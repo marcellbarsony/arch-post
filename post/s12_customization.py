@@ -12,7 +12,8 @@ class Customization():
         cmd = f'curl -L -o /home/{user}/Downloads/wallpapers.zip "{url}"'
         cmd = f'unzip /home/{user}/Downloads/wallpapers.zip -d /home/{user}/Pictures/Wallpapers/ -x /'
 
-    def fonts(self):
+    @staticmethod
+    def fonts():
         # Japanese
         # sudo sed -i '/#ja_JP.UTF-8 UTF-8/s/^#//g' /etc/locale.gen
         # sudo echo "LANG=ja_JP.UTF-8" >>/etc/locale.conf
@@ -31,12 +32,15 @@ class Customization():
             print('[+] /etc/locale.conf')
         pass
 
-    def ly_setup(self):
-        # Configuration
+    @staticmethod
+    def login_manager():
+        print('[TODO] Login manager <ly>')
+        # ly configuration
         # /etc/ly/config.ini
         pass
 
-    def pacman(self):
+    @staticmethod
+    def pacman():
         commands = [
             # archlinux-keyring: make explicitly installed
             'sudo pacman -D --asexplicit archlinux-keyring',
@@ -44,17 +48,21 @@ class Customization():
             'sudo pacman -Qtdq | pacman -Rns -'
             ]
         for cmd in commands:
-            out = subprocess.run(cmd, shell=True)
+            out = subprocess.run(cmd, shell=True, check=True)
             if out.returncode != 0:
                 print(f'[-] Pacman customization [{cmd}]')
                 exit(out.returncode)
 
-    def pipewire(self):
+    @staticmethod
+    def pipewire():
+        print('[TODO] Pipewire')
         # echo "Pipewire"
         # https://roosnaflak.com/tech-and-research/transitioning-to-pipewire/
         pass
 
-    def qtile_wayland(self):
+    @staticmethod
+    def wayland():
+        print('[TODO] Wayland')
         # Touchpad gestures
         # https://wiki.archlinux.org/title/Libinput
 
@@ -65,7 +73,9 @@ class Customization():
         #~/.local/share/qtile/qtile.log
         pass
 
-    def spotify(self):
+    @staticmethod
+    def spotify():
+        print('[TODO] Spotify')
         # killall spotifyd
 
         # # Spotifyd.conf
@@ -79,7 +89,9 @@ class Customization():
         # sed -i "s/deviceid/${spotify_device_id}/g" ${HOME}/.config/spotify-tui/client.yml
         pass
 
-    def xdg_dirs(self):
+    @staticmethod
+    def xdg_dirs():
+        print('[TODO] XDG directories')
         # # Generate XDG directories
         # LC_ALL=C.UTF-8 xdg-user-dirs-update --force
         # mkdir ${HOME}/.local/state

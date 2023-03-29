@@ -9,7 +9,7 @@ class Shell():
     def change(shell):
         cmd = f'chsh -s /usr/bin/{shell}'
         try:
-            subprocess.run(cmd, shell=True)
+            subprocess.run(cmd, shell=True, check=True)
             print('[+] SHELL change')
         except Exception as err:
             print('[-] SHELL change', err)
@@ -21,7 +21,7 @@ class Shell():
         for cfg in cfg_list:
             cmd = f'sudo cp -f /home/{user}/.config/zsh/global/{cfg} /etc/zsh/{cfg}'
             try:
-                subprocess.run(cmd, shell=True)
+                subprocess.run(cmd, shell=True, check=True)
                 print('[+] ZSH config')
             except Exception as err:
                 print('[-] ZSH config', err)
@@ -39,7 +39,7 @@ class Shell():
             dst = f'/home/{user}/.local/src/{dir}'
             cmd = f'git clone --depth 1 https://github.com/{repo}.git {dst}'
             try:
-                subprocess.run(cmd, shell=True)
+                subprocess.run(cmd, shell=True, check=True)
                 print('[+] ZSH tools')
             except Exception as err:
                 print('[-] ZSH tools', err)

@@ -8,6 +8,7 @@ class Python():
 
     @staticmethod
     def venv():
+        print('[TODO] PYTHON venv')
         pass
 
     @staticmethod
@@ -15,7 +16,7 @@ class Python():
         for module in modules:
             cmd = f'pip install {module}'
             try:
-                subprocess.run(cmd, shell=True)
+                subprocess.run(cmd, shell=True, check=True)
                 print('[+] PYTHON modules')
             except Exception as err:
                 print('[-] PYTHON modules', err)
@@ -30,7 +31,7 @@ class Ruby():
     def install():
         cmd = 'sudo pacman -Q ruby'
         try:
-            subprocess.run(cmd, shell=True)
+            subprocess.run(cmd, shell=True, check=True)
             print('[+] RUBY install')
         except Exception as err:
             print('[-] RUBY install', err)
@@ -38,6 +39,7 @@ class Ruby():
 
     @staticmethod
     def gems():
+        print('[TODO] RUBY gems')
         # cd ${HOME}/.local/git/blog
         # gem update
         # gem install jekyll bundler

@@ -8,14 +8,11 @@ class Services():
 
     @staticmethod
     def enable():
-        services = [
-            'spotifyd',
-            # 'ly',
-            ]
+        services = ['spotifyd'] # ly
         for service in services:
             cmd = f'sudo systemctl enable {service}.service'
             try:
-                subprocess.run(cmd, shell=True)
+                subprocess.run(cmd, shell=True, check=True)
                 print('[+] SYSTEMCTL enable')
             except Exception as err:
                 print('[-] SYSTEMCTL enable', err)
