@@ -1,13 +1,16 @@
 import subprocess
 import sys
+from .logger import *
 
 
 class Initialize():
 
     """Initialize Arch base installer"""
 
-    @staticmethod
-    def dmi_data():
+    def __init__(self):
+        self.logger = LogHelper()
+
+    def dmi_data(self):
         cmd = 'sudo dmidecode -s system-product-name'
         try:
             out = subprocess.run(cmd, shell=True, check=True, capture_output=True)

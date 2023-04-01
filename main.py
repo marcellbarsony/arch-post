@@ -29,11 +29,13 @@ class Main():
 
     @staticmethod
     def Initialize():
-        Pacman.dependencies()
+        install = Pacman()
+        install.dependencies()
 
-        dmidata = Initialize.dmi_data()
-        Initialize.timezone(timezone)
-        Initialize.sys_clock()
+        init = Initialize()
+        dmidata = init.dmi_data()
+        init.timezone(timezone)
+        init.sys_clock()
 
         while True:
             if dmidata != 'virtualbox' and 'vmware':
@@ -169,6 +171,7 @@ if __name__ == '__main__':
     # TODO: check & add
 
     user = getpass.getuser()
+
 
     Main.Initialize()
     Main.Aur()

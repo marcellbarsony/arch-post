@@ -1,19 +1,26 @@
-
 import subprocess
 import sys
+from .logger import *
 
 
 class Pacman():
 
     """Package manager setup"""
 
-    @staticmethod
-    def dependencies():
+    def __init__(self):
+        self.logger = LogHelper()
+
+    def dependencies(self):
         dependency='dmidecode'
         cmd = f'sudo pacman -S {dependency} --noconfirm'
         try:
-            subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            print('[+] Dependencies')
+            self.logger.info('Installed dependencies')
+            #subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+            subprocess.run(cmd, shell=True, check=True)
+        except KeyboardInterrupt as err:
+            print('KeyboardInterrupt')
+            sys.exit(0)
         except subprocess.CalledProcessError as err:
-            print('[-]', repr(err))
+            self.logger.error('Installing dependencies')
+            print(repr(err))
             sys.exit(1)
