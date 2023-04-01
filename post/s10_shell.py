@@ -1,34 +1,36 @@
 import subprocess
 import sys
+from .logger import *
+
 
 class Shell():
 
     """Docstring for Shell"""
 
-    @staticmethod
-    def change(shell):
+    def __init__(self):
+        self.logger = LogHelper()
+
+    def change(self, shell: str):
         cmd = f'chsh -s /usr/bin/{shell}'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            print('[+] SHELL change')
+            self.logger.info(f'Shell: Change to /usr/bin/{shell}')
         except Exception as err:
-            print('[-] SHELL change', err)
+            self.logger.error(f'Shell: Change to /usr/bin/{shell} {err}')
             sys.exit(1)
 
-    @staticmethod
-    def config(user):
+    def config(self, user: str):
         cfg_list = ['zshenv', 'zprofile']
         for cfg in cfg_list:
             cmd = f'sudo cp -f /home/{user}/.config/zsh/global/{cfg} /etc/zsh/{cfg}'
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                print('[+] ZSH config')
+                self.logger.info('Zsh: Config')
             except Exception as err:
-                print('[-] ZSH config', err)
+                self.logger.error(f'Zsh: Config {err}')
                 sys.exit(1)
 
-    @staticmethod
-    def tools(user):
+    def tools(self, user: str):
         repositories = {
             'marlonrichert/zsh-autocomplete.git': 'zsh-autocomplete',
             'zsh-users/zsh-completions.git':      'zsh-completions',
@@ -40,7 +42,7 @@ class Shell():
             cmd = f'git clone --depth 1 https://github.com/{repo}.git {dst}'
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                print('[+] ZSH tools')
+                self.logger.info('Zsh: Tool')
             except Exception as err:
-                print('[-] ZSH tools', err)
+                self.logger.error(f'Zsh: Config {err}')
                 sys.exit(1)

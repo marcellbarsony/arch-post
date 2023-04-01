@@ -1,17 +1,20 @@
 import sys
 import subprocess
+from .logger import *
 
 
 class Install():
 
-    """Docstring for Base"""
+    """Docstring for Pacman install"""
 
-    @staticmethod
-    def install(packages):
+    def __init__(self):
+        self.logger = LogHelper()
+
+    def install(self, packages):
         cmd = f'{packages} | sudo pacman -S --needed --noconfirm -'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            print('[+] PACMAN install')
+            self.logger.info('Pacman: Install')
         except Exception as err:
-            print('[-] PACMAN install', err)
+            self.logger.error(f'Pacman: Install {err}')
             sys.exit(1)

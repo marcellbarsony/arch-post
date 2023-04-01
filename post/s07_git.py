@@ -1,44 +1,45 @@
 import subprocess
 import sys
+from .logger import *
 from .s05_bitwarden import *
 
 class GitHub():
 
     """GitHub setup"""
 
-    @staticmethod
-    def auth_login(gh_token):
+    def __init__(self):
+        self.logger = LogHelper()
+
+    def auth_login(self, gh_token: str):
         cmd = 'gh auth login --with-token'
-        token = Bitwarden.rbw_get('github', gh_token)
+        token = Bitwarden().rbw_get('github', gh_token)
         try:
             subprocess.run(cmd, shell=True, check=True, input=token)
-            print('[+] GITHUB auth login')
+            self.logger.info('GitHub: Auth login')
         except subprocess.CalledProcessError as err:
-            print('[-] GITHUB auth login', err)
+            self.logger.error(f'GitHub: Auth login {err}')
             sys.exit(1)
 
-    @staticmethod
-    def auth_status():
+    def auth_status(self):
         cmd = 'gh auth status'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            print('[+] GITHUB auth status')
+            self.logger.info('GitHub: Auth status')
         except subprocess.CalledProcessError as err:
-            print('[-] GITHUB auth status', err)
+            self.logger.error('GitHub: Auth status')
+            print(err)
             sys.exit(1)
 
-    @staticmethod
-    def add_pubkey(user, gh_pubkey):
+    def add_pubkey(self, user: str, gh_pubkey: str):
         cmd = f'gh ssh-key add /home/{user}/.ssh/id_ed25519.pub -t ${gh_pubkey}'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            print('[+] GITHUB auth status')
+            self.logger.info('GitHub: Add public key')
         except subprocess.CalledProcessError as err:
-            print('[-] GITHUB auth status', err)
+            self.logger.error(f'GitHub: Add public key {err}')
             sys.exit(1)
 
-    @staticmethod
-    def test():
+    def test(self):
         cmd = 'ssh -T git@github.com'
         try:
             res = subprocess.run(cmd, shell=True, check=True)
@@ -46,12 +47,12 @@ class GitHub():
                 cmd = 'ssh-keyscan github.com >> ~/.ssh/known_hosts'
                 try:
                     subprocess.run(cmd, shell=True, check=True)
-                    print('[+] GITHUB SSH test')
+                    self.logger.info('GitHub: SSH test')
                 except subprocess.CalledProcessError as err:
-                    print('[-] GITHUB SSH test', err)
+                    self.logger.error(f'GitHub: SSH test {err}')
                     sys.exit(1)
         except subprocess.CalledProcessError as err:
-            print('[-] GITHUB SSH test', err)
+            self.logger.error(f'GitHub: SSH test {err}')
             sys.exit(1)
 
     @staticmethod

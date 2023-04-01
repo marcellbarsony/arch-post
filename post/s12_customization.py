@@ -1,19 +1,21 @@
 import subprocess
+from .logger import *
 
 
 class Customization():
 
     """Docstring for Customization"""
 
-    @staticmethod
-    def background(user):
+    def __init__(self):
+        self.logger = LogHelper()
+
+    def background(self, user: str):
         # mkdir '/home/{user}/Downloads'
         url = 'https://www.dropbox.com/sh/eo65dcs7buprzea/AABSnhAm1sswyiukCDW9Urp9a?dl=1'
         cmd = f'curl -L -o /home/{user}/Downloads/wallpapers.zip "{url}"'
         cmd = f'unzip /home/{user}/Downloads/wallpapers.zip -d /home/{user}/Pictures/Wallpapers/ -x /'
 
-    @staticmethod
-    def fonts():
+    def fonts(self):
         # Japanese
         # sudo sed -i '/#ja_JP.UTF-8 UTF-8/s/^#//g' /etc/locale.gen
         # sudo echo "LANG=ja_JP.UTF-8" >>/etc/locale.conf
@@ -23,14 +25,13 @@ class Customization():
         lines[linenr] = "ja_JP.UTF-8 UTF-8\n"
         with open('/etc/locale.gen', 'w') as file:
             file.writelines(lines)
-            print('[+] /etc/locale.gen')
+            self.logger.info(f'Fonts: ja_JP >> /etc/locale.gen')
 
         locale = "LANG=ja_JP.UTF-8"
         conf = '/etc/locale.conf'
         with open(conf, 'w') as file:
             file.write(locale)
-            print('[+] /etc/locale.conf')
-        pass
+            self.logger.info(f'Fonts: ja_JP >> /etc/locale.conf')
 
     @staticmethod
     def login_manager():

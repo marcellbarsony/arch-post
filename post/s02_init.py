@@ -15,31 +15,32 @@ class Initialize():
         try:
             out = subprocess.run(cmd, shell=True, check=True, capture_output=True)
             if 'VirtualBox' in str(out.stdout):
-                print('[+] DMI <VirtualBox>')
+                self.logger.info('DMI data: <VirtualBox>')
                 return 'virtualbox'
             if 'VMware Virtual Platform' in str(out.stdout):
-                print('[+] DMI <VMWare>')
+                self.logger.info('DMI data: <VMWare>')
                 return 'vmware'
         except subprocess.CalledProcessError as err:
-            print('[-]', repr(err))
+            self.logger.error('DMI: Cannot fetch DMI information')
+            print(repr(err))
             sys.exit(1)
 
-    @staticmethod
-    def timezone(timezone):
+    def timezone(self, timezone: str):
         cmd = f'sudo timedatectl set-timezone {timezone}'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            print('[+] Timedatectl set-timezone')
+            self.logger.info('Time & Date: Timezone')
         except subprocess.CalledProcessError as err:
-            print('[-]', repr(err))
+            self.logger.error('Time & Date: Timezone')
+            print(repr(err))
             sys.exit(1)
 
-    @staticmethod
-    def sys_clock():
+    def sys_clock(self):
         cmd = 'sudo timedatectl set-ntp true --no-ask-password'
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            print('[+] System clock')
+            self.logger.info('Time & Date: System clock')
         except subprocess.CalledProcessError as err:
-            print('[-] System clock', {err})
+            self.logger.error('Time & Date: System clock')
+            print({err})
             sys.exit(1)

@@ -29,63 +29,60 @@ class Main():
 
     @staticmethod
     def Initialize():
-        install = Pacman()
-        install.dependencies()
+        Pacman().dependencies()
 
-        init = Initialize()
-        dmidata = init.dmi_data()
-        init.timezone(timezone)
-        init.sys_clock()
+        dmidata = Initialize().dmi_data()
+        Initialize().timezone(timezone)
+        Initialize().sys_clock()
 
         while True:
             if dmidata != 'virtualbox' and 'vmware':
-                Network.wifi_activate(network_toggle)
-                Network.wifi_connect(network_ssid, network_key)
-            status = Network.check(network_ip, network_port)
-            if status == True:
+                WiFi().toggle(network_toggle)
+                WiFi().connect(network_ssid, network_key)
+            if Network().check(network_ip, network_port):
                 break
 
     @staticmethod
     def Aur():
-        aur_dir = Helper.directory(user, aur_helper)
-        Helper.clone(aur_helper, aur_dir)
-        Helper.makepkg(aur_dir)
+        aur_dir = Helper().directory(user, aur_helper)
+        Helper().clone(aur_helper, aur_dir)
+        Helper().makepkg(aur_dir)
 
     @staticmethod
     def PasswordManager():
         while True:
-            status = Bitwarden.rbw_register(bw_mail, bw_url, bw_lock)
+            status = Bitwarden().rbw_register(bw_mail, bw_url, bw_lock)
             if status == True:
                 break
 
     @staticmethod
     def SSH():
-        SecureShell.kill()
-        SecureShell.start()
-        SecureShell.keygen(user, ssh_key, gh_mail)
-        SecureShell.add(user)
+        SecureShell().kill()
+        SecureShell().start()
+        SecureShell().keygen(user, ssh_key, gh_mail)
+        SecureShell().add(user)
 
     @staticmethod
     def GitSetup():
-        GitHub.auth_login(gh_token)
-        GitHub.auth_status()
-        GitHub.add_pubkey(user, gh_pubkey)
-        GitHub.test()
-        GitHub.known_hosts()
+        GitHub().auth_login(gh_token)
+        GitHub().auth_status()
+        GitHub().add_pubkey(user, gh_pubkey)
+        GitHub().test()
+        GitHub().known_hosts()
 
         for repo in repositories:
             dir = f'.local/git/{repo}'
-            Git.repo_clone(user, gh_user, repo, dir)
-            Git.repo_chdir(user, dir)
-            Git.repo_cfg(gh_user, repo)
+            Git().repo_clone(user, gh_user, repo, dir)
+            Git().repo_chdir(user, dir)
+            Git().repo_cfg(gh_user, repo)
 
         repo = 'dotfiles'
         dir = '.config'
-        Dotfiles.move(user)
-        Git.repo_clone(user, gh_user, repo, dir)
-        Git.repo_chdir(user, dir)
-        Git.repo_cfg(gh_user, dir)
-        Dotfiles.move_back(user)
+        Dotfiles().move(user)
+        Git().repo_clone(user, gh_user, repo, dir)
+        Git().repo_chdir(user, dir)
+        Git().repo_cfg(gh_user, dir)
+        Dotfiles().move_back(user)
 
     @staticmethod
     def Installation():
@@ -100,18 +97,18 @@ class Main():
 
     @staticmethod
     def Shell():
-        Shell.change(shell)
-        Shell.config(user)
-        Shell.tools(user)
+        Shell().change(shell)
+        Shell().config(user)
+        Shell().tools(user)
 
     @staticmethod
     def Services():
-        Services.enable()
+        Services().enable()
 
     @staticmethod
     def Customization():
-        Customization.background(user)
-        Customization.fonts()
+        Customization().background(user)
+        Customization().fonts()
         Customization.login_manager()
         Customization.pacman()
         Customization.pipewire()
