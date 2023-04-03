@@ -1,22 +1,23 @@
+import logging
 import subprocess
 import sys
-from .logger import *
 
 
-class Shell():
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+class Zsh():
 
     """Docstring for Shell"""
 
-    def __init__(self):
-        self.logger = LogHelper()
-
-    def change(self, shell: str):
+    def set(self, shell: str):
         cmd = f'chsh -s /usr/bin/{shell}'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            self.logger.info(f'Shell: Change to /usr/bin/{shell}')
+            logger.info(f'Shell: Change to /usr/bin/{shell}')
         except Exception as err:
-            self.logger.error(f'Shell: Change to /usr/bin/{shell} {err}')
+            logger.error(f'Shell: Change to /usr/bin/{shell} {err}')
             sys.exit(1)
 
     def config(self, user: str):
@@ -25,9 +26,9 @@ class Shell():
             cmd = f'sudo cp -f /home/{user}/.config/zsh/global/{cfg} /etc/zsh/{cfg}'
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                self.logger.info('Zsh: Config')
+                logger.info('Zsh: Config')
             except Exception as err:
-                self.logger.error(f'Zsh: Config {err}')
+                logger.error(f'Zsh: Config {err}')
                 sys.exit(1)
 
     def tools(self, user: str):
@@ -42,7 +43,7 @@ class Shell():
             cmd = f'git clone --depth 1 https://github.com/{repo}.git {dst}'
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                self.logger.info('Zsh: Tool')
+                logger.info('Zsh: Tool')
             except Exception as err:
-                self.logger.error(f'Zsh: Config {err}')
+                logger.error(f'Zsh: Config {err}')
                 sys.exit(1)

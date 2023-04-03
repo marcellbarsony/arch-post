@@ -8,19 +8,15 @@ Date   : 2023-03
 import argparse
 import configparser
 import getpass
-from post.s01_pacman import *
-from post.s02_init import *
-from post.s03_network import *
-from post.s04_aur import *
-from post.s05_bitwarden import *
-from post.s06_ssh import *
-from post.s07_git import *
-from post.s08_git_repos import *
-from post.s09_install import *
-from post.s10_shell import *
-from post.s11_services import *
-from post.s12_customization import *
-from post.s13_languages import *
+from post import Initialize
+from post import WiFi
+from post import Network
+from post import AurHelper
+from post import Bitwarden
+from post import SecureShell
+from post import GitSetup
+from post import Git
+from post import Dotfiles
 
 
 class Main():
@@ -29,11 +25,12 @@ class Main():
 
     @staticmethod
     def Initialize():
-        Pacman().dependencies()
+        # Pacman().dependencies()
 
-        dmidata = Initialize().dmi_data()
-        Initialize().timezone(timezone)
-        Initialize().sys_clock()
+        init = Initialize()
+        dmidata = init.dmi_data()
+        init.timezone(timezone)
+        init.sys_clock()
 
         while True:
             if dmidata != 'virtualbox' and 'vmware':
@@ -44,45 +41,52 @@ class Main():
 
     @staticmethod
     def Aur():
-        aur_dir = Helper().directory(user, aur_helper)
-        Helper().clone(aur_helper, aur_dir)
-        Helper().makepkg(aur_dir)
+        pikaur = AurHelper(user, aur_helper)
+        pikaur.makedir()
+        pikaur.clone()
+        pikaur.makepkg()
 
     @staticmethod
     def PasswordManager():
+        rbw = Bitwarden()
+        rbw.install(aur_helper)
         while True:
-            status = Bitwarden().rbw_register(bw_mail, bw_url, bw_lock)
+            status = rbw.register(bw_mail, bw_url, bw_lock)
             if status == True:
                 break
 
     @staticmethod
     def SSH():
-        SecureShell().kill()
-        SecureShell().start()
-        SecureShell().keygen(user, ssh_key, gh_mail)
-        SecureShell().add(user)
+        ssh = SecureShell()
+        ssh.kill()
+        ssh.start()
+        ssh.keygen(user, ssh_key, gh_mail)
+        ssh.add(user)
 
     @staticmethod
-    def GitSetup():
-        GitHub().auth_login(gh_token)
-        GitHub().auth_status()
-        GitHub().add_pubkey(user, gh_pubkey)
-        GitHub().test()
-        GitHub().known_hosts()
+    def Git():
+        github = GitSetup()
+        github.auth_login(gh_token)
+        github.auth_status()
+        github.add_pubkey(user, gh_pubkey)
+        github.test()
+        github.known_hosts()
 
+        git = Git(user, gh_user)
         for repo in repositories:
             dir = f'.local/git/{repo}'
-            Git().repo_clone(user, gh_user, repo, dir)
-            Git().repo_chdir(user, dir)
-            Git().repo_cfg(gh_user, repo)
+            git.repo_clone(repo, dir)
+            git.repo_chdir(dir)
+            git.repo_cfg(repo)
 
         repo = 'dotfiles'
         dir = '.config'
-        Dotfiles().move(user)
-        Git().repo_clone(user, gh_user, repo, dir)
-        Git().repo_chdir(user, dir)
-        Git().repo_cfg(gh_user, dir)
-        Dotfiles().move_back(user)
+        dots = Dotfiles(user)
+        dots.move()
+        git.repo_clone(repo, dir)
+        git.repo_chdir(dir)
+        git.repo_cfg(repo)
+        dots.move_back()
 
     @staticmethod
     def Installation():
@@ -169,11 +173,10 @@ if __name__ == '__main__':
 
     user = getpass.getuser()
 
-
     Main.Initialize()
     Main.Aur()
-    Main.PasswordManager()
-    Main.SSH()
+    #Main.PasswordManager()
+    #Main.SSH()
     #Main.GitSetup()
     #Main.Installation()
     #Main.Shell()

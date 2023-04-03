@@ -1,13 +1,14 @@
+import logging
 import subprocess
-from .logger import *
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Customization():
 
     """Docstring for Customization"""
-
-    def __init__(self):
-        self.logger = LogHelper()
 
     def background(self, user: str):
         # mkdir '/home/{user}/Downloads'
@@ -25,13 +26,13 @@ class Customization():
         lines[linenr] = "ja_JP.UTF-8 UTF-8\n"
         with open('/etc/locale.gen', 'w') as file:
             file.writelines(lines)
-            self.logger.info(f'Fonts: ja_JP >> /etc/locale.gen')
+            logger.info(f'Fonts: ja_JP >> /etc/locale.gen')
 
         locale = "LANG=ja_JP.UTF-8"
         conf = '/etc/locale.conf'
         with open(conf, 'w') as file:
             file.write(locale)
-            self.logger.info(f'Fonts: ja_JP >> /etc/locale.conf')
+            logger.info(f'Fonts: ja_JP >> /etc/locale.conf')
 
     @staticmethod
     def login_manager():

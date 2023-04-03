@@ -1,23 +1,24 @@
+import logging
 import subprocess
 import sys
-from .logger import *
 from .s05_bitwarden import Bitwarden
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class SecureShell():
 
     """SSH setup"""
 
-    def __init__(self):
-        self.logger = LogHelper()
-
     def kill(self):
         cmd = 'sudo pkill -9 -f ssh'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            self.logger.info('SSH: Kill')
+            logger.info('SSH: Kill')
         except Exception as err:
-            self.logger.error('SSH: Kill')
+            logger.error('SSH: Kill')
             print(err)
             sys.exit(1)
 
@@ -25,9 +26,9 @@ class SecureShell():
         cmd = 'eval "$(ssh-agent -s)"'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            self.logger.info('SSH: Launch')
+            logger.info('SSH: Launch')
         except Exception as err:
-            self.logger.error('SSH: Launch')
+            logger.error('SSH: Launch')
             print(err)
             sys.exit(1)
 
@@ -37,9 +38,9 @@ class SecureShell():
         cmd = f'ssh-keygen -t ed25519 -N {ssh_key} -C {gh_mail} -f {dir}'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            self.logger.info('SSH: Keygen')
+            logger.info('SSH: Keygen')
         except Exception as err:
-            self.logger.error('SSH: Keygen')
+            logger.error('SSH: Keygen')
             print(err)
             sys.exit(1)
 
@@ -47,8 +48,8 @@ class SecureShell():
         cmd = f'ssh-add /home/{user}/.ssh/id_ed25519'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            self.logger.info('SSH: Add key')
+            logger.info('SSH: Add key')
         except Exception as err:
-            self.logger.error('SSH: Add key')
+            logger.error('SSH: Add key')
             print('[-] SSH add', err)
             sys.exit(1)

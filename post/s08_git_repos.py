@@ -1,45 +1,50 @@
+import logging
 import os
 import shutil
 import subprocess
 import sys
-from .logger import *
 from .s05_bitwarden import *
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Git():
 
     """Repository setup"""
 
-    def __init__(self):
-        self.logger = LogHelper()
+    def __init__(self, user, gh_user):
+        self.user = user
+        self.gh_user = gh_user
 
-    def repo_clone(self, user: str, gh_user: str, repo: str, dir: str):
-        github_user = Bitwarden().rbw_get('github', gh_user)
-        cmd = f'git clone git@github.com:{github_user}/{repo}.git /home/{user}/{dir}'
+    def repo_clone(self, repo: str, dir: str):
+        github_user = Bitwarden().rbw_get('github', self.gh_user)
+        cmd = f'git clone git@github.com:{github_user}/{repo}.git /home/{self.user}/{dir}'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            self.logger.info(f'Repository: Clone {repo}')
+            logger.info(f'Repository: Clone {repo}')
         except Exception as err:
-            self.logger.error(f'Repository: Clone {repo} {err}')
+            logger.error(f'Repository: Clone {repo} {err}')
             sys.exit(1)
 
-    def repo_chdir(self, user: str, dir: str):
-        dst = f'/home/{user}/{dir}'
+    def repo_chdir(self, dir: str):
+        dst = f'/home/{self.user}/{dir}'
         try:
             os.chdir(dst)
-            self.logger.info(f'Repository: directory {dst}')
+            logger.info(f'Repository: directory {dst}')
         except Exception as err:
-            self.logger.error(f'Repository: directory {dst} {err}')
+            logger.error(f'Repository: directory {dst} {err}')
             sys.exit(1)
 
-    def repo_cfg(self, gh_user: str, repo: str):
-        github_user = Bitwarden().rbw_get('github', gh_user)
+    def repo_cfg(self, repo: str):
+        github_user = Bitwarden().rbw_get('github', self.gh_user)
         cmd = f'git remote set-url origin git@github.com:{github_user}/{repo}.git'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            self.logger.error(f'Repository: Set-url {repo}')
+            logger.error(f'Repository: Set-url {repo}')
         except Exception as err:
-            self.logger.error(f'Repository: Set-url {repo} {err}')
+            logger.error(f'Repository: Set-url {repo} {err}')
             sys.exit(1)
 
 
@@ -47,20 +52,20 @@ class Dotfiles():
 
     """Dotfiles setup"""
 
-    def __init__(self):
-        self.logger = LogHelper()
+    def __init__(self, user):
+        self.user = user
 
-    def move(self, user: str):
-        src_list = [ f'/home/{user}/.config/rbw', f'/home/{user}/.config/gh' ]
+    def move(self):
+        src_list = [ f'/home/{self.user}/.config/rbw', f'/home/{self.user}/.config/gh' ]
         dst = '/tmp'
         for src in src_list:
             shutil.copytree(src, dst)
-        shutil.rmtree(f'/home/{user}/.config')
-        self.logger.info('Dotfiles: Moving dotfiles')
+        shutil.rmtree(f'/home/{self.user}/.config')
+        logger.info('Dotfiles: Moving dotfiles')
 
-    def move_back(self, user: str):
+    def move_back(self):
         src_list = [ '/tmp/rbw', '/tmp/gh' ]
-        dst = f'/home/{user}/.config'
+        dst = f'/home/{self.user}/.config'
         for src in src_list:
             shutil.copytree(src, dst)
-        self.logger.info('Dotfiles: Moving dotfiles back')
+        logger.info('Dotfiles: Moving dotfiles back')
