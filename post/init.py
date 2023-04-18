@@ -46,5 +46,5 @@ class Initialize():
             logger.info('Time & Date: System clock')
         except subprocess.CalledProcessError as err:
             logger.error('Time & Date: System clock')
-            print({err})
+            print(repr(err))
             sys.exit(1)

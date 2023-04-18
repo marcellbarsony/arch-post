@@ -1,5 +1,8 @@
 import logging
+import os
 import subprocess
+import urllib.request
+import zipfile
 
 
 logging.basicConfig(level=logging.INFO)
@@ -10,29 +13,21 @@ class Customization():
 
     """Docstring for Customization"""
 
-    def background(self, user: str):
-        # mkdir '/home/{user}/Downloads'
+    @staticmethod
+    def background(user: str):
+        # makedir
+        dir = f'/home/{user}/Downloads/Wallpapers'
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+
+        # download
         url = 'https://www.dropbox.com/sh/eo65dcs7buprzea/AABSnhAm1sswyiukCDW9Urp9a?dl=1'
-        cmd = f'curl -L -o /home/{user}/Downloads/wallpapers.zip "{url}"'
-        cmd = f'unzip /home/{user}/Downloads/wallpapers.zip -d /home/{user}/Pictures/Wallpapers/ -x /'
+        out = f'{dir}/wallpapers.zip'
+        urllib.request.urlretrieve(url, out)
 
-    def fonts(self):
-        # Japanese
-        # sudo sed -i '/#ja_JP.UTF-8 UTF-8/s/^#//g' /etc/locale.gen
-        # sudo echo "LANG=ja_JP.UTF-8" >>/etc/locale.conf
-        linenr= 69 # TODO
-        with open('/etc/locale.gen', 'r') as file:
-            lines = file.readlines()
-        lines[linenr] = "ja_JP.UTF-8 UTF-8\n"
-        with open('/etc/locale.gen', 'w') as file:
-            file.writelines(lines)
-            logger.info(f'Fonts: ja_JP >> /etc/locale.gen')
-
-        locale = "LANG=ja_JP.UTF-8"
-        conf = '/etc/locale.conf'
-        with open(conf, 'w') as file:
-            file.write(locale)
-            logger.info(f'Fonts: ja_JP >> /etc/locale.conf')
+        # unzip
+        with zipfile.ZipFile(out, 'r') as zip_ref:
+            zip_ref.extractall(dir)
 
     @staticmethod
     def login_manager():
@@ -92,8 +87,10 @@ class Customization():
         pass
 
     @staticmethod
-    def xdg_dirs():
+    def xdgDirs():
         print('[TODO] XDG directories')
+        # https://wiki.archlinux.org/title/XDG_user_directories
+
         # # Generate XDG directories
         # LC_ALL=C.UTF-8 xdg-user-dirs-update --force
         # mkdir ${HOME}/.local/state

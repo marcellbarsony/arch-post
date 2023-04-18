@@ -1,22 +1,31 @@
 #!/usr/bin/env python3
 """
 Author : FName SName <mail@domain.com>
-Date   : 2023-03
+Date   : 2023 April
 """
 
 
 import argparse
 import configparser
 import getpass
-from post import Initialize
-from post import WiFi
-from post import Network
+import sys
+
 from post import AurHelper
 from post import Bitwarden
-from post import SecureShell
+from post import Customization
+from post import Dotfiles
 from post import GitSetup
 from post import Git
-from post import Dotfiles
+from post import Initialize
+from post import Network
+from post import OpenSSH
+from post import Pacman
+from post import Python
+from post import Ruby
+from post import Rust
+from post import Services
+from post import WiFi
+from post import Zsh
 
 
 class Main():
@@ -24,109 +33,109 @@ class Main():
     """Arch post-installation setup"""
 
     @staticmethod
-    def Initialize():
-        # Pacman().dependencies()
+    def initialize():
+        install = Pacman()
+        install.dependencies()
 
         init = Initialize()
-        dmidata = init.dmi_data()
         init.timezone(timezone)
         init.sys_clock()
 
         while True:
-            if dmidata != 'virtualbox' and 'vmware':
-                WiFi().toggle(network_toggle)
-                WiFi().connect(network_ssid, network_key)
             if Network().check(network_ip, network_port):
                 break
+            else:
+                WiFi().toggle(network_toggle)
+                WiFi().connect(network_ssid, network_key)
 
     @staticmethod
-    def Aur():
+    def aurHelper():
         pikaur = AurHelper(user, aur_helper)
         pikaur.makedir()
         pikaur.clone()
         pikaur.makepkg()
 
     @staticmethod
-    def PasswordManager():
+    def passwordManager():
         rbw = Bitwarden()
         rbw.install(aur_helper)
         while True:
-            status = rbw.register(bw_mail, bw_url, bw_lock)
-            if status == True:
+            if rbw.register(bw_mail, bw_lock):
                 break
+            # TODO: Check algorithm
+            user_in = input(f'Failed to authenticate. Retry? Y/N ')
+            if user_in.upper() == 'N':
+                sys.exit(1)
 
     @staticmethod
-    def SSH():
-        ssh = SecureShell()
-        ssh.kill()
-        ssh.start()
-        ssh.keygen(user, ssh_key, gh_mail)
-        ssh.add(user)
+    def ssh():
+        agent = OpenSSH(user)
+        agent.keygen(ssh_key, gh_mail)
 
     @staticmethod
-    def Git():
+    def git():
         github = GitSetup()
-        github.auth_login(gh_token)
-        github.auth_status()
-        github.add_pubkey(user, gh_pubkey)
+        github.authLogin(gh_token)
+        github.authStatus()
+        github.addPubkey(user, gh_pubkey)
+        github.knownHosts()
         github.test()
-        github.known_hosts()
+        github.config(gh_user, gh_mail)
 
         git = Git(user, gh_user)
         for repo in repositories:
-            dir = f'.local/git/{repo}'
-            git.repo_clone(repo, dir)
-            git.repo_chdir(dir)
-            git.repo_cfg(repo)
+            dir = f'src/{repo}'
+            git.repoClone(repo, dir)
+            git.repoChdir(dir)
+            git.repoCfg(repo)
 
+        dots = Dotfiles(user)
         repo = 'dotfiles'
         dir = '.config'
-        dots = Dotfiles(user)
         dots.move()
-        git.repo_clone(repo, dir)
-        git.repo_chdir(dir)
-        git.repo_cfg(repo)
-        dots.move_back()
+        git.repoClone(repo, dir)
+        git.repoChdir(dir)
+        git.repoCfg(repo)
+        dots.moveBack()
 
     @staticmethod
-    def Installation():
-        # Install.install(packages)
-        # Install.install(audio)
-        # Install.install(aur)
-        # Install.install(display)
-        # Install.install(fonts)
-        # Install.install(hacking)
-        # Install.install(pacman)
-        pass
+    def installation():
+        pacman = Pacman()
+        pacman.install()
+        #AurHelper.install(package)
 
     @staticmethod
-    def Shell():
-        Shell().change(shell)
-        Shell().config(user)
-        Shell().tools(user)
+    def setZsh():
+        zsh = Zsh(user)
+        zsh.set()
+        zsh.config()
+        #zsh.tools()
 
     @staticmethod
-    def Services():
-        Services().enable()
+    def systemd():
+        systemctl = Services()
+        systemctl.enable()
 
     @staticmethod
-    def Customization():
-        Customization().background(user)
-        Customization().fonts()
-        Customization.login_manager()
-        Customization.pacman()
-        Customization.pipewire()
-        Customization.wayland()
-        Customization.spotify()
-        Customization.xdg_dirs()
+    def customize():
+        c = Customization()
+        c.background(user)
+        c.login_manager()
+        #c.pacman()
+        c.pipewire()
+        c.wayland()
+        c.spotify()
+        c.xdgDirs()
 
     @staticmethod
-    def Languages():
-        Python.venv()
-        #Python.modules(python_modules)
-        Ruby.install()
-        Ruby.gems()
-
+    def development():
+        python = Python()
+        python.venv()
+        #python.modules(python_modules)
+        ruby = Ruby()
+        ruby.install()
+        ruby.gems()
+        rust = Rust()
 
 
 if __name__ == '__main__':
@@ -162,24 +171,18 @@ if __name__ == '__main__':
     network_key =       config.get('network','wifi_key')
     network_ssid =      config.get('network','wifi_ssid')
     repositories =      config.get('repositories','repositories').split(', ')
-    shell =             config.get('shell', 'shell')
     ssh_key =           config.get('ssh','key')
     timezone =          config.get('timezone', 'timezone')
 
-    config.read('cfg/config_packages.ini')
-
-    python = config.get('packages', 'coreutils').split(', ')
-    # TODO: check & add
-
     user = getpass.getuser()
 
-    Main.Initialize()
-    Main.Aur()
-    #Main.PasswordManager()
-    #Main.SSH()
-    #Main.GitSetup()
-    #Main.Installation()
-    #Main.Shell()
-    #Main.Services()
-    #Main.Customization()
-    #Main.Languages()
+    Main.initialize()
+    Main.aurHelper()
+    Main.passwordManager()
+    Main.ssh()
+    Main.git()
+    Main.installation()
+    Main.setZsh()
+    #Main.systemd()
+    Main.customize()
+    #Main.development()

@@ -1,5 +1,10 @@
+import logging
 import subprocess
 import sys
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Python():
@@ -46,3 +51,11 @@ class Ruby():
         # bundle update
         # cd ${HOME}
         pass
+
+
+class Rust():
+
+    """Docstring for Rust"""
+
+    def __init__(self):
+        print('[TODO] RUST')

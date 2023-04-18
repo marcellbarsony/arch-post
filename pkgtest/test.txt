@@ -1,0 +1,12 @@
+zsh
+qtile
+kitty
+dkms
+xorg-server
+xorg-xinit
+xorg-xwayland
+xwallpaper
+autorandr
+picom
+unclutter
+adobe-source-code-pro-fonts

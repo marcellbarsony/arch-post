@@ -16,15 +16,14 @@ class Bitwarden():
         cmd = f'{aur_helper} -S --noconfirm rbw'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logger.info('Bitwarden: RBW install')
+            logger.info('RBW install')
         except subprocess.CalledProcessError as err:
-            logger.error(f'Bitwarden: RBW install {err}')
+            logger.error(f'RBW install {err}')
             sys.exit(1)
 
     @staticmethod
-    def register(mail: str, url: str, timeout: str) -> bool:
+    def register(mail: str, timeout: str) -> bool:
         commands = [f'rbw config set email {mail}',
-                    f'rbw config set base_url {url}',
                     f'rbw config set lock_timeout {timeout}',
                     'rbw register',
                     'rbw sync']
@@ -32,19 +31,22 @@ class Bitwarden():
         for cmd in commands:
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                #self.logger.info('Bitwarden: RBW register')
+                logger.info('RBW config')
+            except KeyboardInterrupt as err:
+                sys.exit(0)
             except subprocess.CalledProcessError as err:
-                #self.logger.error('Bitwarden: RBW register')
+                logger.error('RBW config')
                 print(repr(err))
                 success = False
                 break
         return success
 
-    def rbw_get(self, name: str, item: str) -> str:
+    @staticmethod
+    def rbwGet(name: str, item: str) -> str:
         cmd = f'rbw get {name} --full | grep "{item}" | cut -d " " -f 2'
         out = subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding='UTF-8')
         if "ERROR" in str(out.stderr):
-            logger.error(f'Bitwarden: Fetch data <{name}> <{item}>')
+            logger.error(f'Fetch data <{name}> <{item}>')
             sys.exit(1)
-        logger.info(f'Bitwarden: Fetch data')
-        return out.stdout
+        logger.info(f'Fetch data')
+        return out.stdout.rstrip('\n')

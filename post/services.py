@@ -9,9 +9,13 @@ logger = logging.getLogger(__name__)
 
 class Services():
 
-    """Docstring for Services"""
+    """
+    Docstring for managing services
+    https://wiki.archlinux.org/title/Systemd
+    """
 
-    def enable(self):
+    @staticmethod
+    def enable():
         services = ['spotifyd'] # ly
         for service in services:
             cmd = f'sudo systemctl enable {service}.service'
