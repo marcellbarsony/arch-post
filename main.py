@@ -8,24 +8,27 @@ Date   : 2023 April
 import argparse
 import configparser
 import getpass
+import os
 import sys
 
-from post import AurHelper
-from post import Bitwarden
-from post import Customization
-from post import Dotfiles
-from post import GitSetup
-from post import Git
-from post import Initialize
-from post import Network
-from post import OpenSSH
-from post import Pacman
-from post import Python
-from post import Ruby
-from post import Rust
-from post import Services
-from post import WiFi
-from post import Zsh
+from src.lang import Python
+from src.lang import Ruby
+from src.lang import Rust
+
+from src.post import AURhelper
+from src.post import Bitwarden
+from src.post import Customization
+from src.post import GitSetup
+from src.post import Git
+from src.post import Dotfiles
+from src.post import Initialize
+from src.post import Network
+from src.post import SSHagent
+from src.post import Pacman
+from src.post import Systemd
+from src.post import WiFi
+from src.post import Zsh
+from src.post import Finalize
 
 
 class Main():
@@ -33,113 +36,122 @@ class Main():
     """Arch post-installation setup"""
 
     @staticmethod
-    def initialize():
-        install = Pacman()
-        install.dependencies()
-
-        init = Initialize()
-        init.timezone(timezone)
-        init.sys_clock()
+    def init():
+        i = Initialize()
+        i.sys_timezone(timezone)
+        i.sys_clock()
 
         while True:
             if Network().check(network_ip, network_port):
                 break
             else:
-                WiFi().toggle(network_toggle)
-                WiFi().connect(network_ssid, network_key)
+                w = WiFi()
+                w.toggle(network_toggle)
+                w.connect(network_ssid, network_key)
 
     @staticmethod
-    def aurHelper():
-        pikaur = AurHelper(user, aur_helper)
-        pikaur.makedir()
-        pikaur.clone()
-        pikaur.makepkg()
+    def aur():
+        a = AURhelper(user, aurhelper)
+        a.make_dir()
+        a.clone()
+        a.make_pkg()
 
     @staticmethod
-    def passwordManager():
+    def password_manager():
         rbw = Bitwarden()
-        rbw.install(aur_helper)
+        rbw.install(aurhelper)
         while True:
             if rbw.register(bw_mail, bw_lock):
                 break
-            # TODO: Check algorithm
             user_in = input(f'Failed to authenticate. Retry? Y/N ')
             if user_in.upper() == 'N':
                 sys.exit(1)
 
     @staticmethod
     def ssh():
-        agent = OpenSSH(user)
-        agent.keygen(ssh_key, gh_mail)
+        a = SSHagent(user, current_dir)
+        a.config()
+        a.service_set()
+        a.service_start()
+        a.key_gen(ssh_key, git_mail)
+        a.key_add()
 
     @staticmethod
     def git():
-        github = GitSetup()
-        github.authLogin(gh_token)
-        github.authStatus()
-        github.addPubkey(user, gh_pubkey)
-        github.knownHosts()
-        github.test()
-        github.config(gh_user, gh_mail)
+        g = GitSetup()
+        gh_user = g.get_user(git_user)
+        g.auth_login(git_token)
+        g.auth_status()
+        g.add_pubkey(user, git_pubkey)
+        g.known_hosts()
+        g.ssh_test()
+        g.config(gh_user, git_mail)
 
-        git = Git(user, gh_user)
         for repo in repositories:
-            dir = f'src/{repo}'
-            git.repoClone(repo, dir)
-            git.repoChdir(dir)
-            git.repoCfg(repo)
+            r = Git(user, gh_user, repo)
+            r.repo_clone()
+            r.repo_chdir()
+            r.repo_cfg()
 
-        dots = Dotfiles(user)
-        repo = 'dotfiles'
-        dir = '.config'
-        dots.move()
-        git.repoClone(repo, dir)
-        git.repoChdir(dir)
-        git.repoCfg(repo)
-        dots.moveBack()
+        d = Dotfiles(user, gh_user)
+        d.temp_dir()
+        d.move()
+        d.repo_clone()
+        d.repo_chdir()
+        d.repo_cfg()
+        d.move_back()
 
     @staticmethod
     def installation():
-        pacman = Pacman()
-        pacman.install()
+        p = Pacman()
+        p.explicit_keyring()
+        p.install(current_dir)
         #AurHelper.install(package)
 
     @staticmethod
-    def setZsh():
-        zsh = Zsh(user)
-        zsh.set()
-        zsh.config()
-        #zsh.tools()
+    def z_shell():
+        z = Zsh(user)
+        z.chsh()
+        z.config()
+        z.tools()
 
     @staticmethod
     def systemd():
-        systemctl = Services()
-        systemctl.enable()
+        d = Systemd()
+        d.enable()
 
     @staticmethod
     def customize():
         c = Customization()
         c.background(user)
-        c.login_manager()
-        #c.pacman()
         c.pipewire()
         c.wayland()
         c.spotify()
-        c.xdgDirs()
+        c.xdg_dirs(user)
 
     @staticmethod
     def development():
-        python = Python()
-        python.venv()
-        #python.modules(python_modules)
+        py = Python()
+        py.venv()
+        #py.modules(python_modules)
         ruby = Ruby()
         ruby.install()
         ruby.gems()
         rust = Rust()
 
+    @staticmethod
+    def finalize():
+        f = Finalize(user)
+        f.clean_home()
+
 
 if __name__ == '__main__':
     """ Initialize argparse """
+
+    uid = os.getuid()
+    if uid == 0:
+        print(f'[-] Executed as root (UID={uid})')
+        sys.exit(1)
 
     parser = argparse.ArgumentParser(
                 prog='python3 setup.py',
@@ -151,20 +163,20 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('config.ini')
 
-    aur_helper =        config.get('aur', 'helper')
+    aurhelper =        config.get('aur', 'helper')
     bw_mail =           config.get('bitwarden', 'mail')
     bw_url =            config.get('bitwarden', 'url')
     bw_lock =           config.get('bitwarden', 'lock')
-    gh_mail =           config.get('bitwarden_data', 'github_mail')
-    gh_user =           config.get('bitwarden_data', 'github_user')
-    gh_token =          config.get('bitwarden_data', 'github_token')
+    git_mail =           config.get('bitwarden_data', 'github_mail')
+    git_user =           config.get('bitwarden_data', 'github_user')
+    git_token =          config.get('bitwarden_data', 'github_token')
     spotify_client_id = config.get('bitwarden_data', 'spotify_client_id')
     spotify_secret =    config.get('bitwarden_data', 'spotify_client_secret')
     spotify_device_id = config.get('bitwarden_data', 'spotify_device_id')
     spotify_mail =      config.get('bitwarden_data', 'spotify_mail')
     spotify_user =      config.get('bitwarden_data', 'spotify_user')
     dependencies =      config.get('dependencies', 'dependencies')
-    gh_pubkey =         config.get('github', 'pubkey')
+    git_pubkey =         config.get('github', 'pubkey')
     network_ip =        config.get('network','ip')
     network_port =      config.get('network','port')
     network_toggle =    config.get('network','wifi')
@@ -175,14 +187,16 @@ if __name__ == '__main__':
     timezone =          config.get('timezone', 'timezone')
 
     user = getpass.getuser()
+    current_dir = os.getcwd()
 
-    Main.initialize()
-    Main.aurHelper()
-    Main.passwordManager()
+    Main.init()
+    Main.aur()
+    Main.password_manager()
     Main.ssh()
     Main.git()
     Main.installation()
-    Main.setZsh()
+    Main.z_shell()
     #Main.systemd()
     Main.customize()
     #Main.development()
+    Main.finalize()

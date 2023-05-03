@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class Services():
+class Systemd():
 
     """
     Docstring for managing services

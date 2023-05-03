@@ -1,6 +1,5 @@
 import logging
 import os
-import shutil
 import subprocess
 import sys
 
@@ -16,13 +15,13 @@ class Zsh():
     def __init__(self, user: str):
         self.user = user
 
-    def set(self):
+    def chsh(self):
         cmd = 'chsh -s /usr/bin/zsh'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logger.info('Zsh: Change to /usr/bin/zsh')
+            logger.info('Change to /usr/bin/zsh')
         except Exception as err:
-            logger.error('Zsh: Change to /usr/bin/zsh', {err})
+            logger.error('Change to /usr/bin/zsh', {err})
             sys.exit(1)
 
     def config(self):
@@ -37,22 +36,22 @@ class Zsh():
             try:
                 subprocess.run(cmd_copy, shell=True, check=True)
                 subprocess.run(cmd_chmod, shell=True, check=True)
-                logger.info('Zsh: Startup file')
+                logger.info('Startup file')
             except Exception as err:
-                logger.error('Zsh: Startup file', {err})
+                logger.error('Startup file', {err})
                 sys.exit(1)
 
     def tools(self):
-        repositories = {'marlonrichert/zsh-autocomplete.git': 'zsh-autocomplete',
-                        'zsh-users/zsh-completions.git':      'zsh-completions',
+        repositories = {'marlonrichert/zsh-autocomplete': 'zsh-autocomplete',
+                        'zsh-users/zsh-completions':      'zsh-completions',
                         'zsh-users/zsh-autosuggestions':      'zsh-autosuggestions',
-                        'spaceship-prompt/spaceship-prompt':  'spaceship-prompt'}
+                        'zsh-users/zsh-syntax-highlighting':      'zsh-syntax-highlighting'}
         for repo, dir in repositories.items():
             dst = f'/home/{self.user}/.local/src/{dir}'
-            cmd = f'git clone --depth 1 https://github.com/{repo}.git {dst}'
+            cmd = f'git clone --depth 1 git@github.com:{repo}.git {dst}'
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logger.info('Zsh: Tools')
+                logger.info('Tools', repo)
             except Exception as err:
-                logger.error('Zsh: Tools ', {err})
+                logger.error('Tools ', repo, {err})
                 sys.exit(1)

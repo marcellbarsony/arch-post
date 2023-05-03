@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+import sys
 import urllib.request
 import zipfile
 
@@ -28,27 +29,6 @@ class Customization():
         # unzip
         with zipfile.ZipFile(out, 'r') as zip_ref:
             zip_ref.extractall(dir)
-
-    @staticmethod
-    def login_manager():
-        print('[TODO] Login manager <ly>')
-        # ly configuration
-        # /etc/ly/config.ini
-        pass
-
-    @staticmethod
-    def pacman():
-        commands = [
-            # archlinux-keyring: make explicitly installed
-            'sudo pacman -D --asexplicit archlinux-keyring',
-            # Remove orphans and their configs
-            'sudo pacman -Qtdq | pacman -Rns -'
-            ]
-        for cmd in commands:
-            out = subprocess.run(cmd, shell=True, check=True)
-            if out.returncode != 0:
-                print(f'[-] Pacman customization [{cmd}]')
-                exit(out.returncode)
 
     @staticmethod
     def pipewire():
@@ -87,21 +67,24 @@ class Customization():
         pass
 
     @staticmethod
-    def xdgDirs():
-        print('[TODO] XDG directories')
-        # https://wiki.archlinux.org/title/XDG_user_directories
+    def xdg_dirs(user: str):
+        # Generate directories
+        cmd = 'LC_ALL=C.UTF-8 xdg-user-dirs-update --force'
+        try:
+            subprocess.run(cmd, shell=True, check=True)
+            logger.info('Create XDG dirs')
+        except Exception as err:
+            logger.error('Create XDG dirs', err)
+            sys.exit(1)
 
-        # # Generate XDG directories
-        # LC_ALL=C.UTF-8 xdg-user-dirs-update --force
-        # mkdir ${HOME}/.local/state
-        # mkdir ${HOME}/.local/share/{bash,cargo,Trash,vim}
-
-        # # Move files
-        # mv ${HOME}/.cargo ${HOME}/.local/share/cargo
-        # mv ${HOME}/.bash* ${HOME}/.local/share/bash
-        # mv ${HOME}/.viminfo* ${HOME}/.local/share/vim
-
-        # # Delete files
-        # rm -rf ${HOME}/{Desktop,Music,Public,Templates,Videos}
-        # rm -rf ${HOME}/arch
-        pass
+        # Remove directories
+        parent = f'/home/{user}'
+        dirs = ['Desktop', 'Documents', 'Music', 'Pictures', 'Public', 'Templates', 'Videos']
+        for dir in dirs:
+            try:
+                path = os.path.join(parent, dir)
+                os.rmdir(path)
+                logger.info('Remove XDG dir', dir)
+            except OSError as err:
+                logger.error('Remove XDG dir', dir)
+                sys.exit(1)

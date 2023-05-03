@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class Initialize():
 
-    """Initialize Arch base installer"""
+    """Initialize Arch post installer"""
 
     @staticmethod
     def dmi_data():
@@ -28,7 +28,7 @@ class Initialize():
             sys.exit(1)
 
     @staticmethod
-    def timezone(timezone: str):
+    def sys_timezone(timezone: str):
         cmd = f'sudo timedatectl set-timezone {timezone}'
         try:
             subprocess.run(cmd, shell=True, check=True)

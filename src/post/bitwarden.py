@@ -12,7 +12,7 @@ class Bitwarden():
     """Bitwarden setup with rbw"""
 
     @staticmethod
-    def install(aur_helper):
+    def install(aur_helper: str):
         cmd = f'{aur_helper} -S --noconfirm rbw'
         try:
             subprocess.run(cmd, shell=True, check=True)
@@ -23,11 +23,11 @@ class Bitwarden():
 
     @staticmethod
     def register(mail: str, timeout: str) -> bool:
+        success = True
         commands = [f'rbw config set email {mail}',
                     f'rbw config set lock_timeout {timeout}',
                     'rbw register',
                     'rbw sync']
-        success = True
         for cmd in commands:
             try:
                 subprocess.run(cmd, shell=True, check=True)
@@ -42,11 +42,11 @@ class Bitwarden():
         return success
 
     @staticmethod
-    def rbwGet(name: str, item: str) -> str:
+    def rbw_get(name: str, item: str) -> str:
         cmd = f'rbw get {name} --full | grep "{item}" | cut -d " " -f 2'
         out = subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding='UTF-8')
         if "ERROR" in str(out.stderr):
             logger.error(f'Fetch data <{name}> <{item}>')
             sys.exit(1)
-        logger.info(f'Fetch data')
+        logger.info(f'Fetch data <{name}> <{item}>')
         return out.stdout.rstrip('\n')

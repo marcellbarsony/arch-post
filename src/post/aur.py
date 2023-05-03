@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class AurHelper():
+class AURhelper():
 
     """AUR helper setup"""
 
@@ -17,7 +17,7 @@ class AurHelper():
         self.aur_helper = aur_helper
         self.aur_dir = f'/home/{self.user}/.local/src/{self.aur_helper}/'
 
-    def makedir(self):
+    def make_dir(self):
         os.makedirs(self.aur_dir, exist_ok=True)
 
     def clone(self):
@@ -34,7 +34,7 @@ class AurHelper():
                 print(repr(err))
                 sys.exit(1)
 
-    def makepkg(self):
+    def make_pkg(self):
         current_dir = os.getcwd()
         cmd = f'makepkg -si --noconfirm'
         try:
