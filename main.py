@@ -106,9 +106,9 @@ class Main():
     def installation(self):
         p = Pacman()
         p.explicit_keyring()
-        pkgs = p.get_packages(self.cwd)
-        p.install(pkgs)
-        AURhelper.install(self.cwd, aurhelper, self.sudo)
+        #pkgs = p.get_packages(self.cwd)
+        #p.install(pkgs)
+        #AURhelper.install(self.cwd, aurhelper, self.sudo)
 
     def zshell(self):
         z = Zsh(self.user)
@@ -187,14 +187,14 @@ if __name__ == '__main__':
 
 
     m = Main()
-    #m.init()
-    #m.aur()
-    #m.password_manager()
-    #m.ssh()
-    #m.git()
+    m.init()
+    m.aur()
+    m.password_manager()
+    m.ssh()
+    m.git()
+    m.zshell()
     m.installation()
-    #m.zshell()
-        #m.systemd()
-    #m.customize()
-        #m.development()
-    #m.finalize()
+    #m.systemd()
+    m.customize()
+    #m.development()
+    m.finalize()
