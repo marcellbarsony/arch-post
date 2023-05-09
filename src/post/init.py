@@ -1,3 +1,4 @@
+import getpass
 import subprocess
 import sys
 import logging
@@ -12,20 +13,15 @@ class Initialize():
     """Initialize Arch post installer"""
 
     @staticmethod
-    def dmi_data():
-        cmd = 'sudo dmidecode -s system-product-name'
-        try:
-            out = subprocess.run(cmd, shell=True, check=True, capture_output=True)
-            if 'VirtualBox' in str(out.stdout):
-                logger.info('DMI data: VirtualBox')
-                return 'virtualbox'
-            if 'VMware Virtual Platform' in str(out.stdout):
-                logger.info('DMI data: VMWare')
-                return 'vmware'
-        except subprocess.CalledProcessError as err:
-            logger.error('DMI: Cannot fetch DMI information')
-            print(repr(err))
-            sys.exit(1)
+    def get_sudo(user: str) -> str:
+        while True:
+            sudo = getpass.getpass(f'[Sudo] password for {user}: ')
+            cmd = f'echo {sudo} | sudo -S true'
+            result = subprocess.run(cmd, shell=True, capture_output=True)
+            if result.returncode == 0:
+                return sudo
+            else:
+                logger.error(f'Incorrect sudo password for {user}')
 
     @staticmethod
     def sys_timezone(timezone: str):

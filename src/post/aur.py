@@ -48,14 +48,17 @@ class AURhelper():
             print(repr(err))
             sys.exit(1)
 
-
     @staticmethod
-    def install(package):
-        print(f'[TODO] Install AUR packages {package}')
-        #dmenu-rs
-        #librewolf-bin
-        #ly
-        #spotifyd
-        #spotify-tui-bin
-        #starship
-        pass
+    def install(current_dir: str, aurhelper: str, sudo: str):
+        packages = ''
+        with open(f'{current_dir}/src/pkg/pkg_aur.ini', 'r') as file:
+            for line in file:
+                if not line.startswith('[') and not line.startswith('#') and line.strip() != '':
+                    packages += f'{line.rstrip()} '
+        cmd = f'sudo {aurhelper} -S --noconfirm {packages}'
+        try:
+            subprocess.run(cmd, shell=True, input=sudo, check=True, text=True)
+            logger.info('AUR install')
+        except Exception as err:
+            logger.error(f'AUR install {err}')
+            sys.exit(1)

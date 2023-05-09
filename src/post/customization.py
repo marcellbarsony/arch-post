@@ -32,10 +32,15 @@ class Customization():
 
     @staticmethod
     def pipewire():
-        print('[TODO] Pipewire')
-        # echo "Pipewire"
-        # https://roosnaflak.com/tech-and-research/transitioning-to-pipewire/
-        pass
+        services = ['pipewire.socket', 'pipewire-pulse.socket', 'wireplumber.service'] #spotifyd
+        for service in services:
+            cmd = f'sudo systemctl enable {service}'
+            try:
+                subprocess.run(cmd, shell=True, check=True)
+                logger.info(f'Service: Enable <{service}>')
+            except Exception as err:
+                logger.error(f'Service: Enable <{service}> {err}')
+                sys.exit(1)
 
     @staticmethod
     def wayland():
@@ -74,7 +79,7 @@ class Customization():
             subprocess.run(cmd, shell=True, check=True)
             logger.info('Create XDG dirs')
         except Exception as err:
-            logger.error('Create XDG dirs', err)
+            logger.error(f'Create XDG dirs {err}')
             sys.exit(1)
 
         # Remove directories
@@ -84,7 +89,7 @@ class Customization():
             try:
                 path = os.path.join(parent, dir)
                 os.rmdir(path)
-                logger.info('Remove XDG dir', dir)
+                logger.info(f'Remove XDG {dir}')
             except OSError as err:
-                logger.error('Remove XDG dir', dir)
+                logger.error(f'Remove XDG {dir}')
                 sys.exit(1)

@@ -16,7 +16,7 @@ class Systemd():
 
     @staticmethod
     def enable():
-        services = ['spotifyd'] # ly
+        services = ['spotifyd'] #spotifyd
         for service in services:
             cmd = f'sudo systemctl enable {service}.service'
             try:

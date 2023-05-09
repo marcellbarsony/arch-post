@@ -27,7 +27,7 @@ class GitSetup():
             subprocess.run(cmd, shell=True, check=True, input=token.encode())
             logger.info('Auth login')
         except subprocess.CalledProcessError as err:
-            logger.error(f'Auth login', err)
+            logger.error(f'Auth login {err}')
             sys.exit(1)
 
     @staticmethod
@@ -47,7 +47,7 @@ class GitSetup():
             subprocess.run(cmd, shell=True, check=True)
             logger.info('Add public key')
         except subprocess.CalledProcessError as err:
-            logger.error('Add public key', err)
+            logger.error(f'Add public key {err}')
             sys.exit(1)
 
     @staticmethod
@@ -57,7 +57,7 @@ class GitSetup():
             subprocess.run(cmd, shell=True, check=True)
             logger.info('Known hosts')
         except subprocess.CalledProcessError as err:
-            logger.error('Known hosts', err)
+            logger.error(f'Known hosts {err}')
             sys.exit(1)
 
     @staticmethod
@@ -80,6 +80,6 @@ class GitSetup():
             try:
                 subprocess.run(cmd, shell=True, check=True)
             except subprocess.CalledProcessError as err:
-                logger.error('Git config', err)
+                logger.error(f'Git config {err}')
                 sys.exit(1)
         logger.info('Git config')

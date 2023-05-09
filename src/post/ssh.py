@@ -51,7 +51,7 @@ class SSHagent():
             subprocess.run(cmd2, shell=True, check=True)
             logger.info('Enable & Start SSH-Agent')
         except Exception as err:
-            logger.error('Enable SSH-Agent', err)
+            logger.error(f'Enable SSH-Agent {err}')
             sys.exit(1)
 
     def key_gen(self, ssh_key: str, gh_mail: str):
@@ -62,7 +62,7 @@ class SSHagent():
             subprocess.run(cmd, shell=True, check=True)
             logger.info('Keygen')
         except Exception as err:
-            logger.error('Keygen', err)
+            logger.error(f'Keygen {err}')
             sys.exit(1)
 
     @staticmethod
@@ -72,5 +72,5 @@ class SSHagent():
             subprocess.run(cmd, shell=True, check=True)
             logger.info('SSH Add key')
         except Exception as err:
-            logger.error('SSH Add key', err)
+            logger.error(f'SSH Add key {err}')
             sys.exit(1)

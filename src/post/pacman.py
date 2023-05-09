@@ -1,7 +1,6 @@
 import logging
 import subprocess
 import sys
-import os
 
 
 logging.basicConfig(level=logging.INFO)
@@ -13,25 +12,20 @@ class Pacman():
     """Package manager setup"""
 
     @staticmethod
-    def install(current_dir: str):
-        src_dir = f'{current_dir}/src/pkgtest/' # TODO: change test dir to prod
-        for file in os.listdir(src_dir):
-            file_path = os.path.join(src_dir, file)
-            if os.path.isfile(file_path):
-                cmd = f'sudo pacman -S --needed --noconfirm - < {file_path}'
-                try:
-                    subprocess.run(cmd, shell=True, check=True, text=True)
-                    logger.info('Install')
-                except Exception as err:
-                    logger.error(f'Install {err}')
-                    sys.exit(1)
+    def get_packages(current_dir: str):
+        packages = ''
+        with open(f'{current_dir}/_packages.ini', 'r') as file:
+            for line in file:
+                if not line.startswith('[') and not line.startswith('#') and line.strip() != '':
+                    packages += f'{line.rstrip()} '
+        return packages
 
     @staticmethod
-    def install_package(package):
-        cmd = f'sudo pacman -S --needed --noconfirm {package}'
+    def install(pkgs: str):
+        cmd = f'sudo pacman -S --needed --noconfirm {pkgs}'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logger.info(f'Install {package}')
+            logger.info('Install packages')
         except Exception as err:
             logger.error(f'Install {err}')
             sys.exit(1)

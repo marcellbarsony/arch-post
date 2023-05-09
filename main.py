@@ -13,7 +13,7 @@ import sys
 
 from src.lang import Python
 from src.lang import Ruby
-from src.lang import Rust
+#from src.lang import Rust
 
 from src.post import AURhelper
 from src.post import Bitwarden
@@ -35,6 +35,11 @@ class Main():
 
     """Arch post-installation setup"""
 
+    def __init__(self):
+        self.cwd = os.getcwd()
+        self.user = getpass.getuser()
+        self.sudo = Initialize.get_sudo(self.user)
+
     @staticmethod
     def init():
         i = Initialize()
@@ -49,9 +54,8 @@ class Main():
                 w.toggle(network_toggle)
                 w.connect(network_ssid, network_key)
 
-    @staticmethod
-    def aur():
-        a = AURhelper(user, aurhelper)
+    def aur(self):
+        a = AURhelper(self.user, aurhelper)
         a.make_dir()
         a.clone()
         a.make_pkg()
@@ -67,33 +71,31 @@ class Main():
             if user_in.upper() == 'N':
                 sys.exit(1)
 
-    @staticmethod
-    def ssh():
-        a = SSHagent(user, current_dir)
+    def ssh(self):
+        a = SSHagent(self.user, self.cwd)
         a.config()
         a.service_set()
         a.service_start()
         a.key_gen(ssh_key, git_mail)
         a.key_add()
 
-    @staticmethod
-    def git():
+    def git(self):
         g = GitSetup()
         gh_user = g.get_user(git_user)
         g.auth_login(git_token)
         g.auth_status()
-        g.add_pubkey(user, git_pubkey)
+        g.add_pubkey(self.user, git_pubkey)
         g.known_hosts()
         g.ssh_test()
         g.config(gh_user, git_mail)
 
         for repo in repositories:
-            r = Git(user, gh_user, repo)
+            r = Git(self.user, gh_user, repo)
             r.repo_clone()
             r.repo_chdir()
             r.repo_cfg()
 
-        d = Dotfiles(user, gh_user)
+        d = Dotfiles(self.user, gh_user)
         d.temp_dir()
         d.move()
         d.repo_clone()
@@ -101,16 +103,15 @@ class Main():
         d.repo_cfg()
         d.move_back()
 
-    @staticmethod
-    def installation():
+    def installation(self):
         p = Pacman()
         p.explicit_keyring()
-        p.install(current_dir)
-        #AurHelper.install(package)
+        pkgs = p.get_packages(self.cwd)
+        p.install(pkgs)
+        AURhelper.install(self.cwd, aurhelper, self.sudo)
 
-    @staticmethod
-    def z_shell():
-        z = Zsh(user)
+    def zshell(self):
+        z = Zsh(self.user)
         z.chsh()
         z.config()
         z.tools()
@@ -120,14 +121,13 @@ class Main():
         d = Systemd()
         d.enable()
 
-    @staticmethod
-    def customize():
+    def customize(self):
         c = Customization()
-        c.background(user)
+        c.background(self.user)
         c.pipewire()
         c.wayland()
         c.spotify()
-        c.xdg_dirs(user)
+        c.xdg_dirs(self.user)
 
     @staticmethod
     def development():
@@ -137,11 +137,10 @@ class Main():
         ruby = Ruby()
         ruby.install()
         ruby.gems()
-        rust = Rust()
+        #rust = Rust()
 
-    @staticmethod
-    def finalize():
-        f = Finalize(user)
+    def finalize(self):
+        f = Finalize(self.user)
         f.clean_home()
 
 
@@ -161,7 +160,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read('_config.ini')
 
     aurhelper =        config.get('aur', 'helper')
     bw_mail =           config.get('bitwarden', 'mail')
@@ -186,17 +185,16 @@ if __name__ == '__main__':
     ssh_key =           config.get('ssh','key')
     timezone =          config.get('timezone', 'timezone')
 
-    user = getpass.getuser()
-    current_dir = os.getcwd()
 
-    Main.init()
-    Main.aur()
-    Main.password_manager()
-    Main.ssh()
-    Main.git()
-    Main.installation()
-    Main.z_shell()
-    #Main.systemd()
-    Main.customize()
-    #Main.development()
-    Main.finalize()
+    m = Main()
+    #m.init()
+    #m.aur()
+    #m.password_manager()
+    #m.ssh()
+    #m.git()
+    m.installation()
+    #m.zshell()
+        #m.systemd()
+    #m.customize()
+        #m.development()
+    #m.finalize()
