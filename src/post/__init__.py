@@ -1,3 +1,4 @@
+from .audio import Audio
 from .aur import AURhelper
 from .bitwarden import Bitwarden
 from .customization import Customization

@@ -15,6 +15,7 @@ from src.lang import Python
 from src.lang import Ruby
 #from src.lang import Rust
 
+from src.post import Audio
 from src.post import AURhelper
 from src.post import Bitwarden
 from src.post import Customization
@@ -113,18 +114,22 @@ class Main():
         z.config()
         z.tools()
 
+    def customize(self):
+        c = Customization()
+        c.background(self.user)
+        c.wayland()
+        c.xdg_dirs(self.user)
+
+    @staticmethod
+    def audio(self):
+        a = Audio()
+        a.pipewire()
+        a.spotify()
+
     @staticmethod
     def systemd():
         d = Systemd()
         d.enable()
-
-    def customize(self):
-        c = Customization()
-        c.background(self.user)
-        c.pipewire()
-        c.wayland()
-        c.spotify()
-        c.xdg_dirs(self.user)
 
     @staticmethod
     def development():
@@ -159,20 +164,20 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('_config.ini')
 
-    aurhelper =        config.get('aur', 'helper')
+    aurhelper =         config.get('aur', 'helper')
     bw_mail =           config.get('bitwarden', 'mail')
     bw_url =            config.get('bitwarden', 'url')
     bw_lock =           config.get('bitwarden', 'lock')
-    git_mail =           config.get('bitwarden_data', 'github_mail')
-    git_user =           config.get('bitwarden_data', 'github_user')
-    git_token =          config.get('bitwarden_data', 'github_token')
+    git_mail =          config.get('bitwarden_data', 'github_mail')
+    git_user =          config.get('bitwarden_data', 'github_user')
+    git_token =         config.get('bitwarden_data', 'github_token')
     spotify_client_id = config.get('bitwarden_data', 'spotify_client_id')
     spotify_secret =    config.get('bitwarden_data', 'spotify_client_secret')
     spotify_device_id = config.get('bitwarden_data', 'spotify_device_id')
     spotify_mail =      config.get('bitwarden_data', 'spotify_mail')
     spotify_user =      config.get('bitwarden_data', 'spotify_user')
     dependencies =      config.get('dependencies', 'dependencies')
-    git_pubkey =         config.get('github', 'pubkey')
+    git_pubkey =        config.get('github', 'pubkey')
     network_ip =        config.get('network','ip')
     network_port =      config.get('network','port')
     network_toggle =    config.get('network','wifi')
@@ -191,7 +196,7 @@ if __name__ == '__main__':
     m.git()
     m.zshell()
     m.installation()
-    #m.systemd()
     m.customize()
+    #m.systemd()
     #m.development()
     m.finalize()
