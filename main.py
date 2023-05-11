@@ -121,7 +121,7 @@ class Main():
         c.xdg_dirs(self.user)
 
     @staticmethod
-    def audio(self):
+    def audio():
         a = Audio()
         a.pipewire()
         a.spotify()

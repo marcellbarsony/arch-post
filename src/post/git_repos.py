@@ -15,7 +15,7 @@ class Git():
     """Repository setup"""
 
     def __init__(self, user: str, gh_user: str, repo: str):
-        self.dir = f'/home/{user}/src/{repo}'
+        self.dir = f'/home/{user}/git/{repo}'
         self.gh_user = gh_user
         self.repo = repo
 
