@@ -21,7 +21,7 @@ class Zsh():
             subprocess.run(cmd, shell=True, check=True)
             logger.info('Change to /usr/bin/zsh')
         except Exception as err:
-            logger.error('Change to /usr/bin/zsh', {err})
+            logger.error(f'Change to /usr/bin/zsh {err}')
             sys.exit(1)
 
     def config(self):
@@ -38,7 +38,7 @@ class Zsh():
                 subprocess.run(cmd_chmod, shell=True, check=True)
                 logger.info('Startup file')
             except Exception as err:
-                logger.error('Startup file', {err})
+                logger.error(f'Startup file {err}')
                 sys.exit(1)
 
     def tools(self):
@@ -51,7 +51,7 @@ class Zsh():
             cmd = f'git clone --depth 1 git@github.com:{repo}.git {dst}'
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logger.info('Tools', repo)
+                logger.info(f'Tools {repo}')
             except Exception as err:
-                logger.error('Tools ', repo, {err})
+                logger.error(f'Tools {repo} {err}')
                 sys.exit(1)

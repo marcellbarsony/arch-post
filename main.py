@@ -106,9 +106,6 @@ class Main():
     def installation(self):
         p = Pacman()
         p.explicit_keyring()
-        #pkgs = p.get_packages(self.cwd)
-        #p.install(pkgs)
-        #AURhelper.install(self.cwd, aurhelper, self.sudo)
 
     def zshell(self):
         z = Zsh(self.user)
