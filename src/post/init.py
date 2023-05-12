@@ -1,4 +1,3 @@
-import getpass
 import subprocess
 import sys
 import logging
@@ -13,17 +12,10 @@ class Initialize():
     """Initialize Arch post installer"""
 
     @staticmethod
-    def get_sudo(user: str) -> str:
-        while True:
-            sudo = getpass.getpass(f'[sudo] password for {user}: ')
-            # TODO: sudo password validation
-            return sudo
-
-    @staticmethod
-    def sys_timezone(timezone: str, sudo: str):
+    def sys_timezone(timezone: str):
         cmd = f'sudo timedatectl set-timezone {timezone}'
         try:
-            subprocess.run(cmd, shell=True, check=True, input=sudo.encode(), stdout=subprocess.DEVNULL)
+            subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
             logger.info('Time & Date: Timezone')
         except subprocess.CalledProcessError as err:
             logger.error('Time & Date: Timezone')

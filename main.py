@@ -40,11 +40,11 @@ class Main():
     def __init__(self):
         self.cwd = os.getcwd()
         self.user = getpass.getuser()
-        self.sudo = Initialize.get_sudo(self.user)
 
-    def init(self):
+    @staticmethod
+    def init():
         i = Initialize()
-        i.sys_timezone(timezone, self.sudo)
+        i.sys_timezone(timezone)
         i.sys_clock()
 
         # while True:
@@ -55,12 +55,13 @@ class Main():
         #         w.toggle(network_toggle)
         #         w.connect(network_ssid, network_key)
 
-    def pacman(self):
+    @staticmethod
+    def pacman():
         p = Pacman()
         p.explicit_keyring()
         m = Mirrorlist()
         #m.backup()
-        m.update(self.sudo)
+        m.update()
 
     def aur(self):
         a = AURhelper(self.user, aurhelper)

@@ -37,11 +37,11 @@ class Mirrorlist():
         dst = '/etc/pacman.d/mirrorlist.bak'
         shutil.copy2(self.mirrorlist, dst)
 
-    def update(self, sudo: str):
+    def update(self):
         cmd = f'sudo reflector --latest 20 --protocol https --connection-timeout 5 --sort rate --save {self.mirrorlist}'
         try:
             print('REFLECTOR: Updating Pacman mirrorlist...')
-            subprocess.run(cmd, shell=True, check=True, input=sudo.encode(), stdout=subprocess.DEVNULL)
+            subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
             print(f'[+] REFLECTOR: Mirrorlist update')
         except subprocess.CalledProcessError as err:
             print(f'[-] REFLECTOR: Mirorlist update', err)
