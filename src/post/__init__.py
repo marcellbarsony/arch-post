@@ -8,6 +8,7 @@ from .git_repos import Dotfiles
 from .init import Initialize
 from .network import WiFi
 from .network import Network
+from .pacman import Mirrorlist
 from .pacman import Pacman
 from .ssh import SSHagent
 from .services import Systemd

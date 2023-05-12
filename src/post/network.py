@@ -16,7 +16,6 @@ class WiFi():
         cmd = f'sudo nmcli radio wifi {status}'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            print('most')
             logger.info(f'Wi-Fi status: {status}')
         except subprocess.CalledProcessError as err:
             print(repr(err))

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Author : FName SName <mail@domain.com>
-Date   : 2023 April
+Date   : 2023 May
 """
 
 
@@ -23,6 +23,7 @@ from src.post import GitSetup
 from src.post import Git
 from src.post import Dotfiles
 from src.post import Initialize
+from src.post import Mirrorlist
 from src.post import Network
 from src.post import SSHagent
 from src.post import Pacman
@@ -47,13 +48,20 @@ class Main():
         i.sys_timezone(timezone)
         i.sys_clock()
 
-        while True:
-            if Network().check(network_ip, network_port):
-                break
-            else:
-                w = WiFi()
-                w.toggle(network_toggle)
-                w.connect(network_ssid, network_key)
+        # while True:
+        #     if Network().check(network_ip, network_port):
+        #         break
+        #     else:
+        #         w = WiFi()
+        #         w.toggle(network_toggle)
+        #         w.connect(network_ssid, network_key)
+
+    def pacman(self):
+        p = Pacman()
+        p.explicit_keyring()
+        m = Mirrorlist()
+        m.backup()
+        m.update()
 
     def aur(self):
         a = AURhelper(self.user, aurhelper)
@@ -104,10 +112,6 @@ class Main():
         d.repo_cfg()
         d.move_back()
 
-    def installation(self):
-        p = Pacman()
-        p.explicit_keyring()
-
     def zshell(self):
         z = Zsh(self.user)
         z.chsh()
@@ -116,9 +120,9 @@ class Main():
 
     def customize(self):
         c = Customization()
+        c.xdg_dirs(self.user)
         c.background(self.user)
         c.wayland()
-        c.xdg_dirs(self.user)
 
     @staticmethod
     def audio():
@@ -155,9 +159,9 @@ if __name__ == '__main__':
         sys.exit(1)
 
     parser = argparse.ArgumentParser(
-                prog='python3 setup.py',
-                description='Arch post install',
-                epilog='TODO'  # TODO
+                prog='python3 arch-post.py',
+                description='Arch post-install setup',
+                epilog='TODO'
                 )
     args = parser.parse_args()
 
@@ -190,12 +194,12 @@ if __name__ == '__main__':
 
     m = Main()
     m.init()
+    m.pacman()
     m.aur()
     m.password_manager()
     m.ssh()
     m.git()
     m.zshell()
-    m.installation()
     m.customize()
     #m.systemd()
     #m.development()

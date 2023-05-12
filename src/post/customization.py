@@ -15,11 +15,31 @@ class Customization():
     """Docstring for Customization"""
 
     @staticmethod
+    def xdg_dirs(user: str):
+        # Generate directories
+        #cmd = 'LC_ALL=C.UTF-8 xdg-user-dirs-update --force'
+        #try:
+        #    subprocess.run(cmd, shell=True, check=True)
+        #    logger.info('Create XDG dirs')
+        #except Exception as err:
+        #    logger.error(f'Create XDG dirs {err}')
+        #    sys.exit(1)
+
+        # Remove directories
+        parent = f'/home/{user}'
+        dirs = ['Desktop', 'Documents', 'Music', 'Public', 'Templates', 'Videos']
+        for dir in dirs:
+            try:
+                path = os.path.join(parent, dir)
+                os.rmdir(path)
+                logger.info(f'Remove XDG {dir}')
+            except OSError as err:
+                logger.error(f'Remove XDG {dir} {err}')
+                sys.exit(1)
+
+    @staticmethod
     def background(user: str):
-        # makedir
-        dir = f'/home/{user}/Downloads/Wallpapers'
-        if not os.path.exists(dir):
-            os.makedirs(dir)
+        dir = f'/home/{user}/Pictures'
 
         # download
         url = 'https://www.dropbox.com/sh/eo65dcs7buprzea/AABSnhAm1sswyiukCDW9Urp9a?dl=1'
@@ -42,26 +62,3 @@ class Customization():
         # Log
         #~/.local/share/qtile/qtile.log
         pass
-
-    @staticmethod
-    def xdg_dirs(user: str):
-        # Generate directories
-        cmd = 'LC_ALL=C.UTF-8 xdg-user-dirs-update --force'
-        try:
-            subprocess.run(cmd, shell=True, check=True)
-            logger.info('Create XDG dirs')
-        except Exception as err:
-            logger.error(f'Create XDG dirs {err}')
-            sys.exit(1)
-
-        # Remove directories
-        parent = f'/home/{user}'
-        dirs = ['Desktop', 'Documents', 'Music', 'Pictures', 'Public', 'Templates', 'Videos']
-        for dir in dirs:
-            try:
-                path = os.path.join(parent, dir)
-                os.rmdir(path)
-                logger.info(f'Remove XDG {dir}')
-            except OSError as err:
-                logger.error(f'Remove XDG {dir}')
-                sys.exit(1)

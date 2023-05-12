@@ -15,7 +15,7 @@ class Initialize():
     @staticmethod
     def get_sudo(user: str) -> str:
         while True:
-            sudo = getpass.getpass(f'[Sudo] password for {user}: ')
+            sudo = getpass.getpass(f'[sudo] password for {user}: ')
             cmd = f'echo {sudo} | sudo -S true'
             result = subprocess.run(cmd, shell=True, capture_output=True)
             if result.returncode == 0:
