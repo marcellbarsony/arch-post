@@ -42,10 +42,9 @@ class Main():
         self.user = getpass.getuser()
         self.sudo = Initialize.get_sudo(self.user)
 
-    @staticmethod
-    def init():
+    def init(self):
         i = Initialize()
-        i.sys_timezone(timezone)
+        i.sys_timezone(timezone, self.sudo)
         i.sys_clock()
 
         # while True:
@@ -60,8 +59,8 @@ class Main():
         p = Pacman()
         p.explicit_keyring()
         m = Mirrorlist()
-        m.backup()
-        m.update()
+        #m.backup()
+        m.update(self.sudo)
 
     def aur(self):
         a = AURhelper(self.user, aurhelper)
@@ -180,7 +179,6 @@ if __name__ == '__main__':
     spotify_device_id = config.get('bitwarden_data', 'spotify_device_id')
     spotify_mail =      config.get('bitwarden_data', 'spotify_mail')
     spotify_user =      config.get('bitwarden_data', 'spotify_user')
-    dependencies =      config.get('dependencies', 'dependencies')
     git_pubkey =        config.get('github', 'pubkey')
     network_ip =        config.get('network','ip')
     network_port =      config.get('network','port')

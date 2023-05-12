@@ -14,7 +14,7 @@ class Finalize():
         self.user = user
 
     def clean_home(self):
-        files = ['.bash_history', '.bash_logout', '.bash_profile', '.bashrc']
+        files = ['.bash_history', '.bash_logout', '.bash_profile', '.bashrc', '.gitconfig']
         for file in files:
             os.remove(os.path.join(f'/home/{self.user}', file))
             logger.info(f'Removed {file}')

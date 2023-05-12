@@ -16,18 +16,14 @@ class Initialize():
     def get_sudo(user: str) -> str:
         while True:
             sudo = getpass.getpass(f'[sudo] password for {user}: ')
-            cmd = f'echo {sudo} | sudo -S true'
-            result = subprocess.run(cmd, shell=True, capture_output=True)
-            if result.returncode == 0:
-                return sudo
-            else:
-                logger.error(f'Incorrect sudo password for {user}')
+            # TODO: sudo password validation
+            return sudo
 
     @staticmethod
-    def sys_timezone(timezone: str):
+    def sys_timezone(timezone: str, sudo: str):
         cmd = f'sudo timedatectl set-timezone {timezone}'
         try:
-            subprocess.run(cmd, shell=True, check=True)
+            subprocess.run(cmd, shell=True, check=True, input=sudo.encode(), stdout=subprocess.DEVNULL)
             logger.info('Time & Date: Timezone')
         except subprocess.CalledProcessError as err:
             logger.error('Time & Date: Timezone')

@@ -16,7 +16,7 @@ class Pacman():
     def explicit_keyring():
         cmd = 'sudo pacman -D --asexplicit archlinux-keyring',
         try:
-            subprocess.run(cmd, shell=True, check=True)
+            subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
             logger.info('Explicit Keyring')
         except Exception as err:
             logger.error(f'Explicit Keyring {err}')
@@ -37,11 +37,11 @@ class Mirrorlist():
         dst = '/etc/pacman.d/mirrorlist.bak'
         shutil.copy2(self.mirrorlist, dst)
 
-    def update(self):
-        cmd = f'reflector --latest 20 --protocol https --connection-timeout 5 --sort rate --save {self.mirrorlist}'
+    def update(self, sudo: str):
+        cmd = f'sudo reflector --latest 20 --protocol https --connection-timeout 5 --sort rate --save {self.mirrorlist}'
         try:
             print('REFLECTOR: Updating Pacman mirrorlist...')
-            subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+            subprocess.run(cmd, shell=True, check=True, input=sudo.encode(), stdout=subprocess.DEVNULL)
             print(f'[+] REFLECTOR: Mirrorlist update')
         except subprocess.CalledProcessError as err:
             print(f'[-] REFLECTOR: Mirorlist update', err)
