@@ -1,4 +1,3 @@
-
 import logging
 import subprocess
 import sys
@@ -16,6 +15,15 @@ class Python():
     def venv():
         print('[TODO] PYTHON venv')
         pass
+
+    @staticmethod
+    def get_modules(cwd: str):
+        modules = ''
+        with open(f'{cwd}/src/pkg/python.ini', 'r') as file:
+            for line in file:
+                if not line.startswith('[') and not line.startswith('#') and line.strip() != '':
+                    modules += f'{line.rstrip()} '
+        return modules
 
     @staticmethod
     def modules(modules: list):

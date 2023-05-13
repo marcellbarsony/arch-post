@@ -16,9 +16,14 @@ class Systemd():
 
     @staticmethod
     def enable():
-        services = ['spotifyd'] #spotifyd
+        # spotifyd
+        pass
+
+    @staticmethod
+    def enable_user():
+        services = ['pipewire', 'pipewire-pulse', 'wireplumber']
         for service in services:
-            cmd = f'sudo systemctl enable {service}.service'
+            cmd = f'systemctl --user enable {service}'
             try:
                 subprocess.run(cmd, shell=True, check=True)
                 logger.info(f'Service: Enable <{service}>')

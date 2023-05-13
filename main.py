@@ -134,15 +134,17 @@ class Main():
     def systemd():
         d = Systemd()
         d.enable()
+        d.enable_user()
 
-    @staticmethod
-    def development():
+    def development(self):
         py = Python()
         py.venv()
-        #py.modules(python_modules)
-        ruby = Ruby()
-        ruby.install()
-        ruby.gems()
+        modules = py.get_modules(self.cwd)
+        print(modules)
+        py.modules(modules)
+        #ruby = Ruby()
+        #ruby.install()
+        #ruby.gems()
         #rust = Rust()
 
     def finalize(self):
@@ -192,14 +194,14 @@ if __name__ == '__main__':
 
 
     m = Main()
-    m.init()
-    m.pacman()
-    m.aur()
-    m.password_manager()
-    m.ssh()
-    m.git()
-    m.zshell()
-    m.customize()
+    #m.init()
+    #m.pacman()
+    #m.aur()
+    #m.password_manager()
+    #m.ssh()
+    #m.git()
+    #m.zshell()
+    #m.customize()
     #m.systemd()
-    #m.development()
-    m.finalize()
+    m.development()
+    #m.finalize()

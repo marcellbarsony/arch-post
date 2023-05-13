@@ -11,6 +11,6 @@ from .network import Network
 from .pacman import Mirrorlist
 from .pacman import Pacman
 from .ssh import SSHagent
-from .services import Systemd
+from .systemd import Systemd
 from .zsh import Zsh
 from .finalize import Finalize
