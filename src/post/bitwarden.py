@@ -32,7 +32,7 @@ class Bitwarden():
             try:
                 subprocess.run(cmd, shell=True, check=True)
                 logger.info('RBW config')
-            except KeyboardInterrupt as err:
+            except KeyboardInterrupt:
                 sys.exit(0)
             except subprocess.CalledProcessError as err:
                 logger.error('RBW config')

@@ -3,7 +3,6 @@ import os
 import shutil
 import subprocess
 import sys
-from .bitwarden import *
 
 
 logging.basicConfig(level=logging.INFO)
@@ -15,7 +14,7 @@ class Git():
     """Repository setup"""
 
     def __init__(self, user: str, gh_user: str, repo: str):
-        self.dir = f'/home/{user}/git/{repo}'
+        self.dir = f'/home/{user}/.src/{repo}'
         self.gh_user = gh_user
         self.repo = repo
 
@@ -56,9 +55,9 @@ class Dotfiles(Git):
 
     def __init__(self, user: str, gh_user: str):
         self.dir = f'/home/{user}/.config'
-        self.tmp = f'/tmp/config'
+        self.tmp = '/tmp/config'
         self.repo = 'dotfiles'
-        self.gh_user = gh_user # TODO: duplicated
+        self.gh_user = gh_user  # TODO: duplicated
 
     def temp_dir(self):
         os.makedirs(self.tmp, exist_ok=True)
@@ -91,7 +90,7 @@ class Dotfiles(Git):
                     shutil.move(item_path, self.dir)
                 except shutil.Error as err:
                     if 'already exists' in str(err):
-                        logger.info(f'File or directory already exists >> skipping')
+                        logger.info('File or directory already exists >> skipping')
                         pass
                     else:
                         sys.exit(1)
@@ -100,7 +99,7 @@ class Dotfiles(Git):
                     shutil.move(item_path, os.path.join(self.dir, item))
                 except shutil.Error as err:
                     if 'already exists' in str(err):
-                        logger.info(f'File or directory already exists >> skipping')
+                        logger.info('File or directory already exists >> skipping')
                         pass
                     else:
                         sys.exit(1)

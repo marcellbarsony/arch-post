@@ -1,4 +1,5 @@
 import logging
+import os
 import subprocess
 import sys
 
@@ -12,9 +13,12 @@ class Python():
     """Docstring for Python"""
 
     @staticmethod
-    def venv():
-        print('[TODO] PYTHON venv')
-        pass
+    def venv(user: str):
+        dirs = ['arch', 'arch-post', 'arch-tools']
+        cmd = 'python -m venv venv'
+        for dir in dirs:
+            os.chdir(f'/home/{user}/.src/{dir}')
+            subprocess.run(cmd, shell=True)
 
     @staticmethod
     def get_modules(cwd: str):

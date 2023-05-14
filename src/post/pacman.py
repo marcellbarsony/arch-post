@@ -42,7 +42,7 @@ class Mirrorlist():
         try:
             print('REFLECTOR: Updating Pacman mirrorlist...')
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            print(f'[+] REFLECTOR: Mirrorlist update')
+            print('[+] REFLECTOR: Mirrorlist update')
         except subprocess.CalledProcessError as err:
-            print(f'[-] REFLECTOR: Mirorlist update', err)
+            print('[-] REFLECTOR: Mirorlist update', err)
             sys.exit(1)

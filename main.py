@@ -13,7 +13,7 @@ import sys
 
 from src.lang import Python
 from src.lang import Ruby
-#from src.lang import Rust
+from src.lang import Rust
 
 from src.post import Audio
 from src.post import AURhelper
@@ -24,11 +24,11 @@ from src.post import Git
 from src.post import Dotfiles
 from src.post import Initialize
 from src.post import Mirrorlist
-from src.post import Network
+from src.post import Network  # TODO
 from src.post import SSHagent
 from src.post import Pacman
 from src.post import Systemd
-from src.post import WiFi
+from src.post import WiFi  # TODO
 from src.post import Zsh
 from src.post import Finalize
 
@@ -60,7 +60,7 @@ class Main():
         p = Pacman()
         p.explicit_keyring()
         m = Mirrorlist()
-        #m.backup()
+        # m.backup()
         m.update()
 
     def aur(self):
@@ -76,7 +76,7 @@ class Main():
         while True:
             if rbw.register(bw_mail, bw_lock):
                 break
-            user_in = input(f'Failed to authenticate. Retry? Y/N ')
+            user_in = input('Failed to authenticate. Retry? Y/N ')
             if user_in.upper() == 'N':
                 sys.exit(1)
 
@@ -130,22 +130,22 @@ class Main():
         a.pipewire()
         a.spotify()
 
+    def development(self):
+        python = Python()
+        modules = py.get_modules(self.cwd)
+        python.modules(modules)
+        python.venv(self.user)
+        rust = Rust()
+        rust.cargo_cfg(self.user)
+        # ruby = Ruby()
+        # ruby.install()
+        # ruby.gems()
+
     @staticmethod
     def systemd():
         d = Systemd()
         d.enable()
         d.enable_user()
-
-    def development(self):
-        py = Python()
-        py.venv()
-        modules = py.get_modules(self.cwd)
-        print(modules)
-        py.modules(modules)
-        #ruby = Ruby()
-        #ruby.install()
-        #ruby.gems()
-        #rust = Rust()
 
     def finalize(self):
         f = Finalize(self.user)
@@ -192,16 +192,15 @@ if __name__ == '__main__':
     ssh_key =           config.get('ssh','key')
     timezone =          config.get('timezone', 'timezone')
 
-
     m = Main()
-    #m.init()
-    #m.pacman()
-    #m.aur()
-    #m.password_manager()
-    #m.ssh()
-    #m.git()
-    #m.zshell()
-    #m.customize()
-    #m.systemd()
+    m.init()
+    m.pacman()
+    m.aur()
+    m.password_manager()
+    m.ssh()
+    m.git()
+    m.zshell()
+    m.customize()
     m.development()
-    #m.finalize()
+    m.systemd()
+    m.finalize()

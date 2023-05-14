@@ -30,6 +30,7 @@ class WiFi():
             print(repr(err))
             pass
 
+
 class Network():
 
     """Network settings"""
