@@ -132,7 +132,7 @@ class Main():
 
     def development(self):
         python = Python()
-        modules = py.get_modules(self.cwd)
+        modules = python.get_modules(self.cwd)
         python.modules(modules)
         python.venv(self.user)
         rust = Rust()
