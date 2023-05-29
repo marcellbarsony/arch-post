@@ -1,6 +1,6 @@
 import logging
 import os
-import shutil
+import subprocess
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -8,16 +8,18 @@ logger = logging.getLogger(__name__)
 
 class Rust():
 
-    """Docstring for Rust config"""
-
-    def __init__(self):
-        pass
+    """Docstring for Rust setup"""
 
     @staticmethod
-    def cargo_cfg(user: str):
-        """Move Cargo config to $CARGO_HOME"""
-        src = f'/home/{user}/.cargo'
-        dst = f'/home/{user}/.local/share/cargo'
-
-        if os.path.exists(src) and os.path.isdir(src):
-            shutil.move(src, dst)
+    def install():
+        """
+        Rust install with Rustup
+        https://rustup.rs/
+        """
+        cmd = "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+        try:
+            os.system('clear')
+            subprocess.run(cmd, shell=True, check=True)
+            logger.info('Rust install')
+        except subprocess.CalledProcessError as err:
+            logger.error(err)

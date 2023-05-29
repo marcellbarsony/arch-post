@@ -42,10 +42,7 @@ class Zsh():
                 sys.exit(1)
 
     def tools(self):
-        repositories = {'marlonrichert/zsh-autocomplete': 'zsh-autocomplete',
-                        'zsh-users/zsh-completions':      'zsh-completions',
-                        'zsh-users/zsh-autosuggestions':      'zsh-autosuggestions',
-                        'zsh-users/zsh-syntax-highlighting':      'zsh-syntax-highlighting'}
+        repositories = {'marlonrichert/zsh-autocomplete': 'zsh-autocomplete'}
         for repo, dir in repositories.items():
             dst = f'/home/{self.user}/.local/src/{dir}'
             cmd = f'git clone --depth 1 git@github.com:{repo}.git {dst}'

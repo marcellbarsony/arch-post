@@ -47,6 +47,8 @@ class Main():
         i.sys_timezone(timezone)
         i.sys_clock()
 
+    @staticmethod
+    def network():
         # while True:
         #     if Network().check(network_ip, network_port):
         #         break
@@ -54,6 +56,12 @@ class Main():
         #         w = WiFi()
         #         w.toggle(network_toggle)
         #         w.connect(network_ssid, network_key)
+        pass
+
+    @staticmethod
+    def dependencies():
+        rust = Rust()
+        rust.install()
 
     @staticmethod
     def pacman():
@@ -135,8 +143,6 @@ class Main():
         modules = python.get_modules(self.cwd)
         python.modules(modules)
         python.venv(self.user)
-        rust = Rust()
-        rust.cargo_cfg(self.user)
         # ruby = Ruby()
         # ruby.install()
         # ruby.gems()
@@ -194,6 +200,8 @@ if __name__ == '__main__':
 
     m = Main()
     m.init()
+    m.network()
+    m.dependencies()
     m.pacman()
     m.aur()
     m.password_manager()
