@@ -15,7 +15,6 @@ from src.lang import Python
 from src.lang import Ruby
 from src.lang import Rust
 
-from src.post import Audio
 from src.post import AURhelper
 from src.post import Bitwarden
 from src.post import Customization
@@ -27,7 +26,8 @@ from src.post import Mirrorlist
 from src.post import Network  # TODO
 from src.post import SSHagent
 from src.post import Pacman
-from src.post import Systemd
+from src.post import Pipewire
+from src.post import Wayland
 from src.post import WiFi  # TODO
 from src.post import Zsh
 from src.post import Finalize
@@ -42,34 +42,28 @@ class Main():
         self.user = getpass.getuser()
 
     @staticmethod
-    def init():
+    def date_time():
         i = Initialize()
         i.sys_timezone(timezone)
         i.sys_clock()
 
     @staticmethod
     def network():
-        # while True:
-        #     if Network().check(network_ip, network_port):
-        #         break
-        #     else:
-        #         w = WiFi()
-        #         w.toggle(network_toggle)
-        #         w.connect(network_ssid, network_key)
+        print('TODO: Network connection')
         pass
-
-    @staticmethod
-    def dependencies():
-        rust = Rust()
-        rust.install()
 
     @staticmethod
     def pacman():
         p = Pacman()
-        p.explicit_keyring()
+        p.keyring()
         m = Mirrorlist()
-        # m.backup()
+        m.backup()
         m.update()
+
+    def rust(self):
+        r = Rust(self.user)
+        r.toolchain()
+        r.xdg()
 
     def aur(self):
         a = AURhelper(self.user, aurhelper)
@@ -106,52 +100,51 @@ class Main():
         g.ssh_test()
         g.config(gh_user, git_mail)
 
+        d = Dotfiles(self.user, gh_user)
+        d.remove()
+        d.clone()
+        d.cfg()
+
         for repo in repositories:
             r = Git(self.user, gh_user, repo)
             r.repo_clone()
             r.repo_chdir()
             r.repo_cfg()
 
-        d = Dotfiles(self.user, gh_user)
-        d.temp_dir()
-        d.move()
-        d.repo_clone()
-        d.repo_chdir()
-        d.repo_cfg()
-        d.move_back()
-
-    def zshell(self):
+    def shell(self):
         z = Zsh(self.user)
         z.chsh()
         z.config()
         z.tools()
 
+    @staticmethod
+    def audio():
+        p = Pipewire()
+        p.services()
+
+    def display(self):
+        w = Wayland()
+        w.dm_install(aurhelper)
+        w.dm_service()
+
+    def python(self):
+        p = Python()
+        modules = p.get_modules(self.cwd)
+        p.modules(modules)
+        p.venv(self.user)
+
+    @staticmethod
+    def ruby():
+        # r = Ruby()
+        # r.install()
+        # r.gems()
+        pass
+
     def customize(self):
         c = Customization()
         c.xdg_dirs(self.user)
         c.background(self.user)
-        c.wayland()
-
-    @staticmethod
-    def audio():
-        a = Audio()
-        a.pipewire()
-        a.spotify()
-
-    def development(self):
-        python = Python()
-        modules = python.get_modules(self.cwd)
-        python.modules(modules)
-        python.venv(self.user)
-        # ruby = Ruby()
-        # ruby.install()
-        # ruby.gems()
-
-    @staticmethod
-    def systemd():
-        d = Systemd()
-        d.enable()
-        d.enable_user()
+        c.spotify()
 
     def finalize(self):
         f = Finalize(self.user)
@@ -178,7 +171,6 @@ if __name__ == '__main__':
 
     aurhelper =         config.get('aur', 'helper')
     bw_mail =           config.get('bitwarden', 'mail')
-    bw_url =            config.get('bitwarden', 'url')
     bw_lock =           config.get('bitwarden', 'lock')
     git_mail =          config.get('bitwarden_data', 'github_mail')
     git_user =          config.get('bitwarden_data', 'github_user')
@@ -199,16 +191,18 @@ if __name__ == '__main__':
     timezone =          config.get('timezone', 'timezone')
 
     m = Main()
-    m.init()
+    m.date_time()
     m.network()
-    m.dependencies()
+    m.rust()
     m.pacman()
     m.aur()
     m.password_manager()
     m.ssh()
     m.git()
-    m.zshell()
+    m.shell()
+    m.audio()
+    m.display()
+    m.python()
+    m.ruby()
     m.customize()
-    m.development()
-    m.systemd()
     m.finalize()

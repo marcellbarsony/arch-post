@@ -14,10 +14,16 @@ class Finalize():
         self.user = user
 
     def clean_home(self):
-        files = ['.bash_history', '.bash_logout', '.bash_profile', '.bashrc']
+        files = ['.bashrc',
+                 '.bash_logout',
+                 '.bash_profile',
+                 '.bash_history',
+                 '.gitconfig']
         for file in files:
-            os.remove(os.path.join(f'/home/{self.user}', file))
-            logger.info(f'Removed {file}')
+            path = os.path.join(f'/home/{self.user}', file)
+            if os.path.exists(path):
+                os.remove(path)
+                logger.info(f'Removed {file}')
 
     # Remove orphans and their configs (requires root)
     # 'sudo pacman -Qtdq | pacman -Rns -'

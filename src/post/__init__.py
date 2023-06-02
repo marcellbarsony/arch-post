@@ -1,4 +1,3 @@
-from .audio import Audio
 from .aur import AURhelper
 from .bitwarden import Bitwarden
 from .customization import Customization
@@ -10,7 +9,8 @@ from .network import WiFi
 from .network import Network
 from .pacman import Mirrorlist
 from .pacman import Pacman
+from .audio import Pipewire
 from .ssh import SSHagent
-from .systemd import Systemd
+from .wayland import Wayland
 from .zsh import Zsh
 from .finalize import Finalize

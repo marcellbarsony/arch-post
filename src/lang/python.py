@@ -13,20 +13,12 @@ class Python():
     """Docstring for Python"""
 
     @staticmethod
-    def venv(user: str):
-        dirs = ['arch', 'arch-post', 'arch-tools']
-        cmd = 'python -m venv venv'
-        for dir in dirs:
-            os.chdir(f'/home/{user}/.src/{dir}')
-            subprocess.run(cmd, shell=True)
-
-    @staticmethod
     def get_modules(cwd: str):
-        modules = ''
+        modules = [] 
         with open(f'{cwd}/src/pkg/python.ini', 'r') as file:
             for line in file:
                 if not line.startswith('[') and not line.startswith('#') and line.strip() != '':
-                    modules += f'{line.rstrip()} '
+                    modules.append(line.rstrip())
         return modules
 
     @staticmethod
@@ -36,6 +28,14 @@ class Python():
             try:
                 subprocess.run(cmd, shell=True, check=True)
                 print('[+] PYTHON modules')
-            except Exception as err:
+            except subprocess.CalledProcessError as err:
                 print('[-] PYTHON modules', err)
                 sys.exit(1)
+
+    @staticmethod
+    def venv(user: str):
+        dirs = ['arch', 'arch-post', 'arch-tools']
+        cmd = 'python -m venv venv'
+        for dir in dirs:
+            os.chdir(f'/home/{user}/.src/{dir}')
+            subprocess.run(cmd, shell=True)

@@ -18,9 +18,10 @@ class Zsh():
     def chsh(self):
         cmd = 'chsh -s /usr/bin/zsh'
         try:
+            os.system('clear')
             subprocess.run(cmd, shell=True, check=True)
             logger.info('Change to /usr/bin/zsh')
-        except Exception as err:
+        except subprocess.CalledProcessError as err:
             logger.error(f'Change to /usr/bin/zsh {err}')
             sys.exit(1)
 
@@ -37,7 +38,7 @@ class Zsh():
                 subprocess.run(cmd_copy, shell=True, check=True)
                 subprocess.run(cmd_chmod, shell=True, check=True)
                 logger.info('Startup file')
-            except Exception as err:
+            except subprocess.CalledProcessError as err:
                 logger.error(f'Startup file {err}')
                 sys.exit(1)
 
@@ -49,6 +50,6 @@ class Zsh():
             try:
                 subprocess.run(cmd, shell=True, check=True)
                 logger.info(f'Tools {repo}')
-            except Exception as err:
+            except subprocess.CalledProcessError as err:
                 logger.error(f'Tools {repo} {err}')
                 sys.exit(1)

@@ -1,6 +1,5 @@
 import logging
 import os
-import shutil
 import subprocess
 import sys
 
@@ -14,9 +13,9 @@ class Git():
     """Repository setup"""
 
     def __init__(self, user: str, gh_user: str, repo: str):
+        self.repo = repo
         self.dir = f'/home/{user}/.src/{repo}'
         self.gh_user = gh_user
-        self.repo = repo
 
     def repo_clone(self):
         cmd = f'git clone git@github.com:{self.gh_user}/{self.repo}.git {self.dir}'
@@ -44,62 +43,44 @@ class Git():
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
             logger.info(f'Set-url {self.repo}')
-        except Exception as err:
+        except subprocess.CalledProcessError as err:
             logger.error(f'Set-url {self.repo} {err}')
             sys.exit(1)
 
+class Dotfiles():
 
-class Dotfiles(Git):
-
-    """Dotfiles setup"""
+    """Docstring for Dotfiles"""
 
     def __init__(self, user: str, gh_user: str):
         self.dir = f'/home/{user}/.config'
-        self.tmp = '/tmp/config'
-        self.repo = 'dotfiles'
-        self.gh_user = gh_user  # TODO: duplicated
+        self.gh_user = gh_user
+        pass
 
-    def temp_dir(self):
-        os.makedirs(self.tmp, exist_ok=True)
+    def remove(self):
+        cmd = f'rm -rf {self.dir}'
+        try:
+            subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+            logger.info(f'Remove existing config')
+        except subprocess.CalledProcessError as err:
+            logger.error(f'Remove existing config {err}')
+            sys.exit(1)
 
-    def move(self):
-        for item in os.listdir(self.dir):
-            item_path = os.path.join(self.dir, item)
-            if os.path.isfile(item_path):
-                try:
-                    shutil.move(item_path, self.tmp)
-                except shutil.Error as err:
-                    if 'already exists' in str(err):
-                        pass
-                    else:
-                        sys.exit(1)
-            else:
-                try:
-                    shutil.move(item_path, os.path.join(self.tmp, item))
-                except shutil.Error as err:
-                    if 'already exists' in str(err):
-                        pass
-                    else:
-                        sys.exit(1)
+    def clone(self):
+        cmd = f'git clone git@github.com:{self.gh_user}/dotfiles.git {self.dir}'
+        try:
+            subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+            logger.info('Clone')
+        except subprocess.CalledProcessError as err:
+            logger.error('Clone')
+            print(repr(err))
+            sys.exit(1)
 
-    def move_back(self):
-        for item in os.listdir(self.tmp):
-            item_path = os.path.join(self.tmp, item)
-            if os.path.isfile(item_path):
-                try:
-                    shutil.move(item_path, self.dir)
-                except shutil.Error as err:
-                    if 'already exists' in str(err):
-                        logger.info('File or directory already exists >> skipping')
-                        pass
-                    else:
-                        sys.exit(1)
-            else:
-                try:
-                    shutil.move(item_path, os.path.join(self.dir, item))
-                except shutil.Error as err:
-                    if 'already exists' in str(err):
-                        logger.info('File or directory already exists >> skipping')
-                        pass
-                    else:
-                        sys.exit(1)
+    def cfg(self):
+        cmd = f'git remote set-url origin git@github.com:{self.gh_user}/dotfiles.git'
+        try:
+            os.chdir(self.dir)
+            subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+            logger.info(f'Config')
+        except subprocess.CalledProcessError as err:
+            logger.error(f'Config {err}')
+            sys.exit(1)

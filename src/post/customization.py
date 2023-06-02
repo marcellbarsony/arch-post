@@ -23,18 +23,20 @@ class Customization():
         # except Exception as err:
         #     logger.error(f'Create XDG dirs {err}')
         #     sys.exit(1)
+        pass
 
         # Remove directories
         parent = f'/home/{user}'
         dirs = ['Desktop', 'Documents', 'Music', 'Public', 'Templates', 'Videos']
         for dir in dirs:
-            try:
-                path = os.path.join(parent, dir)
-                os.rmdir(path)
-                logger.info(f'Remove XDG {dir}')
-            except OSError as err:
-                logger.error(f'Remove XDG {dir} {err}')
-                sys.exit(1)
+            path = os.path.join(parent, dir)
+            if os.path.exists(path):
+                try:
+                    os.rmdir(path)
+                    logger.info(f'Remove XDG {dir}')
+                except OSError as err:
+                    logger.error(f'Remove XDG {dir} {err}')
+                    sys.exit(1)
 
     @staticmethod
     def background(user: str):
@@ -51,6 +53,22 @@ class Customization():
 
         # delete
         os.remove(out)
+
+    @staticmethod
+    def spotify():
+        print('[TODO] Spotify')
+        # killall spotifyd
+
+        # # Spotifyd.conf
+        # sed -i "s/usr/${spotify_username}/g" ${HOME}/.config/spotifyd/spotifyd.conf
+        # sed -i "s/pswd/${spotify_password}/g" ${HOME}/.config/spotifyd/spotifyd.conf
+        # sed -i "s#cachedir#/home/${USER}/.cache/spotifyd/#g" ${HOME}/.config/spotifyd/spotifyd.conf
+
+        # # Client.yml
+        # sed -i "s/clientid/${spotify_client_id}/g" ${HOME}/.config/spotify-tui/client.yml
+        # sed -i "s/clientsecret/${spotify_client_secret}/g" ${HOME}/.config/spotify-tui/client.yml
+        # sed -i "s/deviceid/${spotify_device_id}/g" ${HOME}/.config/spotify-tui/client.yml
+        pass
 
     @staticmethod
     def wayland():
