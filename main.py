@@ -21,16 +21,16 @@ from src.post import Customization
 from src.post import GitSetup
 from src.post import Git
 from src.post import Dotfiles
-from src.post import Initialize
+from src.post import SysTime
 from src.post import Mirrorlist
 from src.post import Network  # TODO
 from src.post import SSHagent
 from src.post import Pacman
 from src.post import Pipewire
-from src.post import Wayland
+from src.post import DisplayManager
 from src.post import WiFi  # TODO
 from src.post import Zsh
-from src.post import Finalize
+from src.post import XDGStandard
 
 
 class Main():
@@ -42,10 +42,10 @@ class Main():
         self.user = getpass.getuser()
 
     @staticmethod
-    def date_time():
-        i = Initialize()
-        i.sys_timezone(timezone)
-        i.sys_clock()
+    def systime():
+        i = SysTime()
+        i.time()
+        i.timezone(timezone)
 
     @staticmethod
     def network():
@@ -63,7 +63,6 @@ class Main():
     def rust(self):
         r = Rust(self.user)
         r.toolchain()
-        r.xdg()
 
     def aur(self):
         a = AURhelper(self.user, aurhelper)
@@ -120,12 +119,34 @@ class Main():
     @staticmethod
     def audio():
         p = Pipewire()
-        p.services()
+        p.service()
 
-    def display(self):
-        w = Wayland()
-        w.dm_install(aurhelper)
-        w.dm_service()
+    @staticmethod
+    def display():
+        l = DisplayManager(displayman)
+        l.install(aurhelper)
+        l.service()
+
+    def customize(self):
+        c = Customization()
+        c.background(self.user)
+        c.spotify()
+
+    def xdg(self):
+        x = XDGStandard(self.user)
+        x.xdg_force()
+        x.xdg_remove(self.user)
+        x.home()
+        x.rust()
+
+
+class Lang():
+
+    """Developer setup"""
+
+    def __init__(self):
+        self.cwd = os.getcwd()
+        self.user = getpass.getuser()
 
     def python(self):
         p = Python()
@@ -139,16 +160,6 @@ class Main():
         # r.install()
         # r.gems()
         pass
-
-    def customize(self):
-        c = Customization()
-        c.xdg_dirs(self.user)
-        c.background(self.user)
-        c.spotify()
-
-    def finalize(self):
-        f = Finalize(self.user)
-        f.clean_home()
 
 
 if __name__ == '__main__':
@@ -180,6 +191,7 @@ if __name__ == '__main__':
     spotify_device_id = config.get('bitwarden_data', 'spotify_device_id')
     spotify_mail =      config.get('bitwarden_data', 'spotify_mail')
     spotify_user =      config.get('bitwarden_data', 'spotify_user')
+    displayman =        config.get('displayman', 'displayman')
     git_pubkey =        config.get('github', 'pubkey')
     network_ip =        config.get('network','ip')
     network_port =      config.get('network','port')
@@ -191,7 +203,7 @@ if __name__ == '__main__':
     timezone =          config.get('timezone', 'timezone')
 
     m = Main()
-    m.date_time()
+    m.systime()
     m.network()
     m.rust()
     m.pacman()
@@ -202,7 +214,9 @@ if __name__ == '__main__':
     m.shell()
     m.audio()
     m.display()
-    m.python()
-    m.ruby()
     m.customize()
-    m.finalize()
+    m.xdg()
+
+    l = Lang()
+    l.python()
+    l.ruby()

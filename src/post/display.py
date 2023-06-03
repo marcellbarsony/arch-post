@@ -8,16 +8,17 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class Wayland():
+class DisplayManager():
 
     """
-    Docstring for Wayland
-    https://wiki.archlinux.org/title/Wayland
+    Docstring for Display manager
     """
 
-    @staticmethod
-    def dm_install(aurhelper: str):
-        cmd = f'{aurhelper} -S --noconfirm ly' # lemurs-git
+    def __init__(self, loginman: str):
+        self.loginman = loginman
+
+    def install(self, aurhelper: str):
+        cmd = f'{aurhelper} -S --noconfirm {self.loginman}'
         try:
             os.system('clear')
             subprocess.run(cmd, shell=True, check=True)
@@ -26,9 +27,8 @@ class Wayland():
             logger.error(f'Display manager install {err}')
             sys.exit(1)
 
-    @staticmethod
-    def dm_service():
-        cmd = 'sudo systemctl enable ly.service' # lemurs.service
+    def service(self):
+        cmd = f'sudo systemctl enable {self.loginman}.service'
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
             logger.info('Display manager service')

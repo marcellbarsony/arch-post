@@ -1,4 +1,5 @@
 import logging
+import os
 import subprocess
 import sys
 
@@ -31,7 +32,7 @@ class Bitwarden():
         for cmd in commands:
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logger.info('RBW config')
+                os.system('clear')
             except KeyboardInterrupt:
                 sys.exit(0)
             except subprocess.CalledProcessError as err:

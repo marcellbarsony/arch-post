@@ -15,7 +15,7 @@ class Pipewire():
     """
 
     @staticmethod
-    def services():
+    def service():
         services = ['pipewire',
                     'pipewire-pulse',
                     'wireplumber']
