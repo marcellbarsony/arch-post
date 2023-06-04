@@ -27,10 +27,10 @@ class Python():
             cmd = f'pip install {module}'
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                print('[+] PYTHON modules')
             except subprocess.CalledProcessError as err:
-                print('[-] PYTHON modules', err)
+                logger.error(f'Python modules {err}')
                 sys.exit(1)
+        logger.info('Python modules')
 
     @staticmethod
     def venv(user: str):

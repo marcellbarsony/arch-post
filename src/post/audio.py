@@ -23,7 +23,7 @@ class Pipewire():
             cmd = f'systemctl --user enable {service}'
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logger.info(f'Service: Enable <{service}>')
+                logger.info(f'Enable <{service}>')
             except subprocess.CalledProcessError as err:
-                logger.error(f'Service: Enable <{service}> {err}')
+                logger.error(f'Enable <{service}> {err}')
                 sys.exit(1)

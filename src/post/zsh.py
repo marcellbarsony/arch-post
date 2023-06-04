@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class Zsh():
 
-    """Docstring for Shell"""
+    """Docstring for ZSH"""
 
     def __init__(self, user: str):
         self.user = user

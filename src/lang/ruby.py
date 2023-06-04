@@ -16,9 +16,9 @@ class Ruby():
         cmd = 'sudo pacman -Q ruby'
         try:
             subprocess.run(cmd, shell=True, check=True)
-            print('[+] RUBY install')
+            logger.info('Ruby install')
         except Exception as err:
-            print('[-] RUBY install', err)
+            logger.error(f'Ruby install {err}')
             sys.exit(1)
 
     @staticmethod
