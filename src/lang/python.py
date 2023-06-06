@@ -10,7 +10,11 @@ logger = logging.getLogger(__name__)
 
 class Python():
 
-    """Docstring for Python"""
+    """
+    Docstring for Python
+    https://wiki.archlinux.org/title/python
+    https://wiki.archlinux.org/title/python/virtual_environment
+    """
 
     @staticmethod
     def get_modules(cwd: str):

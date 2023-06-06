@@ -142,7 +142,7 @@ class Main():
 
 class Lang():
 
-    """Developer setup"""
+    """Dev environment setup"""
 
     def __init__(self):
         self.cwd = os.getcwd()
@@ -156,14 +156,14 @@ class Lang():
 
     @staticmethod
     def ruby():
-        # r = Ruby()
-        # r.install()
-        # r.gems()
-        pass
+        r = Ruby()
+        r.install()
+        r.gems()
 
 
 if __name__ == '__main__':
-    """ Initialize argparse """
+
+    """Initialize argparse"""
 
     uid = os.getuid()
     if uid == 0:
@@ -176,6 +176,8 @@ if __name__ == '__main__':
                 epilog='TODO'
                 )
     args = parser.parse_args()
+
+    """Initialize global variables"""
 
     config = configparser.ConfigParser()
     config.read('_config.ini')
