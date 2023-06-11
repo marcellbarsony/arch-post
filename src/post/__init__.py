@@ -1,4 +1,5 @@
 from .aur import AURhelper
+from .rust import Rust
 from .bitwarden import Bitwarden
 from .customization import Customization
 from .git_setup import GitSetup

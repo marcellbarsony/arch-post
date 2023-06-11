@@ -11,10 +11,6 @@ import getpass
 import os
 import sys
 
-from src.lang import Python
-from src.lang import Ruby
-from src.lang import Rust
-
 from src.post import AURhelper
 from src.post import Bitwarden
 from src.post import Customization
@@ -27,6 +23,7 @@ from src.post import Network  # TODO
 from src.post import SSHagent
 from src.post import Pacman
 from src.post import Pipewire
+from src.post import Rust
 from src.post import DisplayManager
 from src.post import WiFi  # TODO
 from src.post import Zsh
@@ -61,7 +58,7 @@ class Main():
         m.update()
 
     def rust(self):
-        r = Rust(self.user)
+        r = Rust()
         r.toolchain()
 
     def aur(self):
@@ -140,27 +137,6 @@ class Main():
         x.rust()
 
 
-class Lang():
-
-    """Dev environment setup"""
-
-    def __init__(self):
-        self.cwd = os.getcwd()
-        self.user = getpass.getuser()
-
-    def python(self):
-        p = Python()
-        modules = p.get_modules(self.cwd)
-        p.modules(modules)
-        p.venv(self.user)
-
-    @staticmethod
-    def ruby():
-        r = Ruby()
-        r.install()
-        r.gems()
-
-
 if __name__ == '__main__':
 
     """Initialize argparse"""
@@ -218,7 +194,3 @@ if __name__ == '__main__':
     m.display()
     m.customize()
     m.xdg()
-
-    l = Lang()
-    l.python()
-    l.ruby()
