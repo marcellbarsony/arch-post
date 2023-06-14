@@ -1,7 +1,8 @@
 import logging
 import os
-import sys
 import urllib.request
+import sys
+import subprocess
 import zipfile
 
 
@@ -47,3 +48,14 @@ class Customization():
         # sed -i "s/clientsecret/${spotify_client_secret}/g" ${HOME}/.config/spotify-tui/client.yml
         # sed -i "s/deviceid/${spotify_device_id}/g" ${HOME}/.config/spotify-tui/client.yml
         pass
+
+    @staticmethod
+    def pc_speaker():
+        # https://wiki.archlinux.org/title/PC_speaker#Globally
+        cmd = 'sudo rmmod pcspkr'
+        try:
+            subprocess.run(cmd, shell=True, check=True)
+            logger.info('Disable PC speaker')
+        except subprocess.CalledProcessError as err:
+            logger.error(f'Disable PC speaker {err}')
+            pass
