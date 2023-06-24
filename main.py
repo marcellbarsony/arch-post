@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Author : FName SName <mail@domain.com>
-Date   : 2023 May
+Author : Marcell Barsony
+Date   : January 2023
 """
 
 
@@ -23,6 +23,7 @@ from src.post import Network  # TODO
 from src.post import SSHagent
 from src.post import Pacman
 from src.post import Pipewire
+from src.post import Progs
 from src.post import Rust
 from src.post import DisplayManager
 from src.post import WiFi  # TODO
@@ -100,6 +101,10 @@ class Main():
         d.remove()
         d.clone()
         d.cfg()
+
+        p = Progs(self.user, gh_user)
+        p.clone()
+        p.cfg()
 
         for repo in repositories:
             r = Git(self.user, gh_user, repo)

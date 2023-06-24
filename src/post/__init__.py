@@ -5,6 +5,7 @@ from .customization import Customization
 from .git_setup import GitSetup
 from .git_repos import Git
 from .git_repos import Dotfiles
+from .git_repos import Progs
 from .timedate import SysTime
 from .network import WiFi
 from .network import Network

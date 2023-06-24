@@ -7,6 +7,7 @@ class Rust():
 
     @staticmethod
     def toolchain():
+
         """
         Rust default toolchain install
         https://rustup.rs/
