@@ -51,7 +51,7 @@ class Customization():
 
     @staticmethod
     def pc_speaker():
-        # https://wiki.archlinux.org/title/PC_speaker#Globally
+        """https://wiki.archlinux.org/title/PC_speaker#Globally"""
         cmd = 'sudo rmmod pcspkr'
         try:
             subprocess.run(cmd, shell=True, check=True)
