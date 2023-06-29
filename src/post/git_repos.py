@@ -14,7 +14,7 @@ class Git():
 
     def __init__(self, user: str, gh_user: str, repo: str):
         self.repo = repo
-        self.dir = f'/home/{user}/.local/got/{repo}'
+        self.dir = f'/home/{user}/.local/git/{repo}'
         self.gh_user = gh_user
 
     def repo_clone(self):
