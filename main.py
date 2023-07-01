@@ -47,7 +47,7 @@ class Main():
 
     @staticmethod
     def network():
-        print('TODO: Network connection')
+        print("TODO: Network connection")
         pass
 
     @staticmethod
@@ -75,8 +75,8 @@ class Main():
         while True:
             if rbw.register(bw_mail, bw_lock):
                 break
-            user_in = input('Failed to authenticate. Retry? Y/N ')
-            if user_in.upper() == 'N':
+            user_in = input("Failed to authenticate. Retry? Y/N ")
+            if user_in.upper() == "N":
                 sys.exit(1)
 
     def ssh(self):
@@ -143,48 +143,48 @@ class Main():
         x.rust()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     """Initialize argparse"""
 
     uid = os.getuid()
     if uid == 0:
-        print(f'[-] Executed as root (UID={uid})')
+        print(f"[-] Executed as root (UID={uid})")
         sys.exit(1)
 
     parser = argparse.ArgumentParser(
-                prog='python3 arch-post.py',
-                description='Arch post-install setup',
-                epilog='TODO'
+                prog="python3 arch-post.py",
+                description="Arch post-install setup",
+                epilog="TODO"
                 )
     args = parser.parse_args()
 
     """Initialize global variables"""
 
     config = configparser.ConfigParser()
-    config.read('_config.ini')
+    config.read("_config.ini")
 
-    aurhelper =         config.get('aur', 'helper')
-    bw_mail =           config.get('bitwarden', 'mail')
-    bw_lock =           config.get('bitwarden', 'lock')
-    git_mail =          config.get('bitwarden_data', 'github_mail')
-    git_user =          config.get('bitwarden_data', 'github_user')
-    git_token =         config.get('bitwarden_data', 'github_token')
-    spotify_client_id = config.get('bitwarden_data', 'spotify_client_id')
-    spotify_secret =    config.get('bitwarden_data', 'spotify_client_secret')
-    spotify_device_id = config.get('bitwarden_data', 'spotify_device_id')
-    spotify_mail =      config.get('bitwarden_data', 'spotify_mail')
-    spotify_user =      config.get('bitwarden_data', 'spotify_user')
-    displayman =        config.get('displayman', 'displayman')
-    git_pubkey =        config.get('github', 'pubkey')
-    network_ip =        config.get('network','ip')
-    network_port =      config.get('network','port')
-    network_toggle =    config.get('network','wifi')
-    network_key =       config.get('network','wifi_key')
-    network_ssid =      config.get('network','wifi_ssid')
-    repositories =      config.get('repositories','repositories').split(', ')
-    ssh_key =           config.get('ssh','key')
-    timezone =          config.get('timezone', 'timezone')
+    aurhelper =         config.get("aur", "helper")
+    bw_mail =           config.get("bitwarden", "mail")
+    bw_lock =           config.get("bitwarden", "lock")
+    git_mail =          config.get("bitwarden_data", "github_mail")
+    git_user =          config.get("bitwarden_data", "github_user")
+    git_token =         config.get("bitwarden_data", "github_token")
+    spotify_client_id = config.get("bitwarden_data", "spotify_client_id")
+    spotify_secret =    config.get("bitwarden_data", "spotify_client_secret")
+    spotify_device_id = config.get("bitwarden_data", "spotify_device_id")
+    spotify_mail =      config.get("bitwarden_data", "spotify_mail")
+    spotify_user =      config.get("bitwarden_data", "spotify_user")
+    displayman =        config.get("displayman", "displayman")
+    git_pubkey =        config.get("github",  "pubkey")
+    network_ip =        config.get("network", "ip")
+    network_port =      config.get("network", "port")
+    network_toggle =    config.get("network", "wifi")
+    network_key =       config.get("network", "wifi_key")
+    network_ssid =      config.get("network", "wifi_ssid")
+    repositories =      config.get("repositories", "repositories").split(", ")
+    ssh_key =           config.get("ssh", "key")
+    timezone =          config.get("timezone", "timezone")
 
     m = Main()
     m.systime()
@@ -197,6 +197,6 @@ if __name__ == '__main__':
     m.git()
     m.shell()
     m.audio()
-    #m.display()
+    m.display()
     m.customize()
     m.xdg()
