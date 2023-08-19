@@ -9,8 +9,8 @@
 - Hardened kernel
 - X11
 - Zsh
-- kitty
+- Alacritty
 - Qtile
 - XDGBDS
 - Neovim
-- Librewolf
+- Firefox
