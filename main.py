@@ -197,6 +197,6 @@ if __name__ == "__main__":
     m.git()
     m.shell()
     m.audio()
-    m.display()
+    #m.display()
     m.customize()
     m.xdg()

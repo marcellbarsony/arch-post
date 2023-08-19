@@ -1,6 +1,6 @@
-**Arch Linux installation script**
+**The Chad Stack post-installation script**
 
-## Feature list
+## The Chad Stack
 
 - UEFI
 - GRUB
@@ -14,4 +14,3 @@
 - XDGBDS
 - Neovim
 - Librewolf
-
