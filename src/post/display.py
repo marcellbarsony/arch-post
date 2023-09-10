@@ -12,6 +12,7 @@ class DisplayManager():
 
     """
     Docstring for Display manager
+    Wayland setup
     """
 
     def __init__(self, loginman: str):
