@@ -19,20 +19,20 @@ class DisplayManager():
         self.loginman = loginman
 
     def install(self, aurhelper: str):
-        cmd = f'{aurhelper} -S --noconfirm {self.loginman}'
+        cmd = f"{aurhelper} -S --noconfirm {self.loginman}"
         try:
-            os.system('clear')
+            os.system("clear")
             subprocess.run(cmd, shell=True, check=True)
-            logger.info('Display manager install')
+            logger.info("Display manager install")
         except subprocess.CalledProcessError as err:
-            logger.error(f'Display manager install {err}')
+            logger.error(f"Display manager install {err}")
             sys.exit(1)
 
     def service(self):
-        cmd = f'sudo systemctl enable {self.loginman}.service'
+        cmd = f"sudo systemctl enable {self.loginman}.service"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info('Display manager service')
+            logger.info("Display manager service")
         except subprocess.CalledProcessError as err:
-            logger.error(f'Display manager service {err}')
+            logger.error(f"Display manager service {err}")
             sys.exit(1)

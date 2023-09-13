@@ -14,35 +14,37 @@ class Customization():
 
     @staticmethod
     def background(user: str):
-        dir = f'/home/{user}/Pictures'
+        dir = f"/home/{user}/Pictures"
 
         os.mkdir(dir)
 
-        url = 'https://www.dropbox.com/sh/eo65dcs7buprzea/AABSnhAm1sswyiukCDW9Urp9a?dl=1'
-        out = f'{dir}/wallpapers.zip'
+        url = "https://www.dropbox.com/sh/eo65dcs7buprzea/AABSnhAm1sswyiukCDW9Urp9a?dl=1"
+        out = f"{dir}/wallpapers.zip"
         urllib.request.urlretrieve(url, out)
 
-        with zipfile.ZipFile(out, 'r') as zip_ref:
+        with zipfile.ZipFile(out, "r") as zip_ref:
             zip_ref.extractall(dir)
 
         os.remove(out)
 
     @staticmethod
     def pc_speaker():
+
         """https://wiki.archlinux.org/title/PC_speaker#Globally"""
+
         file = "/etc/modprobe.d/nobeep.conf"
-        content = "blacklist pcspkr\nblacklist snd_pcsp"
+        conf = "blacklist pcspkr\nblacklist snd_pcsp"
         try:
             with open(file, "w") as f:
-                f.write(content)
-            logger.info('Disable PC speaker')
+                f.write(conf)
+            logger.info("Disable PC speaker")
         except IOError as err:
-            logger.error(f'Disable PC speaker {err}')
+            logger.error(f"Disable PC speaker {err}")
             pass
 
     @staticmethod
     def spotify():
-        print('[TODO] Spotify')
+        print("[TODO] Spotify")
         # killall spotifyd
 
         # # Spotifyd.conf

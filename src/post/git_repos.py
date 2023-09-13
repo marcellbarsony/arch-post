@@ -14,20 +14,20 @@ class Git():
 
     def __init__(self, user: str, gh_user: str, repo: str):
         self.repo = repo
-        self.dir = f'/home/{user}/.local/git/{repo}'
+        self.dir = f"/home/{user}/.local/git/{repo}"
         self.gh_user = gh_user
 
     def repo_clone(self):
-        cmd = f'git clone git@github.com:{self.gh_user}/{self.repo}.git {self.dir}'
+        cmd = f"git clone git@github.com:{self.gh_user}/{self.repo}.git {self.dir}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info(f'Clone {self.repo}')
+            logger.info(f"Clone {self.repo}")
         except subprocess.CalledProcessError as err:
             if err.returncode == 128:
-                logger.warning(f'Directory exists: {self.repo}')
+                logger.warning(f"Directory exists: {self.repo}")
                 pass
             else:
-                logger.error(f'Clone {self.repo}')
+                logger.error(f"Clone {self.repo}")
                 print(repr(err))
                 sys.exit(1)
 
@@ -35,16 +35,16 @@ class Git():
         try:
             os.chdir(self.dir)
         except Exception as err:
-            logger.error(f'chdir >> {self.dir} {err}')
+            logger.error(f"chdir >> {self.dir} {err}")
             sys.exit(1)
 
     def repo_cfg(self):
-        cmd = f'git remote set-url origin git@github.com:{self.gh_user}/{self.repo}.git'
+        cmd = f"git remote set-url origin git@github.com:{self.gh_user}/{self.repo}.git"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info(f'Set-url {self.repo}')
+            logger.info(f"Set-url {self.repo}")
         except subprocess.CalledProcessError as err:
-            logger.error(f'Set-url {self.repo} {err}')
+            logger.error(f"Set-url {self.repo} {err}")
             sys.exit(1)
 
 class Dotfiles():
@@ -52,36 +52,36 @@ class Dotfiles():
     """Docstring for Dotfiles"""
 
     def __init__(self, user: str, gh_user: str):
-        self.dir = f'/home/{user}/.config'
+        self.dir = f"/home/{user}/.config"
         self.gh_user = gh_user
 
     def remove(self):
-        cmd = f'rm -rf {self.dir}'
+        cmd = f"rm -rf {self.dir}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info(f'Remove existing config')
+            logger.info(f"Remove existing config")
         except subprocess.CalledProcessError as err:
-            logger.error(f'Remove existing config {err}')
+            logger.error(f"Remove existing config {err}")
             sys.exit(1)
 
     def clone(self):
-        cmd = f'git clone git@github.com:{self.gh_user}/dotfiles.git {self.dir}'
+        cmd = f"git clone git@github.com:{self.gh_user}/dotfiles.git {self.dir}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info('Clone')
+            logger.info("Clone")
         except subprocess.CalledProcessError as err:
-            logger.error('Clone')
+            logger.error("Clone")
             print(repr(err))
             sys.exit(1)
 
     def cfg(self):
-        cmd = f'git remote set-url origin git@github.com:{self.gh_user}/dotfiles.git'
+        cmd = f"git remote set-url origin git@github.com:{self.gh_user}/dotfiles.git"
         try:
             os.chdir(self.dir)
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info(f'Config')
+            logger.info(f"Config")
         except subprocess.CalledProcessError as err:
-            logger.error(f'Config {err}')
+            logger.error(f"Config {err}")
             sys.exit(1)
 
 
@@ -90,25 +90,25 @@ class Progs():
     """Docstring for Progs"""
 
     def __init__(self, user: str, gh_user: str):
-        self.dir = f'/home/{user}/.local/bin'
+        self.dir = f"/home/{user}/.local/bin"
         self.gh_user = gh_user
 
     def clone(self):
-        cmd = f'git clone git@github.com:{self.gh_user}/arch-progs.git {self.dir}'
+        cmd = f"git clone git@github.com:{self.gh_user}/arch-progs.git {self.dir}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info('Clone')
+            logger.info("Clone")
         except subprocess.CalledProcessError as err:
-            logger.error('Clone')
+            logger.error("Clone")
             print(repr(err))
             sys.exit(1)
 
     def cfg(self):
-        cmd = f'git remote set-url origin git@github.com:{self.gh_user}/arch-progs.git'
+        cmd = f"git remote set-url origin git@github.com:{self.gh_user}/arch-progs.git"
         try:
             os.chdir(self.dir)
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info(f'Config')
+            logger.info(f"Config")
         except subprocess.CalledProcessError as err:
-            logger.error(f'Config {err}')
+            logger.error(f"Config {err}")
             sys.exit(1)

@@ -16,22 +16,22 @@ class SysTime():
 
     @staticmethod
     def time():
-        cmd = 'sudo timedatectl set-ntp true --no-ask-password'
+        cmd = "sudo timedatectl set-ntp true --no-ask-password"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info('Time & Date: System clock')
+            logger.info("Time & Date: System clock")
         except subprocess.CalledProcessError as err:
-            logger.error('Time & Date: System clock')
+            logger.error("Time & Date: System clock")
             print(repr(err))
             sys.exit(1)
 
     @staticmethod
     def timezone(timezone: str):
-        cmd = f'sudo timedatectl set-timezone {timezone}'
+        cmd = f"sudo timedatectl set-timezone {timezone}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info('Time & Date: Timezone')
+            logger.info("Time & Date: Timezone")
         except subprocess.CalledProcessError as err:
-            logger.error('Time & Date: Timezone')
+            logger.error("Time & Date: Timezone")
             print(repr(err))
             sys.exit(1)

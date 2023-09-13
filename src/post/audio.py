@@ -16,14 +16,14 @@ class Pipewire():
 
     @staticmethod
     def service():
-        services = ['pipewire',
-                    'wireplumber']
-                    #'pipewire-pulse'
+        services = ["pipewire",
+                    "wireplumber"]
+                    #"pipewire-pulse"
         for service in services:
-            cmd = f'systemctl --user enable {service}'
+            cmd = f"systemctl --user enable {service}"
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logger.info(f'Enable <{service}>')
+                logger.info(f"Enable <{service}>")
             except subprocess.CalledProcessError as err:
-                logger.error(f'Enable <{service}> {err}')
+                logger.error(f"Enable <{service}> {err}")
                 sys.exit(1)
