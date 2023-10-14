@@ -15,7 +15,6 @@ class Customization():
     @staticmethod
     def background(user: str):
         dir = f"/home/{user}/Pictures"
-
         os.mkdir(dir)
 
         url = "https://www.dropbox.com/sh/eo65dcs7buprzea/AABSnhAm1sswyiukCDW9Urp9a?dl=1"

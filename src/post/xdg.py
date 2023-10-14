@@ -50,11 +50,11 @@ class XDGStandard():
 
     def home(self):
         files = [
-             ".bashrc",
-             ".bash_logout",
-             ".bash_profile",
-             ".bash_history",
-             ".gitconfig"
+            ".bashrc",
+            ".bash_logout",
+            ".bash_profile",
+            ".bash_history",
+            ".gitconfig"
         ]
         for file in files:
             path = os.path.join(f"/home/{self.user}", file)

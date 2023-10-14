@@ -51,7 +51,7 @@ class AURhelper():
     @staticmethod
     def install(current_dir: str, aurhelper: str, sudo: str):
         packages = ""
-        with open(f"{current_dir}/src/pkg/_aur.ini", "r") as file:
+        with open(f"{current_dir}/src/pkg/aur.ini", "r") as file:
             for line in file:
                 if not line.startswith("[") and not line.startswith("#") and line.strip() != "":
                     packages += f"{line.rstrip()} "

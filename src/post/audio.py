@@ -16,9 +16,10 @@ class Pipewire():
 
     @staticmethod
     def service():
-        services = ["pipewire",
-                    "wireplumber"]
-                    #"pipewire-pulse"
+        services = [
+            "pipewire",
+            "wireplumber"
+        ]
         for service in services:
             cmd = f"systemctl --user enable {service}"
             try:
