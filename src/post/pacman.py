@@ -47,7 +47,12 @@ class Mirrorlist():
             sys.exit(1)
 
     def update(self):
-        cmd = f"sudo reflector --latest 20 --protocol https --connection-timeout 5 --sort rate --save {self.mirrorlist}"
+        cmd = f"sudo reflector \
+        --latest 25 \
+        --protocol https \
+        --connection-timeout 5 \
+        --sort rate \
+        --save {self.mirrorlist}"
         try:
             logger.info("Updating mirrorlist...")
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
