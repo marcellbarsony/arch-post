@@ -27,21 +27,6 @@ class Customization():
         os.remove(out)
 
     @staticmethod
-    def pc_speaker():
-
-        """https://wiki.archlinux.org/title/PC_speaker#Globally"""
-
-        file = "/etc/modprobe.d/nobeep.conf"
-        conf = "blacklist pcspkr\nblacklist snd_pcsp"
-        try:
-            with open(file, "w") as f:
-                f.write(conf)
-            logger.info("Disable PC speaker")
-        except IOError as err:
-            logger.error(f"Disable PC speaker {err}")
-            pass
-
-    @staticmethod
     def spotify():
         print("[TODO] Spotify")
         # killall spotifyd

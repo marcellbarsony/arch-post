@@ -132,7 +132,6 @@ class Main():
     def customize(self):
         c = Customization()
         c.background(self.user)
-        c.pc_speaker()
         c.spotify()
 
     def xdg(self):
