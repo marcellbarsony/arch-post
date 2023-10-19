@@ -45,7 +45,7 @@ class SSHagent():
 
     def service_start(self):
         cmds = [
-            "systemctl --user enable ssh-agent.service"
+            "systemctl --user enable ssh-agent.service",
             "systemctl --user start ssh-agent.service"
         ]
         for cmd in cmds:
