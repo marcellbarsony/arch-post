@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class Bitwarden():
 
-    """Bitwarden setup with rbw"""
+    """Bitwarden-rbw setup"""
 
     @staticmethod
     def install(aur_helper: str):

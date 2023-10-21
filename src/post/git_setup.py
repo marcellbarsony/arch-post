@@ -76,7 +76,7 @@ class GitSetup():
         cmd_list = [
             f"git config --global user.name '{gh_user}'",
             f"git config --global user.email '{user_mail}'",
-            f"git config --global init.defaultBranch main"
+            "git config --global init.defaultBranch main"
         ]
         for cmd in cmd_list:
             try:

@@ -42,7 +42,7 @@ class Main():
     @staticmethod
     def systime():
         i = SysTime()
-        i.time()
+        #i.time()
         i.timezone(timezone)
 
     @staticmethod

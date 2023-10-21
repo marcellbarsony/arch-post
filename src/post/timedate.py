@@ -12,6 +12,7 @@ class SysTime():
     """
     Set system time & timezone
     https://wiki.archlinux.org/title/System_time
+    https://wiki.archlinux.org/title/Network_Time_Protocol_daemon#
     """
 
     @staticmethod
