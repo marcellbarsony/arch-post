@@ -15,16 +15,21 @@ class Customization():
     @staticmethod
     def background(user: str):
         dir = f"/home/{user}/Downloads/Backgrounds"
-        os.mkdir(dir)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+            print("[+] WALLPAPERS: Mkdir")
 
+        print("[I] WALLPAPERS: Download")
         url = "https://www.dropbox.com/sh/eo65dcs7buprzea/AABSnhAm1sswyiukCDW9Urp9a?dl=1"
         out = f"{dir}/wallpapers.zip"
         urllib.request.urlretrieve(url, out)
 
+        print("[I] WALLPAPERS: Extract")
         with zipfile.ZipFile(out, "r") as zip_ref:
             zip_ref.extractall(dir)
 
         os.remove(out)
+        print("[+] WALLPAPERS: Remove zip")
 
     @staticmethod
     def spotify():

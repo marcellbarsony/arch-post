@@ -19,7 +19,7 @@ from src.post import Git
 from src.post import Dotfiles
 from src.post import SysTime
 from src.post import Mirrorlist
-from src.post import Network  # TODO
+from src.post import Network
 from src.post import SSHagent
 from src.post import Pacman
 from src.post import Pipewire
@@ -48,7 +48,6 @@ class Main():
     @staticmethod
     def network():
         print("TODO: Network connection")
-        pass
 
     @staticmethod
     def pacman():
@@ -72,12 +71,7 @@ class Main():
     def password_manager():
         rbw = Bitwarden()
         rbw.install(aurhelper)
-        while True:
-            if rbw.register(bw_mail, bw_lock):
-                break
-            user_in = input("Failed to authenticate. Retry? Y/N ")
-            if user_in.upper() == "N":
-                sys.exit(1)
+        rbw.register(bw_mail, bw_lock)
 
     def ssh(self):
         a = SSHagent(self.user, self.cwd)
@@ -129,17 +123,16 @@ class Main():
         l.install(aurhelper)
         l.service()
 
+    def xdg(self):
+        x = XDGStandard(self.user)
+        x.xdg_remove(self.user)
+        x.home()
+        x.rust()
+
     def customize(self):
         c = Customization()
         c.background(self.user)
         c.spotify()
-
-    def xdg(self):
-        x = XDGStandard(self.user)
-        x.xdg_force()
-        x.xdg_remove(self.user)
-        x.home()
-        x.rust()
 
 
 if __name__ == "__main__":
@@ -161,7 +154,7 @@ if __name__ == "__main__":
     """Initialize global variables"""
 
     config = configparser.ConfigParser()
-    config.read("_config.ini")
+    config.read("config.ini")
 
     aurhelper =         config.get("aur", "helper")
     bw_mail =           config.get("bitwarden", "mail")
@@ -186,16 +179,16 @@ if __name__ == "__main__":
     timezone =          config.get("timezone", "timezone")
 
     m = Main()
-    m.systime()
-    m.network()
-    m.rust()
-    m.pacman()
-    m.aur()
+    #m.systime()
+    #m.network()
+    #m.rust()
+    #m.pacman()
+    #m.aur()
     m.password_manager()
-    m.ssh()
-    m.git()
-    m.shell()
-    m.audio()
+    #m.ssh()
+    #m.git()
+    #m.shell()
+    #m.audio()
     #m.display()
-    m.customize()
-    m.xdg()
+    #m.xdg()
+    #m.customize()

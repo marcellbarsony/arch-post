@@ -1,6 +1,7 @@
 import os
 import logging
 import shutil
+import subprocess
 import sys
 
 
@@ -14,17 +15,6 @@ class XDGStandard():
 
     def __init__(self, user):
         self.user = user
-
-    @staticmethod
-    def xdg_force():
-        # cmd = "LC_ALL=C.UTF-8 xdg-user-dirs-update --force"
-        # try:
-        #     subprocess.run(cmd, shell=True, check=True)
-        #     logger.info("Create XDG dirs")
-        # except Exception as err:
-        #     logger.error(f"Create XDG dirs {err}")
-        #     sys.exit(1)
-        pass
 
     @staticmethod
     def xdg_remove(user: str):
@@ -71,6 +61,7 @@ class XDGStandard():
         rustup_conf = f"/home/{self.user}/.rustup"
         rustup_home = f"/home/{self.user}/.local/share/rustup"
         if os.path.exists(rustup_home):
+            print(f"moving {rustup_conf}")
             shutil.move(rustup_conf, rustup_home)
 
     # Remove orphans and their configs (requires root)

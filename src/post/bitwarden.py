@@ -23,26 +23,27 @@ class Bitwarden():
             sys.exit(1)
 
     @staticmethod
-    def register(mail: str, timeout: str) -> bool:
-        success = True
-        commands = [
-            f"rbw config set email {mail}",
-            f"rbw config set lock_timeout {timeout}",
-            "rbw register",
-            "rbw sync"
-        ]
-        for cmd in commands:
-            try:
-                subprocess.run(cmd, shell=True, check=True)
-                os.system("clear")
-            except KeyboardInterrupt:
-                sys.exit(0)
-            except subprocess.CalledProcessError as err:
-                logger.error("RBW config")
-                print(repr(err))
-                success = False
-                break
-        return success
+    def register(mail: str, timeout: str):
+        while True:
+            error = False
+            commands = [
+                f"rbw config set email {mail}",
+                f"rbw config set lock_timeout {timeout}",
+                "rbw register",
+                "rbw sync"
+            ]
+            for cmd in commands:
+                try:
+                    subprocess.run(cmd, shell=True, check=True)
+                except KeyboardInterrupt:
+                    logger.error("User interrupt")
+                    sys.exit(1)
+                except subprocess.CalledProcessError as err:
+                    logger.error(f"RBW config {err}")
+                    error=True
+            if error:
+                continue
+            break
 
     @staticmethod
     def rbw_get(name: str, item: str) -> str:
