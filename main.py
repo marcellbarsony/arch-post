@@ -18,7 +18,6 @@ from src.post import GitSetup
 from src.post import Git
 from src.post import Dotfiles
 from src.post import SysTime
-from src.post import Mirrorlist
 from src.post import Network
 from src.post import SSHagent
 from src.post import Pacman
@@ -53,9 +52,6 @@ class Main():
     def pacman():
         p = Pacman()
         p.keyring()
-        m = Mirrorlist()
-        m.backup()
-        m.update()
 
     def rust(self):
         r = Rust()
@@ -69,9 +65,9 @@ class Main():
 
     @staticmethod
     def password_manager():
-        rbw = Bitwarden()
-        rbw.install(aurhelper)
-        rbw.register(bw_mail, bw_lock)
+        r = Bitwarden()
+        r.install(aurhelper)
+        r.register(bw_mail, bw_lock)
 
     def ssh(self):
         a = SSHagent(self.user, self.cwd)
@@ -179,16 +175,16 @@ if __name__ == "__main__":
     timezone =          config.get("timezone", "timezone")
 
     m = Main()
-    #m.systime()
-    #m.network()
-    #m.rust()
-    #m.pacman()
-    #m.aur()
+    m.systime()
+    m.network()
+    m.rust()
+    m.pacman()
+    m.aur()
     m.password_manager()
-    #m.ssh()
-    #m.git()
-    #m.shell()
-    #m.audio()
-    #m.display()
-    #m.xdg()
-    #m.customize()
+    m.ssh()
+    m.git()
+    m.shell()
+    m.audio()
+    m.display()
+    m.xdg()
+    m.customize()

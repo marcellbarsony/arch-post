@@ -9,7 +9,6 @@ from .git_repos import Progs
 from .timedate import SysTime
 from .network import WiFi
 from .network import Network
-from .pacman import Mirrorlist
 from .pacman import Pacman
 from .audio import Pipewire
 from .ssh import SSHagent

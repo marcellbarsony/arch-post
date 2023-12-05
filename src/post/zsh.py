@@ -17,12 +17,15 @@ class Zsh():
 
     def chsh(self):
         cmd = "chsh -s /usr/bin/zsh"
+        # cmd = "chsh -s /usr/bin/nu"
         try:
             os.system("clear")
             subprocess.run(cmd, shell=True, check=True)
             logger.info("Change to /usr/bin/zsh")
+            # logger.info("Change to /usr/bin/nu")
         except subprocess.CalledProcessError as err:
             logger.error(f"Change to /usr/bin/zsh {err}")
+            # logger.error(f"Change to /usr/bin/nu {err}")
             sys.exit(1)
 
     def config(self):
