@@ -20,7 +20,7 @@ class Customization():
             print("[+] WALLPAPERS: Mkdir")
 
         print("[I] WALLPAPERS: Download")
-        url = "https://www.dropbox.com/sh/eo65dcs7buprzea/AABSnhAm1sswyiukCDW9Urp9a?dl=1"
+        url = "https://www.dropbox.com/scl/fo/5loqjisrohzslojb5ibmw/h?rlkey=onmox6lkop8uf9wzd314pbj66&dl=1"
         out = f"{dir}/wallpapers.zip"
         urllib.request.urlretrieve(url, out)
 

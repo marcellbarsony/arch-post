@@ -77,7 +77,7 @@ class GitSetup():
             f"git config --global user.name '{gh_user}'",
             f"git config --global user.email '{user_mail}'",
             "git config --global init.defaultBranch main"
-        ]
+            ]
         for cmd in cmd_list:
             try:
                 subprocess.run(cmd, shell=True, check=True)

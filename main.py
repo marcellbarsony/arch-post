@@ -18,7 +18,7 @@ from src.post import GitSetup
 from src.post import Git
 from src.post import Dotfiles
 from src.post import SysTime
-from src.post import Network
+from src.post import Network # TODO
 from src.post import SSHagent
 from src.post import Pacman
 from src.post import Pipewire
@@ -141,10 +141,10 @@ if __name__ == "__main__":
         sys.exit(1)
 
     parser = argparse.ArgumentParser(
-                prog="python3 arch-post.py",
-                description="Arch post-install setup",
-                epilog="TODO"
-                )
+        prog="python3 arch-post.py",
+        description="Arch post-install setup",
+        epilog="TODO"
+        )
     args = parser.parse_args()
 
     """Initialize global variables"""
