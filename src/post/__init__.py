@@ -15,3 +15,4 @@ from .ssh import SSHagent
 from .display import DisplayManager
 from .zsh import Zsh
 from .xdg import XDGStandard
+from .javascript import JavaScript

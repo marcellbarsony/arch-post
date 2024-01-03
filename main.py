@@ -24,6 +24,7 @@ from src.post import Pacman
 from src.post import Pipewire
 from src.post import Progs
 from src.post import Rust
+from src.post import JavaScript
 from src.post import DisplayManager
 from src.post import WiFi  # TODO
 from src.post import Zsh
@@ -56,6 +57,10 @@ class Main():
     def rust(self):
         r = Rust()
         r.toolchain()
+
+    def javascript(self):
+        j = JavaScript()
+        j.npm_install()
 
     def aur(self):
         a = AURhelper(self.user, aurhelper)
@@ -188,3 +193,4 @@ if __name__ == "__main__":
     m.display()
     m.xdg()
     m.customize()
+    m.javascript()
