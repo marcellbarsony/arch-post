@@ -14,26 +14,25 @@ import sys
 from src.post import AURhelper
 from src.post import Bitwarden
 from src.post import Customization
+from src.post import DisplayManager
+from src.post import Dotfiles
 from src.post import GitSetup
 from src.post import Git
-from src.post import Dotfiles
-from src.post import SysTime
+from src.post import JavaScript # TODO
 from src.post import Network # TODO
-from src.post import SSHagent
 from src.post import Pacman
 from src.post import Pipewire
 from src.post import Progs
+from src.post import Python
 from src.post import Rust
-from src.post import JavaScript
-from src.post import DisplayManager
+from src.post import SSHagent
+from src.post import SysTime
 from src.post import WiFi  # TODO
-from src.post import Zsh
 from src.post import XDGStandard
+from src.post import Zsh
 
 
 class Main():
-
-    """Arch post-installation setup"""
 
     def __init__(self):
         self.cwd = os.getcwd()
@@ -42,12 +41,12 @@ class Main():
     @staticmethod
     def systime():
         i = SysTime()
-        #i.time()
+        #i.time() # TODO: timedate setup
         i.timezone(timezone)
 
     @staticmethod
     def network():
-        print("TODO: Network connection")
+        pass # TODO: network setup
 
     @staticmethod
     def pacman():
@@ -122,9 +121,9 @@ class Main():
 
     def xdg(self):
         x = XDGStandard(self.user)
-        x.xdg_remove(self.user)
-        x.home()
-        # x.rust()
+        x.remove_xdg()
+        x.remove_home()
+        x.move_rust()
         x.remove_self()
 
     def customize(self):
@@ -133,8 +132,20 @@ class Main():
         c.spotify()
 
     def languages(self):
-        j = JavaScript()
-        j.npm_install()
+        # j = JavaScript()
+        # j.npm_install()
+
+        p = Python()
+        dirs = ["arch", "arch-post", "arch-tools"]
+        for dir in dirs:
+            p.chdir(dir)
+            p.venv_init()
+            p.venv_activate()
+            p.pip_upgrade()
+            p.pip_install()
+            p.venv_deactivate()
+
+        # TODO: migrate Python-DAP
 
 
 if __name__ == "__main__":
@@ -150,7 +161,7 @@ if __name__ == "__main__":
         prog="python3 arch-post.py",
         description="Arch post-install setup",
         epilog="TODO"
-        )
+    )
     args = parser.parse_args()
 
     """Initialize global variables"""
@@ -158,27 +169,27 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read("config.ini")
 
-    aurhelper =         config.get("aur", "helper")
-    bw_mail =           config.get("bitwarden", "mail")
-    bw_lock =           config.get("bitwarden", "lock")
-    git_mail =          config.get("bitwarden_data", "github_mail")
-    git_user =          config.get("bitwarden_data", "github_user")
-    git_token =         config.get("bitwarden_data", "github_token")
+    aurhelper = config.get("aur", "helper")
+    bw_mail = config.get("bitwarden", "mail")
+    bw_lock = config.get("bitwarden", "lock")
+    git_mail = config.get("bitwarden_data", "github_mail")
+    git_user = config.get("bitwarden_data", "github_user")
+    git_token = config.get("bitwarden_data", "github_token")
     spotify_client_id = config.get("bitwarden_data", "spotify_client_id")
-    spotify_secret =    config.get("bitwarden_data", "spotify_client_secret")
+    spotify_secret = config.get("bitwarden_data", "spotify_client_secret")
     spotify_device_id = config.get("bitwarden_data", "spotify_device_id")
-    spotify_mail =      config.get("bitwarden_data", "spotify_mail")
-    spotify_user =      config.get("bitwarden_data", "spotify_user")
-    displayman =        config.get("displayman", "displayman")
-    git_pubkey =        config.get("github",  "pubkey")
-    network_ip =        config.get("network", "ip")
-    network_port =      config.get("network", "port")
-    network_toggle =    config.get("network", "wifi")
-    network_key =       config.get("network", "wifi_key")
-    network_ssid =      config.get("network", "wifi_ssid")
-    repositories =      config.get("repositories", "repositories").split(", ")
-    ssh_key =           config.get("ssh", "key")
-    timezone =          config.get("timezone", "timezone")
+    spotify_mail = config.get("bitwarden_data", "spotify_mail")
+    spotify_user = config.get("bitwarden_data", "spotify_user")
+    displayman = config.get("displayman", "displayman")
+    git_pubkey = config.get("github",  "pubkey")
+    network_ip = config.get("network", "ip")
+    network_port = config.get("network", "port")
+    network_toggle = config.get("network", "wifi")
+    network_key = config.get("network", "wifi_key")
+    network_ssid = config.get("network", "wifi_ssid")
+    repositories = config.get("repositories", "repositories").split(", ")
+    ssh_key = config.get("ssh", "key")
+    timezone = config.get("timezone", "timezone")
 
     m = Main()
     m.systime()
@@ -191,7 +202,7 @@ if __name__ == "__main__":
     m.git()
     m.shell()
     m.audio()
-    # m.display()
+    #m.display()
     m.xdg()
     m.customize()
     m.languages()

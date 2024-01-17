@@ -3,9 +3,8 @@ import logging
 import shutil
 import sys
 
-
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 class XDGStandard():
@@ -13,11 +12,9 @@ class XDGStandard():
     """Docstring for Cross Desktop Group (XDG)"""
 
     def __init__(self, user):
-        self.user = user
+        self.home = f"/home/{user}"
 
-    @staticmethod
-    def xdg_remove(user: str):
-        parent = f"/home/{user}"
+    def remove_xdg(self):
         dirs = [
             "Desktop",
             "Documents",
@@ -27,16 +24,15 @@ class XDGStandard():
             "Videos"
         ]
         for dir in dirs:
-            path = os.path.join(parent, dir)
+            path = os.path.join(self.home, dir)
             if os.path.exists(path):
                 try:
                     os.rmdir(path)
-                    logger.info(f"Remove XDG {dir}")
+                    logger.info("Remove XDG", dir)
                 except OSError as err:
-                    logger.error(f"Remove XDG {dir} {err}")
-                    sys.exit(1)
+                    logger.error("Remove XDG", dir, err)
 
-    def home(self):
+    def remove_home(self):
         files = [
             ".bashrc",
             ".bash_logout",
@@ -45,25 +41,26 @@ class XDGStandard():
             ".gitconfig"
         ]
         for file in files:
-            path = os.path.join(f"/home/{self.user}", file)
+            path = os.path.join(self.home, file)
             if os.path.exists(path):
                 os.remove(path)
-                logger.info(f"Removed {file}")
+                logger.info("Removed ", file)
 
-    def rust(self):
-        cargo_conf = f"/home/{self.user}/.cargo"
-        cargo_home = f"/home/{self.user}/.local/share/cargo"
+    def move_rust(self):
+        cargo_conf = f"{self.home}/.cargo"
+        cargo_home = f"{self.home}/.local/share/cargo"
         if os.path.exists(cargo_conf):
+            logger.info("[i] Moving ", cargo_conf)
             shutil.move(cargo_conf, cargo_home)
 
-        rustup_conf = f"/home/{self.user}/.rustup"
-        rustup_home = f"/home/{self.user}/.local/share/rustup"
+        rustup_conf = f"{self.home}/.rustup"
+        rustup_home = f"{self.home}/.local/share/rustup"
         if os.path.exists(rustup_home):
-            print(f"moving {rustup_conf}")
+            logger.info("[i] Moving ", rustup_conf)
             shutil.move(rustup_conf, rustup_home)
 
     def remove_self(self):
-        path = f"/home/{self.user}/arch-post"
+        path = f"{self.home}/arch-post"
         if os.path.exists(path):
             shutil.rmtree(path)
 

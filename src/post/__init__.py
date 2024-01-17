@@ -16,3 +16,4 @@ from .display import DisplayManager
 from .zsh import Zsh
 from .xdg import XDGStandard
 from .javascript import JavaScript
+from .python import Python
