@@ -23,14 +23,14 @@ class Bitwarden():
 
     @staticmethod
     def register(mail: str, timeout: str):
+        commands = [
+            f"rbw config set email {mail}",
+            f"rbw config set lock_timeout {timeout}",
+            "rbw register",
+            "rbw sync"
+        ]
+        error = False
         while True:
-            error = False
-            commands = [
-                f"rbw config set email {mail}",
-                f"rbw config set lock_timeout {timeout}",
-                "rbw register",
-                "rbw sync"
-            ]
             for cmd in commands:
                 try:
                     subprocess.run(cmd, shell=True, check=True)

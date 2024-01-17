@@ -17,7 +17,6 @@ class XDGStandard():
 
     @staticmethod
     def xdg_remove(user: str):
-        # Remove directories
         parent = f"/home/{user}"
         dirs = [
             "Desktop",
@@ -62,6 +61,11 @@ class XDGStandard():
         if os.path.exists(rustup_home):
             print(f"moving {rustup_conf}")
             shutil.move(rustup_conf, rustup_home)
+
+    def remove_self(self):
+        path = f"/home/{self.user}/arch-post"
+        if os.path.exists(path):
+            shutil.rmtree(path)
 
     # Remove orphans and their configs (requires root)
     # "sudo pacman -Qtdq | pacman -Rns -"

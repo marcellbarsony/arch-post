@@ -1,17 +1,16 @@
 import subprocess
+import sys
 
 
 class Rust():
 
-    """Docstring for Rust setup"""
+    """
+    Rust default toolchain install
+    https://rustup.rs/
+    """
 
     @staticmethod
     def toolchain():
-
-        """
-        Rust default toolchain install
-        https://rustup.rs/
-        """
 
         cmd = "rustup default stable"
         try:
@@ -19,3 +18,4 @@ class Rust():
             print("[+] Rust toolchain install")
         except subprocess.CalledProcessError as err:
             print("[-] Rust toolchain install", err)
+            sys.exit(1)

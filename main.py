@@ -58,10 +58,6 @@ class Main():
         r = Rust()
         r.toolchain()
 
-    def javascript(self):
-        j = JavaScript()
-        j.npm_install()
-
     def aur(self):
         a = AURhelper(self.user, aurhelper)
         a.make_dir()
@@ -128,12 +124,17 @@ class Main():
         x = XDGStandard(self.user)
         x.xdg_remove(self.user)
         x.home()
-        x.rust()
+        # x.rust()
+        x.remove_self()
 
     def customize(self):
         c = Customization()
         c.background(self.user)
         c.spotify()
+
+    def languages(self):
+        j = JavaScript()
+        j.npm_install()
 
 
 if __name__ == "__main__":
@@ -190,7 +191,7 @@ if __name__ == "__main__":
     m.git()
     m.shell()
     m.audio()
-    m.display()
+    # m.display()
     m.xdg()
     m.customize()
-    m.javascript()
+    m.languages()
