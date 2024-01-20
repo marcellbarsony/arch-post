@@ -3,10 +3,6 @@ import subprocess
 import sys
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
 class Pacman():
 
     """
@@ -16,10 +12,11 @@ class Pacman():
 
     @staticmethod
     def keyring():
-        cmd = "sudo pacman -D --asexplicit archlinux-keyring",
+        cmd = "sudo pacman -D --asexplicit archlinux-keyring"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info("Explicit Keyring")
+            logging.info(f"Pacman: Explicit keyring - {cmd}")
+            print("[+] Pacman keyring")
         except subprocess.CalledProcessError as err:
-            logger.error(f"Explicit Keyring {err}")
+            logging.error(f"Pacman: Explicit keyring - {cmd}: {err}")
             sys.exit(1)

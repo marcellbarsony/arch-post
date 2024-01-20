@@ -4,10 +4,6 @@ import sys
 import subprocess
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
 class DisplayManager():
 
     """
@@ -23,16 +19,16 @@ class DisplayManager():
         try:
             os.system("clear")
             subprocess.run(cmd, shell=True, check=True)
-            logger.info("Display manager install")
+            logging.info(f"Display manager: Install - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error(f"Display manager install {err}")
+            logging.error(f"Display manager: Install - {cmd}: {err}")
             sys.exit(1)
 
     def service(self):
         cmd = f"sudo systemctl enable {self.loginman}.service"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info("Display manager service")
+            logging.info(f"Display manager: Service - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error(f"Display manager service {err}")
+            logging.error(f"Display manager: Service - {cmd}: {err}")
             sys.exit(1)

@@ -4,46 +4,40 @@ import subprocess
 import sys
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+class Shell():
 
-
-class Zsh():
-
-    """Docstring for ZSH"""
+    """Docstring for Shell setup"""
 
     def __init__(self, user: str):
         self.user = user
 
     def chsh(self):
         cmd = "chsh -s /usr/bin/zsh"
-        # cmd = "chsh -s /usr/bin/nu"
         try:
             os.system("clear")
             subprocess.run(cmd, shell=True, check=True)
-            logger.info("Change to /usr/bin/zsh")
-            # logger.info("Change to /usr/bin/nu")
+            logging.info(f"Shell: change - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error(f"Change to /usr/bin/zsh {err}")
-            # logger.error(f"Change to /usr/bin/nu {err}")
+            logging.error(f"Shell: change - {cmd}: {err}")
             sys.exit(1)
 
     def config(self):
         src = f"/home/{self.user}/.config/zsh/global/"
         dst = "/etc/zsh/"
-
         for file in os.listdir(src):
             src_file = os.path.join(src, file)
             dst_file = os.path.join(dst, file)
-            cmd_copy = f"sudo cp -r {src_file} {dst_file}"
-            cmd_chmod = f"sudo chmod 644 {dst_file}"
-            try:
-                subprocess.run(cmd_copy, shell=True, check=True)
-                subprocess.run(cmd_chmod, shell=True, check=True)
-                logger.info("Startup file")
-            except subprocess.CalledProcessError as err:
-                logger.error(f"Startup file {err}")
-                sys.exit(1)
+            cmds = [
+                f"sudo cp -r {src_file} {dst_file}",
+                f"sudo chmod 644 {dst_file}"
+            ]
+            for cmd in cmds:
+                try:
+                    subprocess.run(cmd, shell=True, check=True)
+                    logging.info(f"Shell: config - {cmd}")
+                except subprocess.CalledProcessError as err:
+                    logging.error(f"Shell: config - {cmd}: {err}")
+                    sys.exit(1)
 
     def tools(self):
         repositories = {"marlonrichert/zsh-autocomplete": "zsh-autocomplete"}
@@ -52,7 +46,7 @@ class Zsh():
             cmd = f"git clone --depth 1 git@github.com:{repo}.git {dst}"
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logger.info(f"Tools {repo}")
+                logging.info(f"Shell: Zsh tools - {cmd}")
             except subprocess.CalledProcessError as err:
-                logger.error(f"Tools {repo} {err}")
+                logging.error(f"Shell: Zsh tools - {cmd}: {err}")
                 sys.exit(1)

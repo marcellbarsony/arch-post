@@ -10,6 +10,7 @@ import configparser
 import getpass
 import os
 import sys
+import logging
 
 from src.post import AURhelper
 from src.post import Bitwarden
@@ -18,18 +19,18 @@ from src.post import DisplayManager
 from src.post import Dotfiles
 from src.post import GitSetup
 from src.post import Git
-from src.post import JavaScript # TODO
-from src.post import Network # TODO
+# from src.post import JavaScript # TODO
+# from src.post import Network # TODO
 from src.post import Pacman
 from src.post import Pipewire
 from src.post import Progs
 from src.post import Python
 from src.post import Rust
 from src.post import SSHagent
-from src.post import SysTime
-from src.post import WiFi  # TODO
+from src.post import TimeDate
+# from src.post import WiFi  # TODO
 from src.post import XDGStandard
-from src.post import Zsh
+from src.post import Shell
 
 
 class Main():
@@ -38,10 +39,26 @@ class Main():
         self.cwd = os.getcwd()
         self.user = getpass.getuser()
 
+    def run(self):
+        self.systime()
+        self.network()
+        self.pacman()
+        self.rust()
+        self.aur()
+        self.password_manager()
+        self.ssh()
+        self.git()
+        self.shell()
+        self.audio()
+        # self.display()
+        self.xdg()
+        self.customize()
+        self.languages()
+
     @staticmethod
     def systime():
-        i = SysTime()
-        #i.time() # TODO: timedate setup
+        i = TimeDate()
+        i.time() # TODO: timedate setup
         i.timezone(timezone)
 
     @staticmethod
@@ -103,7 +120,7 @@ class Main():
             r.repo_cfg()
 
     def shell(self):
-        z = Zsh(self.user)
+        z = Shell(self.user)
         z.chsh()
         z.config()
         z.tools()
@@ -150,13 +167,12 @@ class Main():
 
 if __name__ == "__main__":
 
-    """Initialize argparse"""
-
-    uid = os.getuid()
-    if uid == 0:
-        print(f"[-] Executed as root (UID={uid})")
+    """ Check persmissions """
+    if os.getuid == 0:
+        print("[-] Executed as root: UID=0")
         sys.exit(1)
 
+    """ Initialize Argparse """
     parser = argparse.ArgumentParser(
         prog="python3 arch-post.py",
         description="Arch post-install setup",
@@ -164,8 +180,11 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    """Initialize global variables"""
+    """ Initialize Logging """
+    logging.basicConfig(level=logging.INFO, filename="logs.log", filemode="w",
+                        format="%(asctime)s - %(levelname)s - %(message)s")
 
+    """ Initialize Global variables """
     config = configparser.ConfigParser()
     config.read("config.ini")
 
@@ -191,18 +210,6 @@ if __name__ == "__main__":
     ssh_key = config.get("ssh", "key")
     timezone = config.get("timezone", "timezone")
 
+    """ Run script """
     m = Main()
-    m.systime()
-    m.network()
-    m.rust()
-    m.pacman()
-    m.aur()
-    m.password_manager()
-    m.ssh()
-    m.git()
-    m.shell()
-    m.audio()
-    #m.display()
-    m.xdg()
-    m.customize()
-    m.languages()
+    m.run()

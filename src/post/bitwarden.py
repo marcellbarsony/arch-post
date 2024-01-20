@@ -3,10 +3,6 @@ import subprocess
 import sys
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
 class Bitwarden():
 
     """Bitwarden-rbw setup"""
@@ -16,9 +12,9 @@ class Bitwarden():
         cmd = f"{aur_helper} -S --noconfirm rbw"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logger.info("RBW install")
+            logging.info(f"Bitwarden: Install - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error(f"RBW install {err}")
+            logging.error(f"Bitwarden: Install - {cmd}: {err}")
             sys.exit(1)
 
     @staticmethod
@@ -35,10 +31,10 @@ class Bitwarden():
                 try:
                     subprocess.run(cmd, shell=True, check=True)
                 except KeyboardInterrupt:
-                    logger.error("User interrupt")
+                    logging.error("Bitwarden: Register: User interrupt")
                     sys.exit(1)
                 except subprocess.CalledProcessError as err:
-                    logger.error(f"RBW config {err}")
+                    logging.error(f"Bitwarden: Register - {cmd}: {err}")
                     error=True
             if error:
                 continue
@@ -49,7 +45,7 @@ class Bitwarden():
         cmd = f'rbw get {name} --full | grep "{item}" | cut -d " " -f 2'
         out = subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding="UTF-8")
         if "ERROR" in str(out.stderr):
-            logger.error(f"Fetch data <{name}> <{item}>")
+            logging.error(f"Bitwarden: Toolchain - {cmd} - {out.stderr}")
             sys.exit(1)
-        logger.info(f"Fetch data <{name}> <{item}>")
+        logging.info(f"Rust: Fetch data - {cmd}")
         return out.stdout.rstrip("\n")

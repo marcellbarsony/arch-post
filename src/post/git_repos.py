@@ -4,10 +4,6 @@ import subprocess
 import sys
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
 class Git():
 
     """Repository setup"""
@@ -21,30 +17,30 @@ class Git():
         cmd = f"git clone git@github.com:{self.gh_user}/{self.repo}.git {self.dir}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info(f"Clone {self.repo}")
+            logging.info(f"GIT Repository: Clone - {cmd}")
         except subprocess.CalledProcessError as err:
             if err.returncode == 128:
-                logger.warning(f"Directory exists: {self.repo}")
+                logging.warning(f"GIT Repository: clone - already exists: {self.repo}")
                 pass
             else:
-                logger.error(f"Clone {self.repo}")
-                print(repr(err))
+                logging.error(f"GIT Repository: clone - {cmd}: {repr(err)}")
                 sys.exit(1)
 
     def repo_chdir(self):
         try:
             os.chdir(self.dir)
+            logging.info(f"GIT Repository: chdir {self.dir}")
         except Exception as err:
-            logger.error(f"chdir >> {self.dir} {err}")
+            logging.error(f"GIT Repository: chdir {self.dir}: {err}")
             sys.exit(1)
 
     def repo_cfg(self):
         cmd = f"git remote set-url origin git@github.com:{self.gh_user}/{self.repo}.git"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info(f"Set-url {self.repo}")
+            logging.info(f"GIT Repository: config - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error(f"Set-url {self.repo} {err}")
+            logging.error(f"GIT Repository: config - {cmd}: {err}")
             sys.exit(1)
 
 class Dotfiles():
@@ -59,29 +55,29 @@ class Dotfiles():
         cmd = f"rm -rf {self.dir}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info(f"Remove existing config")
+            logging.info(f"Dotfiles: remove - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error(f"Remove existing config {err}")
+            logging.error(f"Dotfiles: remove - {cmd}: {err}")
             sys.exit(1)
 
     def clone(self):
         cmd = f"git clone git@github.com:{self.gh_user}/dotfiles.git {self.dir}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info("Clone")
+            logging.info(f"Dotfiles: clone - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error("Clone")
-            print(repr(err))
+            logging.error(f"Dotfiles: clone - {cmd}: {repr(err)}")
             sys.exit(1)
 
     def cfg(self):
         cmd = f"git remote set-url origin git@github.com:{self.gh_user}/dotfiles.git"
         try:
             os.chdir(self.dir)
+            logging.info(f"Dotfiles: chdir - {self.dir}")
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info(f"Config")
+            logging.info(f"Dotfiles: config - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error(f"Config {err}")
+            logging.error(f"Dotfiles: config - {cmd}: {err}")
             sys.exit(1)
 
 
@@ -97,10 +93,9 @@ class Progs():
         cmd = f"git clone git@github.com:{self.gh_user}/arch-progs.git {self.dir}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info("Clone")
+            logging.info(f"GIT Clone: Progs - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error("Clone")
-            print(repr(err))
+            logging.error(f"GIT Clone: Progs - {cmd}: {repr(err)}")
             sys.exit(1)
 
     def cfg(self):
@@ -108,7 +103,7 @@ class Progs():
         try:
             os.chdir(self.dir)
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info(f"Config")
+            logging.info(f"GIT Config: Progs - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error(f"Config {err}")
+            logging.error(f"GIT Config: Progs - {cmd}: {err}")
             sys.exit(1)

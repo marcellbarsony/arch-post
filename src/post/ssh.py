@@ -6,10 +6,6 @@ import sys
 from .bitwarden import Bitwarden
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
 class SSHagent():
 
     """
@@ -24,13 +20,16 @@ class SSHagent():
     def config(self):
         src = f"{self.sshdir}/config"
         dst = f"/home/{self.user}/.ssh/"
+        dst_path = os.path.join(dst, os.path.basename(src))
         try:
             os.makedirs(dst, exist_ok=True)
+            logging.info(f"SSH: Config - mkdir {dst}")
             shutil.copy(src, dst)
-            dst_path = os.path.join(dst, os.path.basename(src))
+            logging.info(f"SSH: Config - copy {src} >> {dst}")
             os.chmod(dst_path, 0o600)
+            logging.info(f"SSH: Config - chmod {dst_path}")
         except Exception as err:
-            logger.error(err)
+            logging.error(f"SSH: Config - {err}")
             sys.exit(1)
 
     def service_set(self):
@@ -38,9 +37,11 @@ class SSHagent():
         dst = f"/home/{self.user}/.config/systemd/user/"
         try:
             os.makedirs(dst, exist_ok=True)
+            logging.info(f"SSH: Service - mkdir {dst}")
             shutil.copy(src, dst)
+            logging.info(f"SSH: Service - copy {src} >> {dst}")
         except Exception as err:
-            logger.error(err)
+            logging.error(f"SSH: Service - {err}")
             sys.exit(1)
 
     def service_start(self):
@@ -51,9 +52,9 @@ class SSHagent():
         for cmd in cmds:
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logger.info("Enable & Start SSH-Agent")
+                logging.info(f"SSH: Agent - {cmd}")
             except subprocess.CalledProcessError as err:
-                logger.error(f"Enable SSH-Agent {err}")
+                logging.error(f"SSH: Agent - {cmd}: {err}")
                 sys.exit(1)
 
     def key_gen(self, ssh_key: str, gh_mail: str):
@@ -62,9 +63,9 @@ class SSHagent():
         cmd = f"ssh-keygen -q -t ed25519 -N {ssh_key} -C {gh_mail} -f {file}"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logger.info("Keygen")
+            logging.info(f"SSH: Keygen - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error(f"Keygen {err}")
+            logging.error(f"SSH: Keygen - {cmd}: {err}")
             sys.exit(1)
 
     @staticmethod
@@ -72,7 +73,7 @@ class SSHagent():
         cmd = "ssh-add -q ~/.ssh/id_ed25519"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logger.info("SSH Add key")
+            logging.info(f"SSH: Key add - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error(f"SSH Add key {err}")
+            logging.error(f"SSH: Key add - {cmd}: {err}")
             sys.exit(1)

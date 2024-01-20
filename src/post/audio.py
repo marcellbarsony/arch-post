@@ -3,10 +3,6 @@ import sys
 import subprocess
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
 class Pipewire():
 
     """
@@ -24,7 +20,7 @@ class Pipewire():
             cmd = f"systemctl --user enable {service}"
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logger.info(f"Enable {service}")
+                logging.info(f"Audio: Piewire service - {cmd}")
             except subprocess.CalledProcessError as err:
-                logger.error(f"Enable {service} {err}")
+                logging.error(f"Audio: Pipewire service - {cmd}: {err}")
                 sys.exit(1)

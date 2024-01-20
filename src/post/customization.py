@@ -4,10 +4,6 @@ import urllib.request
 import zipfile
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
 class Customization():
 
     """Docstring for Customization"""
@@ -17,19 +13,22 @@ class Customization():
         dir = f"/home/{user}/Downloads/Backgrounds"
         if not os.path.exists(dir):
             os.makedirs(dir)
-            print("[+] WALLPAPERS: Mkdir")
+            logging.info(f"Customization: Background: mkdir - {dir}")
 
         print("[i] WALLPAPERS: Download")
         url = "https://www.dropbox.com/scl/fo/5loqjisrohzslojb5ibmw/h?rlkey=onmox6lkop8uf9wzd314pbj66&dl=1"
         out = f"{dir}/wallpapers.zip"
         urllib.request.urlretrieve(url, out)
+        logging.info(f"Customization: Background download - {url} >> {out}")
 
         print("[i] WALLPAPERS: Extract")
         with zipfile.ZipFile(out, "r") as zip_ref:
             zip_ref.extractall(dir)
+            logging.info(f"Customization: Background extract - {zip_ref} >> {dir}")
 
         os.remove(out)
         print("[+] WALLPAPERS: Remove zip")
+        logging.info(f"Customization: Background remove zip - {out}")
 
     @staticmethod
     def spotify():

@@ -1,3 +1,4 @@
+import logging
 import subprocess
 import sys
 
@@ -11,11 +12,10 @@ class Rust():
 
     @staticmethod
     def toolchain():
-
         cmd = "rustup default stable"
         try:
-            subprocess.run(cmd, shell=True, check=True)
-            print("[+] Rust toolchain install")
+            subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+            logging.info(f"Rust: Toolchain - {cmd}")
         except subprocess.CalledProcessError as err:
-            print("[-] Rust toolchain install", err)
+            logging.error(f"Rust: Toolchain - {cmd}: {err}")
             sys.exit(1)

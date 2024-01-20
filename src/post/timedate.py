@@ -1,16 +1,12 @@
+import logging
 import subprocess
 import sys
-import logging
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
-class SysTime():
+class TimeDate():
 
     """
-    Set system time & timezone
+    Set System time & Timezone
     https://wiki.archlinux.org/title/System_time
     https://wiki.archlinux.org/title/Network_Time_Protocol_daemon#
     """
@@ -20,9 +16,9 @@ class SysTime():
         cmd = "sudo timedatectl set-ntp true --no-ask-password"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info("Time & Date: System clock")
+            logging.info(f"Time & Date: NTP - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error("Time & Date: System clock")
+            logging.error(f"Time & Date: NTP - {cmd}: {repr(err)}")
             print(repr(err))
             sys.exit(1)
 
@@ -31,8 +27,8 @@ class SysTime():
         cmd = f"sudo timedatectl set-timezone {timezone}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logger.info("Time & Date: Timezone")
+            logging.info(f"Time & Date: Timezone - {cmd}")
         except subprocess.CalledProcessError as err:
-            logger.error("Time & Date: Timezone")
+            logging.error(f"Time & Date: Timezone - {cmd}: {repr(err)}")
             print(repr(err))
             sys.exit(1)
