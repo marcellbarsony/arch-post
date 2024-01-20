@@ -12,13 +12,14 @@ class TimeDate():
     """
 
     @staticmethod
-    def time():
+    def ntp():
         cmd = "sudo timedatectl set-ntp true --no-ask-password"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logging.info(f"Time & Date: NTP - {cmd}")
+            logging.info(cmd)
+            print("[+] Pacman keyring")
         except subprocess.CalledProcessError as err:
-            logging.error(f"Time & Date: NTP - {cmd}: {repr(err)}")
+            logging.error(f"{cmd}: {repr(err)}")
             print(repr(err))
             sys.exit(1)
 
@@ -27,8 +28,8 @@ class TimeDate():
         cmd = f"sudo timedatectl set-timezone {timezone}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logging.info(f"Time & Date: Timezone - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"Time & Date: Timezone - {cmd}: {repr(err)}")
+            logging.error(f"{cmd} - {repr(err)}")
             print(repr(err))
             sys.exit(1)

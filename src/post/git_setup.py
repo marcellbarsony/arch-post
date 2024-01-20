@@ -21,9 +21,9 @@ class GitSetup():
         token = Bitwarden().rbw_get("github", gh_token)
         try:
             subprocess.run(cmd, shell=True, check=True, input=token.encode())
-            logging.info(f"GIT: Auth login - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"GIT: Auth login - {cmd}: {err}")
+            logging.error(f"{cmd}: {err}")
             sys.exit(1)
 
     @staticmethod
@@ -31,9 +31,9 @@ class GitSetup():
         cmd = "gh auth status"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"GIT: Auth status - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"GIT: Auth status - {cmd}: {repr(err)}")
+            logging.error(f"{cmd}: {repr(err)}")
             sys.exit(1)
 
     @staticmethod
@@ -41,9 +41,9 @@ class GitSetup():
         cmd = f"gh ssh-key add /home/{user}/.ssh/id_ed25519.pub -t {gh_pubkey}"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"GIT: Add pubkey - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"GIT: Add pubkey - {cmd}: {err}")
+            logging.error(f"{cmd}: {err}")
             sys.exit(1)
 
     @staticmethod
@@ -51,9 +51,9 @@ class GitSetup():
         cmd = "ssh-keyscan github.com >> ~/.ssh/known_hosts"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"GIT: Known hosts - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"GIT: Known hosts - {cmd}: {err}")
+            logging.error(f"{cmd}: {err}")
             sys.exit(1)
 
     @staticmethod
@@ -61,9 +61,9 @@ class GitSetup():
         cmd = "ssh -T git@github.com"
         res = subprocess.run(cmd, shell=True)
         if res.returncode in [0, 1]:
-            logging.info(f"GIT: SSH test - {cmd}")
+            logging.info(cmd)
         else:
-            logging.error(f"GIT: SSH test - {cmd}: Return: {res}")
+            logging.error(f"{cmd}: Return: {res}")
             sys.exit(res.returncode)
 
     @staticmethod
@@ -77,8 +77,7 @@ class GitSetup():
         for cmd in cmd_list:
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logging.info(f"GIT: SSH config - {cmd}")
+                logging.info(cmd)
             except subprocess.CalledProcessError as err:
-                logging.error(f"GIT: SSH config - {cmd}: {err}")
+                logging.error(f"{cmd}: {err}")
                 sys.exit(1)
-        logging.info(f"GIT: SSH config")

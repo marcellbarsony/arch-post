@@ -23,13 +23,13 @@ class SSHagent():
         dst_path = os.path.join(dst, os.path.basename(src))
         try:
             os.makedirs(dst, exist_ok=True)
-            logging.info(f"SSH: Config - mkdir {dst}")
+            logging.info(f"mkdir {dst}")
             shutil.copy(src, dst)
-            logging.info(f"SSH: Config - copy {src} >> {dst}")
+            logging.info(f"copy {src} >> {dst}")
             os.chmod(dst_path, 0o600)
-            logging.info(f"SSH: Config - chmod {dst_path}")
+            logging.info(f"chmod {dst_path}")
         except Exception as err:
-            logging.error(f"SSH: Config - {err}")
+            logging.error(err)
             sys.exit(1)
 
     def service_set(self):
@@ -37,11 +37,11 @@ class SSHagent():
         dst = f"/home/{self.user}/.config/systemd/user/"
         try:
             os.makedirs(dst, exist_ok=True)
-            logging.info(f"SSH: Service - mkdir {dst}")
+            logging.info(f"mkdir {dst}")
             shutil.copy(src, dst)
-            logging.info(f"SSH: Service - copy {src} >> {dst}")
+            logging.info(f"copy {src} >> {dst}")
         except Exception as err:
-            logging.error(f"SSH: Service - {err}")
+            logging.error(err)
             sys.exit(1)
 
     def service_start(self):
@@ -52,9 +52,9 @@ class SSHagent():
         for cmd in cmds:
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logging.info(f"SSH: Agent - {cmd}")
+                logging.info(cmd)
             except subprocess.CalledProcessError as err:
-                logging.error(f"SSH: Agent - {cmd}: {err}")
+                logging.error(f"{cmd}: {err}")
                 sys.exit(1)
 
     def key_gen(self, ssh_key: str, gh_mail: str):
@@ -63,9 +63,9 @@ class SSHagent():
         cmd = f"ssh-keygen -q -t ed25519 -N {ssh_key} -C {gh_mail} -f {file}"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"SSH: Keygen - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"SSH: Keygen - {cmd}: {err}")
+            logging.error(f"{cmd}: {err}")
             sys.exit(1)
 
     @staticmethod
@@ -73,7 +73,7 @@ class SSHagent():
         cmd = "ssh-add -q ~/.ssh/id_ed25519"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"SSH: Key add - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"SSH: Key add - {cmd}: {err}")
+            logging.error(f"{cmd}: {err}")
             sys.exit(1)

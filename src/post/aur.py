@@ -15,18 +15,18 @@ class AURhelper():
 
     def make_dir(self):
         os.makedirs(self.aur_dir, exist_ok=True)
-        logging.debug(f"AUR: create directory: {self.aur_dir}")
+        logging.info(self.aur_dir)
 
     def clone(self):
         cmd = f"git clone https://aur.archlinux.org/{self.aur_helper}.git {self.aur_dir}"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logging.info(f"AUR: Clone - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
             if err.returncode == 128:
-                logging.debug(f"AUR: Directory already exists: {self.aur_dir}")
+                logging.info(f"Directory already exists: {self.aur_dir}")
             else:
-                logging.error(f"AUR: Clone - {cmd}: {repr(err)}")
+                logging.error(f"{cmd}: {repr(err)}")
                 sys.exit(1)
 
     def make_pkg(self):
@@ -34,13 +34,14 @@ class AURhelper():
         cmd = f"makepkg -si --noconfirm"
         try:
             os.chdir(self.aur_dir)
-            logging.debug(f"AUR: Makepkg: os.chdir {self.aur_dir}")
+            logging.info(f"os.chdir {self.aur_dir}")
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logging.info(f"AUR: Makepkg - {cmd}")
+            logging.info(cmd)
             os.chdir(current_dir)
+            logging.info(f"os.chdir {current_dir}")
         except subprocess.CalledProcessError as err:
+            logging.error(f"{cmd}: {repr(err)}")
             os.chdir(current_dir)
-            logging.error(f"AUR: Makepkg - {cmd}: {repr(err)}")
             sys.exit(1)
 
     @staticmethod
@@ -53,7 +54,7 @@ class AURhelper():
         cmd = f"sudo {aurhelper} -S --noconfirm {packages}"
         try:
             subprocess.run(cmd, shell=True, input=sudo, check=True, text=True)
-            logging.info(f"AUR: Install - {cmd}")
+            logging.info(cmd)
         except Exception as err:
-            logging.error(f"AUR: Install - {cmd}: {err}")
+            logging.error(f"{cmd}: {repr(err)}")
             sys.exit(1)

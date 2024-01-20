@@ -20,17 +20,17 @@ class Python():
         dir = f"/home/{self.user}/.local/git/{dir}"
         if os.path.exists(dir):
             os.chdir(dir)
-            logging.info(f"Python: chdir - {dir}")
+            logging.info(dir)
 
     @staticmethod
     def venv_init():
             cmd = "python -m venv .venv"
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logging.info(f"Python: Venv init")
+                logging.info(cmd)
                 print("[+] Venv init")
             except subprocess.CalledProcessError as err:
-                logging.error(f"Python: Venv init: {err}")
+                logging.error(err)
                 print("[-] Venv init", err)
                 sys.exit(1)
 
@@ -39,10 +39,10 @@ class Python():
         cmd = "source .venv/bin/activate"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"Python: Venv activate")
+            logging.info(cmd)
             print("[+] Venv activate")
         except subprocess.CalledProcessError as err:
-            logging.error(f"Python: Venv activate: {err}")
+            logging.error(err)
             print("[-] Venv activate", err)
             sys.exit(1)
 
@@ -51,10 +51,10 @@ class Python():
         cmd = "pip install --upgrade pip"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"Python: Pip upgrade")
+            logging.info(cmd)
             print("[+] Pip upgrade")
         except subprocess.CalledProcessError as err:
-            logging.error(f"Python: Pip upgrade: {err}")
+            logging.error(err)
             print("[-] Pip upgrade", err)
             sys.exit(1)
 
@@ -63,10 +63,10 @@ class Python():
         cmd = "python -m pip install -r requirements.txt"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"Python: Pip install requirements")
+            logging.info(cmd)
             print("[+] Pip install")
         except subprocess.CalledProcessError as err:
-            logging.error(f"Python: Pip install requirements: {err}")
+            logging.error(err)
             print("[-] Pip install", err)
             sys.exit(1)
 
@@ -75,9 +75,9 @@ class Python():
         cmd = "deactivate"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"Python: Venv deactivate")
+            logging.info(cmd)
             print("[+] Venv deactivate")
         except subprocess.CalledProcessError as err:
-            logging.error(f"Python: Venv deactivate: {err}")
+            logging.error(err)
             print("[-] Venv deactivate", err)
             sys.exit(1)

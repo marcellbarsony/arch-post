@@ -19,16 +19,16 @@ class DisplayManager():
         try:
             os.system("clear")
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"Display manager: Install - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"Display manager: Install - {cmd}: {err}")
+            logging.error(f"{cmd}: {err}")
             sys.exit(1)
 
     def service(self):
         cmd = f"sudo systemctl enable {self.loginman}.service"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logging.info(f"Display manager: Service - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"Display manager: Service - {cmd}: {err}")
+            logging.error(f"{cmd}: {err}")
             sys.exit(1)

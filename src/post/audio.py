@@ -20,7 +20,7 @@ class Pipewire():
             cmd = f"systemctl --user enable {service}"
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logging.info(f"Audio: Piewire service - {cmd}")
+                logging.info(cmd)
             except subprocess.CalledProcessError as err:
-                logging.error(f"Audio: Pipewire service - {cmd}: {err}")
+                logging.error(f"{cmd}: {err}")
                 sys.exit(1)

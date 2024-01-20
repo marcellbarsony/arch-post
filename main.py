@@ -58,8 +58,8 @@ class Main():
     @staticmethod
     def systime():
         i = TimeDate()
-        i.time() # TODO: timedate setup
-        i.timezone(timezone)
+        i.ntp() # TODO: timedate setup
+        # i.timezone(timezone)
 
     @staticmethod
     def network():
@@ -121,7 +121,7 @@ class Main():
 
     def shell(self):
         z = Shell(self.user)
-        z.chsh()
+        z.change()
         z.config()
         z.tools()
 
@@ -138,8 +138,8 @@ class Main():
 
     def xdg(self):
         x = XDGStandard(self.user)
-        x.remove_xdg()
-        x.remove_home()
+        x.remove_dirs()
+        x.remove_files()
         x.move_rust()
         x.remove_self()
 
@@ -167,7 +167,7 @@ class Main():
 
 if __name__ == "__main__":
 
-    """ Check persmissions """
+    """ Check permissions """
     if os.getuid == 0:
         print("[-] Executed as root: UID=0")
         sys.exit(1)
@@ -182,7 +182,7 @@ if __name__ == "__main__":
 
     """ Initialize Logging """
     logging.basicConfig(level=logging.INFO, filename="logs.log", filemode="w",
-                        format="%(asctime)s - %(levelname)s - %(message)s")
+                        format="%(levelname)-7s :: %(module)s - %(funcName)s - %(lineno)d :: %(message)s")
 
     """ Initialize Global variables """
     config = configparser.ConfigParser()

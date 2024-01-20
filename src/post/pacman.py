@@ -15,8 +15,8 @@ class Pacman():
         cmd = "sudo pacman -D --asexplicit archlinux-keyring"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logging.info(f"Pacman: Explicit keyring - {cmd}")
+            logging.info(cmd)
             print("[+] Pacman keyring")
         except subprocess.CalledProcessError as err:
-            logging.error(f"Pacman: Explicit keyring - {cmd}: {err}")
+            logging.error(f"{cmd}: {repr(err)}")
             sys.exit(1)

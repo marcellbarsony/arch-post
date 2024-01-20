@@ -12,9 +12,9 @@ class Bitwarden():
         cmd = f"{aur_helper} -S --noconfirm rbw"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"Bitwarden: Install - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"Bitwarden: Install - {cmd}: {err}")
+            logging.error(f"{cmd}: {repr(err)}")
             sys.exit(1)
 
     @staticmethod
@@ -30,11 +30,12 @@ class Bitwarden():
             for cmd in commands:
                 try:
                     subprocess.run(cmd, shell=True, check=True)
+                    logging.info(cmd)
                 except KeyboardInterrupt:
-                    logging.error("Bitwarden: Register: User interrupt")
+                    logging.error("User interrupt")
                     sys.exit(1)
                 except subprocess.CalledProcessError as err:
-                    logging.error(f"Bitwarden: Register - {cmd}: {err}")
+                    logging.error(f"{cmd}: {repr(err)}")
                     error=True
             if error:
                 continue
@@ -45,7 +46,7 @@ class Bitwarden():
         cmd = f'rbw get {name} --full | grep "{item}" | cut -d " " -f 2'
         out = subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding="UTF-8")
         if "ERROR" in str(out.stderr):
-            logging.error(f"Bitwarden: Toolchain - {cmd} - {out.stderr}")
+            logging.error(f"{cmd}: {out.stderr}")
             sys.exit(1)
-        logging.info(f"Rust: Fetch data - {cmd}")
+        logging.info(cmd)
         return out.stdout.rstrip("\n")

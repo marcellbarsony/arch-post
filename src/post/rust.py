@@ -15,7 +15,7 @@ class Rust():
         cmd = "rustup default stable"
         try:
             subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-            logging.info(f"Rust: Toolchain - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"Rust: Toolchain - {cmd}: {err}")
+            logging.error(f"{cmd}: {repr(err)}")
             sys.exit(1)

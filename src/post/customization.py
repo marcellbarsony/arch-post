@@ -13,22 +13,22 @@ class Customization():
         dir = f"/home/{user}/Downloads/Backgrounds"
         if not os.path.exists(dir):
             os.makedirs(dir)
-            logging.info(f"Customization: Background: mkdir - {dir}")
+            logging.info(f"makedirs: {dir}")
 
         print("[i] WALLPAPERS: Download")
         url = "https://www.dropbox.com/scl/fo/5loqjisrohzslojb5ibmw/h?rlkey=onmox6lkop8uf9wzd314pbj66&dl=1"
         out = f"{dir}/wallpapers.zip"
         urllib.request.urlretrieve(url, out)
-        logging.info(f"Customization: Background download - {url} >> {out}")
+        logging.info(f"download: {url} >> {out}")
 
         print("[i] WALLPAPERS: Extract")
         with zipfile.ZipFile(out, "r") as zip_ref:
             zip_ref.extractall(dir)
-            logging.info(f"Customization: Background extract - {zip_ref} >> {dir}")
+            logging.info(f"extract: {zip_ref} >> {dir}")
 
         os.remove(out)
         print("[+] WALLPAPERS: Remove zip")
-        logging.info(f"Customization: Background remove zip - {out}")
+        logging.info(f"remove zip: {out}")
 
     @staticmethod
     def spotify():

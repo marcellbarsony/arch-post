@@ -11,14 +11,14 @@ class Shell():
     def __init__(self, user: str):
         self.user = user
 
-    def chsh(self):
+    def change(self):
         cmd = "chsh -s /usr/bin/zsh"
         try:
             os.system("clear")
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(f"Shell: change - {cmd}")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"Shell: change - {cmd}: {err}")
+            logging.error(f"{cmd}: {err}")
             sys.exit(1)
 
     def config(self):
@@ -34,9 +34,9 @@ class Shell():
             for cmd in cmds:
                 try:
                     subprocess.run(cmd, shell=True, check=True)
-                    logging.info(f"Shell: config - {cmd}")
+                    logging.info(cmd)
                 except subprocess.CalledProcessError as err:
-                    logging.error(f"Shell: config - {cmd}: {err}")
+                    logging.error(f"{cmd}: {err}")
                     sys.exit(1)
 
     def tools(self):
@@ -46,7 +46,7 @@ class Shell():
             cmd = f"git clone --depth 1 git@github.com:{repo}.git {dst}"
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logging.info(f"Shell: Zsh tools - {cmd}")
+                logging.info(cmd)
             except subprocess.CalledProcessError as err:
-                logging.error(f"Shell: Zsh tools - {cmd}: {err}")
+                logging.error(f"{cmd}: {err}")
                 sys.exit(1)
