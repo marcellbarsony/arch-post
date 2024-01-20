@@ -152,7 +152,11 @@ class Main():
 
     def languages(self):
         p = Python()
-        dirs = ["arch", "arch-post", "arch-tools"]
+        dirs = {
+            f"/home/{self.user}/.local/git/arch",
+            f"/home/{self.user}/.local/git/arch-post",
+            f"/home/{self.user}/.local/git/arch-tools"
+        }
         for dir in dirs:
             p.chdir(dir)
             p.venv_init()
@@ -161,7 +165,15 @@ class Main():
             p.pip_install()
             p.venv_deactivate()
 
-        # TODO: migrate Python-DAP
+        # TODO: test and refactor
+        # dir = f"/home/{self.user}/.local/share/python/debugpy"
+        # p.chdir(dir)
+        # p.venv_init()
+        # p.venv_activate()
+        # p.pip_upgrade()
+        # p.pip_install_debugpy()
+        # p.venv_deactivate()
+
         # j = JavaScript()
         # j.npm_install()
 

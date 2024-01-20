@@ -81,3 +81,15 @@ class Python():
             logging.error(err)
             print("[-] Venv deactivate", err)
             sys.exit(1)
+
+    @staticmethod
+    def pip_install_debugpy():
+        cmd = "python -m pip install debugpy"
+        try:
+            subprocess.run(cmd, shell=True, check=True)
+            logging.info(cmd)
+            print("[+] Pip install debugpy")
+        except subprocess.CalledProcessError as err:
+            logging.error(err)
+            print("[-] Pip install debugpy", err)
+            sys.exit(1)
