@@ -57,13 +57,15 @@ class Main():
 
     @staticmethod
     def systime():
+        # TODO: time setup check
         i = TimeDate()
-        i.ntp() # TODO: timedate setup
-        # i.timezone(timezone)
+        i.ntp()
+        i.timezone(timezone)
 
     @staticmethod
     def network():
-        pass # TODO: network setup
+        # TODO: network setup
+        pass
 
     @staticmethod
     def pacman():
@@ -120,10 +122,10 @@ class Main():
             r.repo_cfg()
 
     def shell(self):
-        z = Shell(self.user)
-        z.change()
-        z.config()
-        z.tools()
+        s = Shell(self.user)
+        s.change()
+        s.config()
+        s.tools()
 
     @staticmethod
     def audio():
@@ -149,9 +151,6 @@ class Main():
         c.spotify()
 
     def languages(self):
-        # j = JavaScript()
-        # j.npm_install()
-
         p = Python()
         dirs = ["arch", "arch-post", "arch-tools"]
         for dir in dirs:
@@ -163,6 +162,9 @@ class Main():
             p.venv_deactivate()
 
         # TODO: migrate Python-DAP
+        # j = JavaScript()
+        # j.npm_install()
+
 
 
 if __name__ == "__main__":

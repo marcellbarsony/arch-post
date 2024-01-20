@@ -43,6 +43,7 @@ class AURhelper():
             logging.error(f"{cmd}: {repr(err)}")
             os.chdir(current_dir)
             sys.exit(1)
+        os.system("clear")
 
     @staticmethod
     def install(current_dir: str, aurhelper: str, sudo: str):

@@ -1,4 +1,5 @@
 import logging
+import os
 import subprocess
 import sys
 
@@ -19,3 +20,4 @@ class Rust():
         except subprocess.CalledProcessError as err:
             logging.error(f"{cmd}: {repr(err)}")
             sys.exit(1)
+        os.system("clear")

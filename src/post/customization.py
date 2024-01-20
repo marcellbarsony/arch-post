@@ -29,6 +29,8 @@ class Customization():
         os.remove(out)
         print("[+] WALLPAPERS: Remove zip")
         logging.info(f"remove zip: {out}")
+        os.system("clear")
+
 
     @staticmethod
     def spotify():

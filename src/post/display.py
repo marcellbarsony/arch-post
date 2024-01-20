@@ -16,8 +16,8 @@ class DisplayManager():
 
     def install(self, aurhelper: str):
         cmd = f"{aurhelper} -S --noconfirm {self.loginman}"
+        os.system("clear")
         try:
-            os.system("clear")
             subprocess.run(cmd, shell=True, check=True)
             logging.info(cmd)
         except subprocess.CalledProcessError as err:

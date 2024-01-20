@@ -1,3 +1,4 @@
+import logging
 import subprocess
 import sys
 
@@ -12,7 +13,7 @@ class JavaScript():
         cmd = f"npm install -g live-server"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            print("[+] JavaScript: NPM install live-server")
+            logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            print(f"[-] JavaScript: NPM install live-server, {err}")
-            sys.exit(1)
+            logging.error(f"{cmd}: {repr(err)}")
+            # sys.exit(1)
