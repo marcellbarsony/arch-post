@@ -50,7 +50,7 @@ class Main():
         self.git()
         self.shell()
         self.audio()
-        # self.display()
+        self.display()
         self.xdg()
         self.customize()
         self.languages()
@@ -140,6 +140,7 @@ class Main():
 
     def xdg(self):
         x = XDGStandard(self.user)
+        x.mkdir_tmp()
         x.remove_dirs()
         x.remove_files()
         x.move_rust()

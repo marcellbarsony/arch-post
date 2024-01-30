@@ -10,10 +10,16 @@ class XDGStandard():
     def __init__(self, user):
         self.home = f"/home/{user}"
 
+    def mkdir_tmp(self):
+        tmp = os.path.join(self.home, "tmp")
+        os.mkdir(tmp)
+        logging.info(f"Created {tmp}")
+
     def remove_dirs(self):
         dirs = [
             "Desktop",
             "Documents",
+            "Downloads",
             "Music",
             "Public",
             "Templates",

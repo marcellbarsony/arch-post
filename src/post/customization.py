@@ -10,7 +10,7 @@ class Customization():
 
     @staticmethod
     def background(user: str):
-        dir = f"/home/{user}/Downloads/Backgrounds"
+        dir = f"/home/{user}/tmp/backgrounds"
         if not os.path.exists(dir):
             os.makedirs(dir)
             logging.info(f"makedirs: {dir}")
