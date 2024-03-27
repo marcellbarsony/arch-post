@@ -150,14 +150,15 @@ class Main():
         c = Customization()
         c.background(self.user)
         c.spotify()
+        c.steam()
 
     def languages(self):
         p = Python()
         dirs = {
-            f"/home/{self.user}/.local/git/arch",
-            f"/home/{self.user}/.local/git/arch-post",
-            f"/home/{self.user}/.local/git/arch-tools"
-        }
+            f".local/git/arch",
+            f".local/git/arch-post",
+            f".local/git/arch-tools"
+            }
         for dir in dirs:
             p.chdir(dir)
             p.venv_init()
@@ -167,6 +168,7 @@ class Main():
             p.venv_deactivate()
 
         # TODO: test and refactor
+        # TODO: add .local/bin
         # dir = f"/home/{self.user}/.local/share/python/debugpy"
         # p.chdir(dir)
         # p.venv_init()

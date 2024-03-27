@@ -17,7 +17,7 @@ class Python():
         self.user = os.getlogin()
 
     def chdir(self, dir: str):
-        dir = f"/home/{self.user}/.local/git/{dir}"
+        dir = f"/home/{self.user}/{dir}"
         if os.path.exists(dir):
             os.chdir(dir)
             logging.info(dir)
