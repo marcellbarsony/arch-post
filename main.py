@@ -12,200 +12,181 @@ import os
 import sys
 import logging
 
-from src.post import AURhelper
-from src.post import Bitwarden
-from src.post import Customization
-from src.post import DisplayManager
-from src.post import Dotfiles
-from src.post import GitSetup
-from src.post import Git
-# from src.post import JavaScript # TODO
-# from src.post import Network # TODO
-from src.post import Pacman
-from src.post import Pipewire
-from src.post import Progs
-from src.post import Python
-from src.post import Rust
-from src.post import SSHagent
-from src.post import TimeDate
-# from src.post import WiFi  # TODO
-from src.post import XDGStandard
-from src.post import Shell
+from src.post import aur
+from src.post import bitwarden
+from src.post import custom
+from src.post import git_setup
+from src.post import git_dotfiles
+from src.post import git_progs
+from src.post import git_repos
+from src.post import javascript
+from src.post import loginman
+from src.post import pacman
+from src.post import pipewire
+from src.post import python
+from src.post import rust
+from src.post import shell
+from src.post import ssh
+from src.post import systime
+from src.post import xdg
 
 
-class Main():
+# {{{ System Time
+def set_system_time():
+    systime.ntp()
+    systime.timezone(timezone)
+# }}}
 
-    def __init__(self):
-        self.cwd = os.getcwd()
-        self.user = getpass.getuser()
+# {{{ Network
+def network():
+    # TODO: network setup
+    pass
+# }}}
 
-    def run(self):
-        self.systime()
-        self.network()
-        self.pacman()
-        self.rust()
-        self.aur()
-        self.password_manager()
-        self.ssh()
-        self.git()
-        self.shell()
-        self.audio()
-        self.display()
-        self.xdg()
-        self.customize()
-        self.languages()
+# {{{ Pacman
+def set_pacman():
+    pacman.explicit_keyring()
+# }}}
 
-    @staticmethod
-    def systime():
-        # TODO: time setup check
-        i = TimeDate()
-        i.ntp()
-        i.timezone(timezone)
+# {{{ Rust
+def set_rust():
+    rust.toolchain()
+# }}}
 
-    @staticmethod
-    def network():
-        # TODO: network setup
-        pass
+# {{{ AUR
+def set_aur():
+    aur.make_dir(aur_dir)
+    aur.clone(aur_dir, aur_helper)
+    aur.makepkg(aur_dir)
+# }}}
 
-    @staticmethod
-    def pacman():
-        p = Pacman()
-        p.keyring()
+# {{{ Password Manager
+def set_bitwarden():
+    bitwarden.install(aur_helper)
+    bitwarden.register(bw_mail, bw_lock)
+# }}}
 
-    def rust(self):
-        r = Rust()
-        r.toolchain()
+# {{{ SSH
+def set_ssh():
+    ssh.config(user, ssh_dir)
+    ssh.service_set(user, ssh_dir)
+    ssh.service_start()
+    ssh.key_gen(user, ssh_key, git_mail)
+    ssh.key_add()
+# }}}
 
-    def aur(self):
-        a = AURhelper(self.user, aurhelper)
-        a.make_dir()
-        a.clone()
-        a.make_pkg()
+# {{{ GIT
+def set_git():
+    git_setup.auth_login(git_token)
+    git_setup.auth_status()
+    git_setup.pubkey(user, git_pubkey)
+    git_setup.known_hosts()
+    git_setup.ssh_test()
+    git_setup.config(git_user, git_mail)
 
-    @staticmethod
-    def password_manager():
-        r = Bitwarden()
-        r.install(aurhelper)
-        r.register(bw_mail, bw_lock)
+    git_dotfiles.remove()
+    git_dotfiles.clone(git_user)
+    git_dotfiles.cfg(git_user)
 
-    def ssh(self):
-        a = SSHagent(self.user, self.cwd)
-        a.config()
-        a.service_set()
-        a.service_start()
-        a.key_gen(ssh_key, git_mail)
-        a.key_add()
+    git_progs.clone(git_user)
+    git_progs.cfg(git_user)
 
-    def git(self):
-        g = GitSetup()
-        gh_user = g.get_user(git_user)
-        g.auth_login(git_token)
-        g.auth_status()
-        g.add_pubkey(self.user, git_pubkey)
-        g.known_hosts()
-        g.ssh_test()
-        g.config(gh_user, git_mail)
+    for repo in repositories:
+        git_repos.repo_clone(git_user, repo)
+        git_repos.repo_chdir(repo)
+        git_repos.repo_cfg(git_user, repo)
+# }}}
 
-        d = Dotfiles(self.user, gh_user)
-        d.remove()
-        d.clone()
-        d.cfg()
+# {{{ Shell
+def set_shell():
+    shell.change()
+    shell.config(user)
+    shell.tools(user)
+# }}}
 
-        p = Progs(self.user, gh_user)
-        p.clone()
-        p.cfg()
+# {{{ Audio
+def set_pipewire():
+    pipewire.service()
+# }}}
 
-        for repo in repositories:
-            r = Git(self.user, gh_user, repo)
-            r.repo_clone()
-            r.repo_chdir()
-            r.repo_cfg()
+# {{{ Login Manager
+def display_manager():
+    loginman.install(aur_helper, displayman)
+    loginman.service(displayman)
+# }}}
 
-    def shell(self):
-        s = Shell(self.user)
-        s.change()
-        s.config()
-        s.tools()
+# {{{ XDG
+def set_xdg():
+    xdg.mkdir_tmp(home)
+    xdg.move_rust(home)
+    xdg.remove_dirs(home)
+    xdg.remove_files(home)
+    xdg.remove_self(home)
+# }}}
 
-    @staticmethod
-    def audio():
-        p = Pipewire()
-        p.service()
+# {{{ Customize
+def customize():
+    custom.background(user)
+    custom.spotify()
+# }}}
 
-    @staticmethod
-    def display():
-        l = DisplayManager(displayman)
-        l.install(aurhelper)
-        l.service()
+# {{{ Programming
+def set_javascript():
+    javascript.npm_install()
 
-    def xdg(self):
-        x = XDGStandard(self.user)
-        x.mkdir_tmp()
-        x.remove_dirs()
-        x.remove_files()
-        x.move_rust()
-        x.remove_self()
+def set_python():
+    dirs = {
+        f".local/git/arch",
+        f".local/git/arch-post",
+        f".local/git/arch-tools"
+        }
+    for dir in dirs:
+        python.chdir(user, dir)
+        python.venv_init()
+        python.venv_activate()
+        python.pip_upgrade()
+        python.pip_install()
+        python.venv_deactivate()
 
-    def customize(self):
-        c = Customization()
-        c.background(self.user)
-        c.spotify()
-        c.steam()
-
-    def languages(self):
-        p = Python()
-        dirs = {
-            f".local/git/arch",
-            f".local/git/arch-post",
-            f".local/git/arch-tools"
-            }
-        for dir in dirs:
-            p.chdir(dir)
-            p.venv_init()
-            p.venv_activate()
-            p.pip_upgrade()
-            p.pip_install()
-            p.venv_deactivate()
-
-        # TODO: test and refactor
-        # TODO: add .local/bin
-        # dir = f"/home/{self.user}/.local/share/python/debugpy"
-        # p.chdir(dir)
-        # p.venv_init()
-        # p.venv_activate()
-        # p.pip_upgrade()
-        # p.pip_install_debugpy()
-        # p.venv_deactivate()
-
-        # j = JavaScript()
-        # j.npm_install()
-
+    # TODO: test and refactor
+    # TODO: add .local/bin
+    # dir = f"/home/{user}/.local/share/python/debugpy"
+    # p.chdir(dir)
+    # p.venv_init()
+    # p.venv_activate()
+    # p.pip_upgrade()
+    # p.pip_install_debugpy()
+    # p.venv_deactivate()
+# }}}
 
 
 if __name__ == "__main__":
 
-    """ Check permissions """
+    # {{{ Check
     if os.getuid == 0:
         print("[-] Executed as root: UID=0")
         sys.exit(1)
+    # }}}
 
-    """ Initialize Argparse """
+    # {{{ Argparse
     parser = argparse.ArgumentParser(
         prog="python3 arch-post.py",
         description="Arch post-install setup",
         epilog="TODO"
     )
     args = parser.parse_args()
+    # }}}
 
-    """ Initialize Logging """
+    # {{{ Logging
     logging.basicConfig(level=logging.INFO, filename="logs.log", filemode="w",
                         format="%(levelname)-7s :: %(module)s - %(funcName)s - %(lineno)d :: %(message)s")
+    # }}}
 
-    """ Initialize Global variables """
+    # {{{ Variables (Config)
     config = configparser.ConfigParser()
     config.read("config.ini")
 
-    aurhelper = config.get("aur", "helper")
+    aur_helper = config.get("aur", "helper")
     bw_mail = config.get("bitwarden", "mail")
     bw_lock = config.get("bitwarden", "lock")
     git_mail = config.get("bitwarden_data", "github_mail")
@@ -226,7 +207,31 @@ if __name__ == "__main__":
     repositories = config.get("repositories", "repositories").split(", ")
     ssh_key = config.get("ssh", "key")
     timezone = config.get("timezone", "timezone")
+    # }}}
 
-    """ Run script """
-    m = Main()
-    m.run()
+    # {{{ Variables (Global)
+    cwd = os.getcwd()
+    user = getpass.getuser()
+
+    aur_dir = f"/home/{user}/.local/src/{aur_helper}/"
+    home = f"/home/{user}"
+    ssh_dir = f"{cwd}/src/ssh"
+    # }}}
+
+    # {{{ Run
+    set_system_time()
+    network()
+    set_pacman()
+    set_rust()
+    set_aur()
+    set_bitwarden()
+    set_ssh()
+    set_git()
+    set_shell()
+    set_pipewire()
+    # display_manager()
+    set_xdg()
+    customize()
+    set_python()
+    set_javascript()
+    # }}}
