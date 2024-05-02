@@ -1,11 +1,12 @@
+import getpass
 import logging
 import os
 import urllib.request
 import zipfile
 
 
-def background(user: str):
-    dir = f"/home/{user}/tmp/backgrounds"
+def background():
+    dir = f"/home/{getpass.getuser()}/tmp/backgrounds"
     if not os.path.exists(dir):
         os.makedirs(dir)
         logging.info(f"makedirs: {dir}")

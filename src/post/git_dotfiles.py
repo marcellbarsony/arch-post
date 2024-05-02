@@ -18,8 +18,8 @@ def remove():
         sys.exit(1)
 
 def clone(git_user: str):
-    dir = f"/home/{getpass.getuser()}/.config"
     gh_user = bitwarden.rbw_get("github", git_user)
+    dir = f"/home/{getpass.getuser()}/.config"
     cmd = f"git clone git@github.com:{gh_user}/dotfiles.git {dir}"
     try:
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
@@ -29,8 +29,8 @@ def clone(git_user: str):
         sys.exit(1)
 
 def cfg(git_user: str):
-    dir = f"/home/{getpass.getuser()}/.config"
     gh_user = bitwarden.rbw_get("github", git_user)
+    dir = f"/home/{getpass.getuser()}/.config"
     cmd = f"git remote set-url origin git@github.com:{gh_user}/dotfiles.git"
     try:
         os.chdir(dir)

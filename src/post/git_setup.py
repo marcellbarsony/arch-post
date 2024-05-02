@@ -1,3 +1,4 @@
+import getpass
 import logging
 import subprocess
 import sys
@@ -28,8 +29,8 @@ def auth_status():
         logging.error(f"{cmd}: {repr(err)}")
         sys.exit(1)
 
-def pubkey(user: str, git_pubkey: str):
-    cmd = f"gh ssh-key add /home/{user}/.ssh/id_ed25519.pub -t {git_pubkey}"
+def pubkey(git_pubkey: str):
+    cmd = f"gh ssh-key add /home/{getpass.getuser()}/.ssh/id_ed25519.pub -t {git_pubkey}"
     try:
         subprocess.run(cmd, shell=True, check=True)
         logging.info(cmd)

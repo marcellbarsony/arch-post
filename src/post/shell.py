@@ -1,3 +1,4 @@
+import getpass
 import logging
 import os
 import subprocess
@@ -14,8 +15,8 @@ def change():
         logging.error(f"{cmd}: {err}")
         sys.exit(1)
 
-def config(user: str):
-    src = f"/home/{user}/.config/zsh/global/"
+def config():
+    src = f"/home/{getpass.getuser()}/.config/zsh/global/"
     dst = "/etc/zsh/"
     for file in os.listdir(src):
         src_file = os.path.join(src, file)
@@ -32,10 +33,10 @@ def config(user: str):
                 logging.error(f"{cmd}: {err}")
                 sys.exit(1)
 
-def tools(user: str):
+def tools():
     repositories = {"marlonrichert/zsh-autocomplete": "zsh-autocomplete"}
     for repo, dir in repositories.items():
-        dst = f"/home/{user}/.local/src/{dir}"
+        dst = f"/home/{getpass.getuser()}/.local/src/{dir}"
         cmd = f"git clone --depth 1 git@github.com:{repo}.git {dst}"
         try:
             subprocess.run(cmd, shell=True, check=True)

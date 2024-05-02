@@ -20,7 +20,6 @@ from src.post import git_dotfiles
 from src.post import git_progs
 from src.post import git_repos
 from src.post import javascript
-from src.post import loginman
 from src.post import pacman
 from src.post import pipewire
 from src.post import python
@@ -68,10 +67,10 @@ def set_bitwarden():
 
 # {{{ SSH
 def set_ssh():
-    ssh.config(user, ssh_dir)
-    ssh.service_set(user, ssh_dir)
+    ssh.config(ssh_dir)
+    ssh.service_set(ssh_dir)
     ssh.service_start()
-    ssh.key_gen(user, ssh_key, git_mail)
+    ssh.key_gen(ssh_key, git_mail)
     ssh.key_add()
 # }}}
 
@@ -79,7 +78,7 @@ def set_ssh():
 def set_git():
     git_setup.auth_login(git_token)
     git_setup.auth_status()
-    git_setup.pubkey(user, git_pubkey)
+    git_setup.pubkey(git_pubkey)
     git_setup.known_hosts()
     git_setup.ssh_test()
     git_setup.config(git_user, git_mail)
@@ -100,19 +99,13 @@ def set_git():
 # {{{ Shell
 def set_shell():
     shell.change()
-    shell.config(user)
-    shell.tools(user)
+    shell.config()
+    shell.tools()
 # }}}
 
 # {{{ Audio
 def set_pipewire():
     pipewire.service()
-# }}}
-
-# {{{ Login Manager
-def display_manager():
-    loginman.install(aur_helper, displayman)
-    loginman.service(displayman)
 # }}}
 
 # {{{ XDG
@@ -126,7 +119,7 @@ def set_xdg():
 
 # {{{ Customize
 def customize():
-    custom.background(user)
+    custom.background()
     custom.spotify()
 # }}}
 
@@ -197,7 +190,6 @@ if __name__ == "__main__":
     spotify_device_id = config.get("bitwarden_data", "spotify_device_id")
     spotify_mail = config.get("bitwarden_data", "spotify_mail")
     spotify_user = config.get("bitwarden_data", "spotify_user")
-    displayman = config.get("displayman", "displayman")
     git_pubkey = config.get("github",  "pubkey")
     network_ip = config.get("network", "ip")
     network_port = config.get("network", "port")
@@ -229,7 +221,6 @@ if __name__ == "__main__":
     set_git()
     set_shell()
     set_pipewire()
-    # display_manager()
     set_xdg()
     customize()
     set_python()

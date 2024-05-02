@@ -1,6 +1,6 @@
 import logging
 import subprocess
-import sys
+# import sys
 
 
 """Docstring for JavaScript NPM setup"""

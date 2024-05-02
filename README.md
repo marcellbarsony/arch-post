@@ -7,10 +7,10 @@
 - LUKS2
 - Btrfs (Snapper)
 - Hardened kernel
-- X11
 - Zsh
+- Wayland
+- Hyprland
 - Alacritty
-- Qtile
 - XDGBDS
 - Neovim
 - Firefox
