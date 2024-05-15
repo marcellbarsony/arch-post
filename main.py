@@ -95,8 +95,8 @@ def set_git():
     git_dotfiles.clone(gh_user)
     git_dotfiles.cfg(gh_user)
 
-    git_progs.clone(gh_user)
-    git_progs.cfg(gh_user)
+    # git_progs.clone(gh_user)
+    # git_progs.cfg(gh_user)
 
     for repo in repositories:
         git_repos.repo_clone(gh_user, repo)
@@ -224,7 +224,7 @@ if __name__ == "__main__":
     set_pacman()
     set_rust()
     set_aur()
-    set_bitwarden()
+    # set_bitwarden()
     set_ssh()
     set_git()
     set_shell()
