@@ -59,6 +59,7 @@ def set_aur():
     aur.make_dir(aur_dir)
     aur.clone(aur_dir, aur_helper)
     aur.makepkg(aur_dir)
+    aur.remove(aur_dir)
 # }}}
 
 # {{{ Password Manager
@@ -211,7 +212,7 @@ if __name__ == "__main__":
     cwd = os.getcwd()
     user = getpass.getuser()
 
-    aur_dir = f"/home/{user}/.local/src/{aur_helper}/"
+    aur_dir = f"/home/{user}/.local/src/{aur_helper}-bin/"
     home = f"/home/{user}"
     ssh_dir = f"{cwd}/src/ssh"
     # }}}

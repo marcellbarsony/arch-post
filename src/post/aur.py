@@ -24,7 +24,7 @@ def clone(aur_dir: str, aur_helper: str):
 
 def makepkg(aur_dir: str):
     current_dir = os.getcwd()
-    cmd = f"makepkg -si --noconfirm"
+    cmd = f"makepkg -rsi --noconfirm"
     try:
         os.chdir(aur_dir)
         logging.info(f"os.chdir {aur_dir}")
@@ -51,3 +51,10 @@ def install(current_dir: str, aurhelper: str, sudo: str):
     except Exception as err:
         logging.error(f"{cmd}: {repr(err)}")
         sys.exit(1)
+
+def remove(aur_dir: str):
+    try:
+        os.rmdir(aur_dir)
+        print(f":: [+] AUR: Remove {aur_dir}")
+    except Exception as err:
+        logging.error(f"Cannot remove {aur_dir}\n{err}")
