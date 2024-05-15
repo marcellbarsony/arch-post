@@ -90,16 +90,16 @@ def set_git():
     git_setup.config(gh_user, gh_mail)
 
     git_dotfiles.remove()
-    git_dotfiles.clone(git_user)
-    git_dotfiles.cfg(git_user)
+    git_dotfiles.clone(gh_user)
+    git_dotfiles.cfg(gh_user)
 
-    git_progs.clone(git_user)
-    git_progs.cfg(git_user)
+    git_progs.clone(gh_user)
+    git_progs.cfg(gh_user)
 
     for repo in repositories:
-        git_repos.repo_clone(git_user, repo)
+        git_repos.repo_clone(gh_user, repo)
         git_repos.repo_chdir(repo)
-        git_repos.repo_cfg(git_user, repo)
+        git_repos.repo_cfg(gh_user, repo)
 # }}}
 
 # {{{ Shell

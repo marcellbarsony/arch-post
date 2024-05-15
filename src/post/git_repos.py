@@ -1,4 +1,3 @@
-import bitwarden
 import getpass
 import logging
 import os
@@ -6,8 +5,7 @@ import subprocess
 import sys
 
 
-def repo_clone(git_user: str, repo: str):
-    gh_user = bitwarden.rbw_get("github", git_user)
+def repo_clone(gh_user: str, repo: str):
     dir = f"/home/{getpass.getuser()}/.local/git/{repo}"
     cmd = f"git clone git@github.com:{gh_user}/{repo}.git {dir}"
     try:
@@ -30,8 +28,7 @@ def repo_chdir(repo: str):
         logging.error(f"{dir}: {err}")
         sys.exit(1)
 
-def repo_cfg(git_user: str, repo: str):
-    gh_user = bitwarden.rbw_get("github", git_user)
+def repo_cfg(gh_user: str, repo: str):
     cmd = f"git remote set-url origin git@github.com:{gh_user}/{repo}.git"
     try:
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
