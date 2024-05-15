@@ -1,4 +1,3 @@
-import bitwarden
 import getpass
 import logging
 import os
@@ -17,8 +16,7 @@ def remove():
         logging.error(f"Dotfiles :: {cmd}: {err}")
         sys.exit(1)
 
-def clone(git_user: str):
-    gh_user = bitwarden.rbw_get("github", git_user)
+def clone(gh_user: str):
     dir = f"/home/{getpass.getuser()}/.config"
     cmd = f"git clone git@github.com:{gh_user}/dotfiles.git {dir}"
     try:
@@ -28,8 +26,7 @@ def clone(git_user: str):
         logging.error(f"Dotfiles :: {cmd}: {repr(err)}")
         sys.exit(1)
 
-def cfg(git_user: str):
-    gh_user = bitwarden.rbw_get("github", git_user)
+def cfg(gh_user: str):
     dir = f"/home/{getpass.getuser()}/.config"
     cmd = f"git remote set-url origin git@github.com:{gh_user}/dotfiles.git"
     try:
