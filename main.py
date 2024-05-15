@@ -139,7 +139,7 @@ def set_python():
     dirs = {
         f".local/git/arch",
         f".local/git/arch-post",
-        f".local/git/arch-tools"
+        # f".local/git/arch-tools"
         }
     for dir in dirs:
         python.chdir(user, dir)
