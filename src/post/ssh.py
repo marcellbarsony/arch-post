@@ -4,7 +4,6 @@ import os
 import shutil
 import subprocess
 import sys
-import bitwarden
 
 """
 SSH Agent setup
@@ -52,7 +51,6 @@ def service_start():
             sys.exit(1)
 
 def key_gen(ssh_key: str, gh_mail: str):
-    gh_mail = bitwarden.rbw_get("github", gh_mail)
     file = f"/home/{getpass.getuser()}/.ssh/id_ed25519"
     cmd = f"ssh-keygen -q -t ed25519 -N {ssh_key} -C {gh_mail} -f {file}"
     try:

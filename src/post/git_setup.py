@@ -2,7 +2,6 @@ import getpass
 import logging
 import subprocess
 import sys
-import bitwarden
 
 
 """
@@ -10,9 +9,8 @@ GitHub setup with SSH
 https://docs.github.com/en/authentication/connecting-to-github-with-ssh
 """
 
-def auth_login(git_token: str):
+def auth_login(gh_token: str):
     cmd = "gh auth login --with-token"
-    gh_token = bitwarden.rbw_get("github", git_token)
     try:
         subprocess.run(cmd, shell=True, check=True, input=gh_token.encode())
         logging.info(cmd)
@@ -56,9 +54,7 @@ def ssh_test():
         logging.error(f"{cmd}: Return: {res}")
         sys.exit(res.returncode)
 
-def config(git_user: str, git_mail: str):
-    gh_mail = bitwarden.rbw_get("github", git_mail)
-    gh_user = bitwarden.rbw_get("github", git_user)
+def config(gh_user: str, gh_mail: str):
     cmds = [
         f"git config --global user.name '{gh_user}'",
         f"git config --global user.email '{gh_mail}'",

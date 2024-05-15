@@ -69,21 +69,25 @@ def set_bitwarden():
 
 # {{{ SSH
 def set_ssh():
+    gh_mail = bitwarden.rbw_get("github", git_mail)
     ssh.config(ssh_dir)
     ssh.service_set(ssh_dir)
     ssh.service_start()
-    ssh.key_gen(ssh_key, git_mail)
+    ssh.key_gen(ssh_key, gh_mail)
     ssh.key_add()
 # }}}
 
 # {{{ GIT
 def set_git():
-    git_setup.auth_login(git_token)
+    gh_token = bitwarden.rbw_get("github", git_token)
+    gh_mail = bitwarden.rbw_get("github", git_mail)
+    gh_user = bitwarden.rbw_get("github", git_user)
+    git_setup.auth_login(gh_token)
     git_setup.auth_status()
     git_setup.pubkey(git_pubkey)
     git_setup.known_hosts()
     git_setup.ssh_test()
-    git_setup.config(git_user, git_mail)
+    git_setup.config(gh_user, gh_mail)
 
     git_dotfiles.remove()
     git_dotfiles.clone(git_user)
