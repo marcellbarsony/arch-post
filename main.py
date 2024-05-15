@@ -47,6 +47,7 @@ def network():
 # {{{ Pacman
 def set_pacman():
     pacman.explicit_keyring()
+    pacman.update()
 # }}}
 
 # {{{ Rust
