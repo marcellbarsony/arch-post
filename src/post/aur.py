@@ -11,7 +11,7 @@ def make_dir(aur_dir: str):
     logging.info(aur_dir)
 
 def clone(aur_dir: str, aur_helper: str):
-    cmd = f"git clone https://aur.archlinux.org/{aur_helper}.git {aur_dir}"
+    cmd = f"git clone https://aur.archlinux.org/{aur_helper}-bin.git {aur_dir}"
     try:
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
         logging.info(cmd)
