@@ -21,6 +21,7 @@ from src.post import git_dotfiles
 from src.post import git_progs
 from src.post import git_repos
 from src.post import javascript
+from src.post import dns
 from src.post import pacman
 from src.post import pipewire
 from src.post import python
@@ -40,8 +41,8 @@ def set_system_time():
 
 # {{{ Network
 def network():
-    # TODO: network setup
-    pass
+    dns.networkmanager()
+    dns.resolvconf()
 # }}}
 
 # {{{ Pacman
