@@ -13,20 +13,20 @@ def ntp():
     cmd = "sudo timedatectl set-ntp true --no-ask-password"
     try:
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+        print(":: [+] SYSTIME :: ", cmd)
         logging.info(cmd)
-        print("[+] NTP")
     except subprocess.CalledProcessError as err:
+        print(":: [-] SYSTIME :: ", repr(err))
         logging.error(f"{cmd}: {repr(err)}")
-        print(repr(err))
         sys.exit(1)
 
-def timezone(timezone: str):
-    cmd = f"sudo timedatectl set-timezone {timezone}"
+def time_zone(zone: str):
+    cmd = f"timedatectl set-timezone {zone}"
     try:
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-        print("[+] Timezone")
+        print(":: [+] SYSTIME :: ", cmd)
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd} - {repr(err)}")
-        print(repr(err))
+        print(":: [-] SYSTIME :: ", err)
+        logging.error(f"{cmd}\n{err}")
         sys.exit(1)

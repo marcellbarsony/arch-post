@@ -19,5 +19,5 @@ def service():
             subprocess.run(cmd, shell=True, check=True)
             logging.info(cmd)
         except subprocess.CalledProcessError as err:
-            logging.error(f"{cmd}: {err}")
+            logging.error(f"{cmd}\n{err}")
             sys.exit(1)

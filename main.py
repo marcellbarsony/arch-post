@@ -21,7 +21,6 @@ from src.post import git_dotfiles
 from src.post import git_progs
 from src.post import git_repos
 from src.post import javascript
-from src.post import dns
 from src.post import pacman
 from src.post import pipewire
 from src.post import python
@@ -36,13 +35,7 @@ from src.post import xdg
 # {{{ System Time
 def set_system_time():
     systime.ntp()
-    systime.timezone(timezone)
-# }}}
-
-# {{{ Network
-def network():
-    dns.networkmanager()
-    dns.resolvconf()
+    systime.time_zone(timezone)
 # }}}
 
 # {{{ Pacman
@@ -138,27 +131,21 @@ def set_javascript():
 
 def set_python():
     dirs = {
-        f".local/git/arch",
-        f".local/git/arch-post",
-        # f".local/git/arch-tools"
-        }
+        ".local/bin"
+        ".local/git/arch",
+        ".local/git/arch-post",
+        # ".local/git/arch-tools"
+        ".local/share/python/debugpy"
+    }
     for dir in dirs:
         python.chdir(user, dir)
         python.venv_init()
         python.venv_activate()
         python.pip_upgrade()
         python.pip_install()
+        if dir == ".local/share/python/debugpy":
+            python.pip_install_debugpy()
         python.venv_deactivate()
-
-    # TODO: test and refactor
-    # TODO: add .local/bin
-    # dir = f"/home/{user}/.local/share/python/debugpy"
-    # p.chdir(dir)
-    # p.venv_init()
-    # p.venv_activate()
-    # p.pip_upgrade()
-    # p.pip_install_debugpy()
-    # p.venv_deactivate()
 # }}}
 
 
@@ -207,31 +194,30 @@ if __name__ == "__main__":
     network_ssid = config.get("network", "wifi_ssid")
     repositories = config.get("repositories", "repositories").split(", ")
     ssh_key = config.get("ssh", "key")
-    timezone = config.get("timezone", "timezone")
+    timezone = config.get("timezone", "zone")
     # }}}
 
     # {{{ Variables (Global)
     cwd = os.getcwd()
     user = getpass.getuser()
 
-    aur_dir = f"/home/{user}/.local/src/{aur_helper}-bin/"
+    aur_dir = f"/home/{user}/.local/src/{aur_helper}/"
     home = f"/home/{user}"
     ssh_dir = f"{cwd}/src/ssh"
     # }}}
 
     # {{{ Run
-    set_system_time()
-    network()
-    set_pacman()
-    set_rust()
-    set_aur()
-    # set_bitwarden()
-    set_ssh()
-    set_git()
-    set_shell()
-    set_pipewire()
-    set_xdg()
-    customize()
+    # set_system_time()
+    # set_pacman()
+    # set_rust()
+    # set_aur()
+    # # set_bitwarden()
+    # set_ssh()
+    # set_git()
+    # set_shell()
+    # set_pipewire()
+    # set_xdg()
+    # customize()
+    # set_javascript()
     set_python()
-    set_javascript()
     # }}}

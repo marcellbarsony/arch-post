@@ -22,63 +22,57 @@ def venv_init():
         try:
             subprocess.run(cmd, shell=True, check=True)
             logging.info(cmd)
-            print("[+] Venv init")
+            print(":: [+] Venv init")
         except subprocess.CalledProcessError as err:
             logging.error(err)
-            print("[-] Venv init", err)
-            sys.exit(1)
+            print(":: [-] Venv init", err)
 
 def venv_activate():
     cmd = "source .venv/bin/activate"
     try:
         subprocess.run(cmd, shell=True, check=True)
         logging.info(cmd)
-        print("[+] Venv activate")
+        print(":: [+] Venv activate")
     except subprocess.CalledProcessError as err:
         logging.error(err)
-        print("[-] Venv activate", err)
-        sys.exit(1)
+        print(":: [-] Venv activate", err)
 
 def pip_upgrade():
     cmd = "pip install --upgrade pip"
     try:
         subprocess.run(cmd, shell=True, check=True)
         logging.info(cmd)
-        print("[+] Pip upgrade")
+        print(":: [+] Pip upgrade")
     except subprocess.CalledProcessError as err:
         logging.error(err)
-        print("[-] Pip upgrade", err)
-        sys.exit(1)
+        print(":: [-] Pip upgrade", err)
 
 def pip_install():
     cmd = "python -m pip install -r requirements.txt"
     try:
         subprocess.run(cmd, shell=True, check=True)
         logging.info(cmd)
-        print("[+] Pip install")
+        print(":: [+] Pip install")
     except subprocess.CalledProcessError as err:
         logging.error(err)
-        print("[-] Pip install", err)
-        sys.exit(1)
+        print(":: [-] Pip install", err)
 
 def venv_deactivate():
     cmd = "deactivate"
     try:
         subprocess.run(cmd, shell=True, check=True)
         logging.info(cmd)
-        print("[+] Venv deactivate")
+        print(":: [+] Venv deactivate")
     except subprocess.CalledProcessError as err:
         logging.error(err)
-        print("[-] Venv deactivate", err)
-        sys.exit(1)
+        print(":: [-] Venv deactivate", err)
 
 def pip_install_debugpy():
     cmd = "python -m pip install debugpy"
     try:
         subprocess.run(cmd, shell=True, check=True)
         logging.info(cmd)
-        print("[+] Pip install debugpy")
+        print(":: [+] Pip install debugpy")
     except subprocess.CalledProcessError as err:
         logging.error(err)
-        print("[-] Pip install debugpy", err)
-        sys.exit(1)
+        print(":: [-] Pip install debugpy", err)

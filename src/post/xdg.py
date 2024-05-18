@@ -8,7 +8,7 @@ import shutil
 def mkdir_tmp(home: str):
     tmp = os.path.join(home, "tmp")
     os.mkdir(tmp)
-    logging.info(f"Created {tmp}")
+    logging.info("Makedir :: ", tmp)
 
 def move_rust(home: str):
     cargo_conf = f"{home}/.cargo"
@@ -40,14 +40,14 @@ def remove_dirs(home: str):
                 os.rmdir(path)
                 logging.info(path)
             except OSError as err:
-                logging.error(f"{path}: {err}")
+                logging.error(f"{path}\n{err}")
 
 def remove_files(home: str):
     files = [
         ".bashrc",
+        ".bash_history",
         ".bash_logout",
         ".bash_profile",
-        ".bash_history",
         ".gitconfig"
     ]
     for file in files:

@@ -16,7 +16,7 @@ def repo_clone(gh_user: str, repo: str):
             logging.warning(f"already exists: {repo}")
             pass
         else:
-            logging.error(f"{cmd}: {repr(err)}")
+            logging.error(f"{cmd}\n{repr(err)}")
             sys.exit(1)
 
 def repo_chdir(repo: str):
@@ -34,5 +34,5 @@ def repo_cfg(gh_user: str, repo: str):
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}: {err}")
+        logging.error(f"{cmd}\n{err}")
         sys.exit(1)

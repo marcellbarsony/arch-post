@@ -15,7 +15,7 @@ def auth_login(gh_token: str):
         subprocess.run(cmd, shell=True, check=True, input=gh_token.encode())
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}: {err}")
+        logging.error(f"{cmd}\n{err}")
         sys.exit(1)
 
 def auth_status():
@@ -24,7 +24,7 @@ def auth_status():
         subprocess.run(cmd, shell=True, check=True)
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}: {repr(err)}")
+        logging.error(f"{cmd}\n{repr(err)}")
         sys.exit(1)
 
 def pubkey(git_pubkey: str):
@@ -33,7 +33,7 @@ def pubkey(git_pubkey: str):
         subprocess.run(cmd, shell=True, check=True)
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}: {err}")
+        logging.error(f"{cmd}\n{err}")
         sys.exit(1)
 
 def known_hosts():
@@ -42,7 +42,7 @@ def known_hosts():
         subprocess.run(cmd, shell=True, check=True)
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}: {err}")
+        logging.error(f"{cmd}\n{err}")
         sys.exit(1)
 
 def ssh_test():
@@ -51,7 +51,7 @@ def ssh_test():
     if res.returncode in [0, 1]:
         logging.info(cmd)
     else:
-        logging.error(f"{cmd}: Return: {res}")
+        logging.error(f"{cmd}\nReturn: {res}")
         sys.exit(res.returncode)
 
 def config(gh_user: str, gh_mail: str):
