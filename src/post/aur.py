@@ -6,7 +6,7 @@ import sys
 
 """AUR helper setup"""
 
-def make_dir(aur_dir: str):
+def mkdir(aur_dir: str):
     os.makedirs(aur_dir, exist_ok=True)
     print(":: [+] AUR :: Mkdir")
     logging.info(aur_dir)
@@ -24,7 +24,7 @@ def clone(aur_dir: str, aur_helper: str):
             logging.error(f"{cmd}\n{repr(err)}")
             sys.exit(1)
 
-def makepkg(aur_dir: str):
+def mkpkg(aur_dir: str):
     current_dir = os.getcwd()
     cmd = f"makepkg -rsi --noconfirm"
     try:
@@ -60,6 +60,7 @@ def remove(aur_dir: str):
     try:
         os.rmdir(aur_dir)
         print(":: [+] AUR :: Rmdir")
+        logging.info(f"Removing {aur_dir}")
     except Exception as err:
         print(":: [-] AUR :: Rmdir")
         logging.error(f"Cannot remove {aur_dir}\n{err}")

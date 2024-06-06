@@ -51,9 +51,9 @@ def set_rust():
 
 # {{{ AUR
 def set_aur():
-    aur.make_dir(aur_dir)
+    aur.mkdir(aur_dir)
     aur.clone(aur_dir, aur_helper)
-    aur.makepkg(aur_dir)
+    aur.mkpkg(aur_dir)
     aur.remove(aur_dir)
 # }}}
 
