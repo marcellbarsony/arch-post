@@ -17,8 +17,6 @@ from src.post import aur
 from src.post import bitwarden
 from src.post import custom
 from src.post import git_setup
-from src.post import git_dotfiles
-from src.post import git_progs
 from src.post import git_repos
 from src.post import javascript
 from src.post import pacman
@@ -85,15 +83,17 @@ def set_git():
     git_setup.ssh_test()
     git_setup.config(gh_user, gh_mail)
 
-    git_dotfiles.remove()
-    git_dotfiles.clone(gh_user)
-    git_dotfiles.cfg(gh_user)
-
-    # git_progs.clone(gh_user)
-    # git_progs.cfg(gh_user)
-
+def set_git_repos():
+    gh_user = bitwarden.rbw_get("github", git_user)
     for repo in repositories:
-        git_repos.repo_clone(gh_user, repo)
+        if repo == "dotfiles":
+            dst = f"{home}/.config"
+            git_repos.remove(dst)
+        if repo == "arch-progs":
+            dst = f"{home}/.local/bin"
+        else:
+            dst = f"{home}/.local/git/{repo}"
+        git_repos.repo_clone(gh_user, repo, dst)
         git_repos.repo_chdir(repo)
         git_repos.repo_cfg(gh_user, repo)
 # }}}
@@ -131,14 +131,14 @@ def set_javascript():
 
 def set_python():
     dirs = {
-        ".local/bin"
+        ".local/bin",
         ".local/git/arch",
         ".local/git/arch-post",
-        # ".local/git/arch-tools"
+        ".local/git/arch-tools",
         ".local/share/python/debugpy"
     }
     for dir in dirs:
-        python.chdir(user, dir)
+        python.chdir(home, dir)
         python.venv_init()
         python.venv_activate()
         python.pip_upgrade()
@@ -207,17 +207,18 @@ if __name__ == "__main__":
     # }}}
 
     # {{{ Run
-    # set_system_time()
-    # set_pacman()
-    # set_rust()
-    # set_aur()
-    # # set_bitwarden()
-    # set_ssh()
-    # set_git()
-    # set_shell()
-    # set_pipewire()
-    # set_xdg()
-    # customize()
-    # set_javascript()
+    set_system_time()
+    set_pacman()
+    set_rust()
+    set_aur()
+    # set_bitwarden()
+    set_ssh()
+    set_git()
+    set_git_repos()
+    set_shell()
+    set_pipewire()
+    set_xdg()
+    customize()
+    set_javascript()
     set_python()
     # }}}

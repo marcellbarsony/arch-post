@@ -1,13 +1,19 @@
-import getpass
 import logging
 import os
 import subprocess
 import sys
 
+def remove(dst: str):
+    cmd = f"rm -rf {dst}"
+    try:
+        subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+        logging.info(cmd)
+    except subprocess.CalledProcessError as err:
+        logging.error(f"{cmd}\n{err}")
+        sys.exit(1)
 
-def repo_clone(gh_user: str, repo: str):
-    dir = f"/home/{getpass.getuser()}/.local/git/{repo}"
-    cmd = f"git clone git@github.com:{gh_user}/{repo}.git {dir}"
+def repo_clone(gh_user: str, repo: str, dst: str):
+    cmd = f"git clone git@github.com:{gh_user}/{repo}.git {dst}"
     try:
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
         logging.info(cmd)
@@ -19,13 +25,12 @@ def repo_clone(gh_user: str, repo: str):
             logging.error(f"{cmd}\n{repr(err)}")
             sys.exit(1)
 
-def repo_chdir(repo: str):
-    dir = f"/home/{getpass.getuser()}/.local/git/{repo}"
+def repo_chdir(dst: str):
     try:
-        os.chdir(dir)
-        logging.info(dir)
+        os.chdir(dst)
+        logging.info(dst)
     except Exception as err:
-        logging.error(f"{dir}: {err}")
+        logging.error(f"{dst}: {err}")
         sys.exit(1)
 
 def repo_cfg(gh_user: str, repo: str):
