@@ -94,7 +94,7 @@ def set_git_repos():
         else:
             dst = f"{home}/.local/git/{repo}"
         git_repos.repo_clone(gh_user, repo, dst)
-        git_repos.repo_chdir(repo)
+        git_repos.repo_chdir(dst)
         git_repos.repo_cfg(gh_user, repo)
 # }}}
 
@@ -141,8 +141,8 @@ def set_python():
         python.chdir(home, dir)
         python.venv_init()
         python.venv_activate()
-        python.pip_upgrade()
-        python.pip_install()
+        # python.pip_upgrade()
+        # python.pip_install()
         if dir == ".local/share/python/debugpy":
             python.pip_install_debugpy()
         python.venv_deactivate()
@@ -207,18 +207,18 @@ if __name__ == "__main__":
     # }}}
 
     # {{{ Run
-    set_system_time()
-    set_pacman()
-    set_rust()
-    set_aur()
-    # set_bitwarden()
-    set_ssh()
-    set_git()
-    set_git_repos()
-    set_shell()
-    set_pipewire()
-    set_xdg()
-    customize()
-    set_javascript()
+    # set_system_time()
+    # set_pacman()
+    # set_rust()
+    # set_aur()
+    # # set_bitwarden()
+    # set_ssh()
+    # set_git()
+    # set_git_repos()
+    # set_shell()
+    # set_pipewire()
+    # set_xdg()
+    # customize()
+    # set_javascript()
     set_python()
     # }}}

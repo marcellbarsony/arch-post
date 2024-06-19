@@ -11,9 +11,10 @@ https://docs.python.org/3/tutorial/venv.html
 
 def chdir(home: str, dir: str):
     dir = f"{home}/{dir}"
-    if os.path.exists(dir):
-        os.chdir(dir)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
         logging.info(dir)
+    os.chdir(dir)
 
 def venv_init():
     cmd = "python -m venv .venv"
