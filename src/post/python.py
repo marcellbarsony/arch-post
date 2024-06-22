@@ -4,7 +4,7 @@ import subprocess
 
 
 """
-Docstring for Python virtual environments
+Docstring for Python virtual environments + Debugpy
 https://wiki.archlinux.org/title/python#virtual_environment
 https://docs.python.org/3/tutorial/venv.html
 """
@@ -24,6 +24,16 @@ def venv_init():
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
         print(":: [-] Venv init", err)
+        logging.error(err)
+
+def venv_init_debugpy():
+    cmd = "python -m venv debugpy"
+    try:
+        subprocess.run(cmd, shell=True, check=True)
+        print(":: [+] Venv init [Debugpy]")
+        logging.info(cmd)
+    except subprocess.CalledProcessError as err:
+        print(":: [-] Venv init [Debugpy]", err)
         logging.error(err)
 
 def venv_activate():
@@ -56,6 +66,16 @@ def pip_install():
         print(":: [-] Pip install", err)
         logging.error(err)
 
+def pip_install_debugpy():
+    cmd = "python -m pip install debugpy"
+    try:
+        subprocess.run(cmd, shell=True, check=True)
+        print(":: [+] Pip install [Debugpy]")
+        logging.info(cmd)
+    except subprocess.CalledProcessError as err:
+        print(":: [-] Pip install [Debugpy]", err)
+        logging.error(err)
+
 def venv_deactivate():
     cmd = "deactivate"
     try:
@@ -64,14 +84,4 @@ def venv_deactivate():
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
         print(":: [-] Venv deactivate", err)
-        logging.error(err)
-
-def pip_install_debugpy():
-    cmd = "python -m pip install debugpy"
-    try:
-        subprocess.run(cmd, shell=True, check=True)
-        print(":: [+] Pip install debugpy")
-        logging.info(cmd)
-    except subprocess.CalledProcessError as err:
-        print(":: [-] Pip install debugpy", err)
         logging.error(err)

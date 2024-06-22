@@ -2,15 +2,11 @@
 
 ## The Chad Stack
 
-- UEFI
-- GRUB
-- LUKS2
-- Btrfs (Snapper)
-- Hardened kernel
+- AUR (Paru)
+- Git
+- Password manager (rbw)
+- Pipewire
+- Python
+- Rust
+- SSH
 - Zsh
-- Wayland
-- Hyprland
-- Alacritty
-- XDGBDS
-- Neovim
-- Firefox

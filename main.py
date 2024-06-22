@@ -135,7 +135,6 @@ def set_python():
         ".local/git/arch",
         ".local/git/arch-post",
         ".local/git/arch-tools",
-        ".local/share/python/debugpy"
     }
     for dir in dirs:
         python.chdir(home, dir)
@@ -143,9 +142,14 @@ def set_python():
         python.venv_activate()
         # python.pip_upgrade()
         # python.pip_install()
-        if dir == ".local/share/python/debugpy":
-            python.pip_install_debugpy()
         python.venv_deactivate()
+
+    dir = ".local/share/python"
+    python.chdir(home, dir)
+    python.venv_init_debugpy()
+    python.venv_activate()
+    python.pip_install_debugpy()
+    python.venv_deactivate()
 # }}}
 
 
@@ -218,7 +222,7 @@ if __name__ == "__main__":
     # set_shell()
     # set_pipewire()
     # set_xdg()
-    # customize()
+    customize()
     # set_javascript()
-    set_python()
+    # set_python()
     # }}}
