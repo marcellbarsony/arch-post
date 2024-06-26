@@ -1,4 +1,3 @@
-import getpass
 import logging
 import os
 import shutil
@@ -10,9 +9,9 @@ SSH Agent setup
 https://wiki.archlinux.org/title/SSH_keys
 """
 
-def config(ssh_dir: str):
+def config(home: str, ssh_dir: str):
     src = f"{ssh_dir}/config"
-    dst = f"/home/{getpass.getuser()}/.ssh/"
+    dst = f"{home}/.ssh/"
     dst_path = os.path.join(dst, os.path.basename(src))
     try:
         os.makedirs(dst, exist_ok=True)
@@ -25,9 +24,9 @@ def config(ssh_dir: str):
         logging.error(err)
         sys.exit(1)
 
-def service_set(ssh_dir: str):
+def service_set(home: str, ssh_dir: str):
     src = f"{ssh_dir}/ssh-agent.service"
-    dst = f"/home/{getpass.getuser()}/.config/systemd/user/"
+    dst = f"{home}/.config/systemd/user/"
     try:
         os.makedirs(dst, exist_ok=True)
         logging.info(f"mkdir {dst}")
@@ -50,8 +49,8 @@ def service_start():
             logging.error(f"{cmd}\n{err}")
             sys.exit(1)
 
-def key_gen(ssh_key: str, gh_mail: str):
-    file = f"/home/{getpass.getuser()}/.ssh/id_ed25519"
+def key_gen(home: str, ssh_key: str, gh_mail: str):
+    file = f"{home}/.ssh/id_ed25519"
     cmd = f"ssh-keygen -q -t ed25519 -N {ssh_key} -C {gh_mail} -f {file}"
     try:
         subprocess.run(cmd, shell=True, check=True)

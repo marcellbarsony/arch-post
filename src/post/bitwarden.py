@@ -3,39 +3,56 @@ import subprocess
 import sys
 
 
-"""Bitwarden-rbw setup"""
+"""
+Bitwarden (rbw) setup
+https://github.com/doy/rbw
+"""
 
-def install(aur_helper: str):
-    cmd = f"{aur_helper} -S --noconfirm rbw"
+def config(email: str, timeout: str):
+    cmds = [
+        f"rbw config set email {email}",
+        f"rbw config set lock_timeout {timeout}",
+    ]
+    for cmd in cmds:
+        try:
+            subprocess.run(cmd, shell=True, check=True)
+            logging.info(cmd)
+        except subprocess.CalledProcessError as err:
+            logging.error(f"{cmd}\n{repr(err)}")
+
+def register():
+    cmd = "rbw register"
     try:
         subprocess.run(cmd, shell=True, check=True)
         logging.info(cmd)
-    except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}: {repr(err)}")
+    except KeyboardInterrupt:
+        logging.warn(f"{cmd}\nKeyboardInterrupt")
         sys.exit(1)
+    except subprocess.CalledProcessError as err:
+        logging.error(f"{cmd}\n{repr(err)}")
+        register_error()
 
-def register(mail: str, timeout: str):
-    commands = [
-        f"rbw config set email {mail}",
-        f"rbw config set lock_timeout {timeout}",
-        "rbw register",
-        "rbw sync"
-    ]
-    error = False
+def register_error():
     while True:
-        for cmd in commands:
-            try:
-                subprocess.run(cmd, shell=True, check=True)
-                logging.info(cmd)
-            except KeyboardInterrupt:
-                logging.error("User interrupt")
-                sys.exit(1)
-            except subprocess.CalledProcessError as err:
-                logging.error(f"{cmd}: {repr(err)}")
-                error=True
-        if error:
-            continue
-        break
+        user_input = input(":: [?] Try again? (Y/N) ").lower()
+        if user_input not in ("y", "n"):
+            register_error()
+        else:
+            if user_input == "y":
+              register()
+            if user_input == "n":
+              sys.exit(1)
+
+def sync():
+    cmd = "rbw sync"
+    try:
+        subprocess.run(cmd, shell=True, check=True)
+        print(":: [+] RBW :: Sync :: ")
+        logging.info(cmd)
+    except subprocess.CalledProcessError as err:
+        print(":: [-] RBW :: Sync :: ", err)
+        logging.error(f"{cmd}\n{repr(err)}")
+        sys.exit(1)
 
 def rbw_get(name: str, item: str) -> str:
     cmd = f'rbw get {name} --full | grep "{item}" | cut -d " " -f 2'

@@ -57,17 +57,18 @@ def set_aur():
 
 # {{{ Password Manager
 def set_bitwarden():
-    bitwarden.install(aur_helper)
-    bitwarden.register(bw_mail, bw_lock)
+    bitwarden.config(bw_mail, bw_lock)
+    bitwarden.register()
+    bitwarden.sync()
 # }}}
 
 # {{{ SSH
 def set_ssh():
     gh_mail = bitwarden.rbw_get("github", git_mail)
-    ssh.config(ssh_dir)
-    ssh.service_set(ssh_dir)
+    ssh.config(home, ssh_dir)
+    ssh.service_set(home, ssh_dir)
     ssh.service_start()
-    ssh.key_gen(ssh_key, gh_mail)
+    ssh.key_gen(home, ssh_key, gh_mail)
     ssh.key_add()
 # }}}
 
@@ -215,14 +216,14 @@ if __name__ == "__main__":
     # set_pacman()
     # set_rust()
     # set_aur()
-    # # set_bitwarden()
+    set_bitwarden()
     # set_ssh()
     # set_git()
     # set_git_repos()
     # set_shell()
     # set_pipewire()
     # set_xdg()
-    customize()
+    # customize()
     # set_javascript()
     # set_python()
     # }}}

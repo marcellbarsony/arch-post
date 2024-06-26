@@ -16,7 +16,7 @@ def toolchain():
         print(":: [+] RUST :: ", cmd)
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        print(":: [-] INIT :: ", err)
+        print(":: [-] RUST :: ", err)
         logging.error(f"{cmd}\n{repr(err)}")
         sys.exit(1)
     os.system("clear")

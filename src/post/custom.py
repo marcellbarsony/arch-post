@@ -1,34 +1,32 @@
-import getpass
 import logging
 import os
 import urllib.request
 import zipfile
 
 
-def background():
-    dir = f"/home/{getpass.getuser()}/tmp/backgrounds"
+def background(home: str):
+    dir = f"{home}/tmp/backgrounds"
     if not os.path.exists(dir):
         os.makedirs(dir)
         logging.info(f"makedirs: {dir}")
 
-    print(":: [i] :: WALLPAPERS: Download")
+    print(":: [i] :: WALLPAPERS :: Download")
     url = "https://www.dropbox.com/scl/fo/5loqjisrohzslojb5ibmw/h?rlkey=onmox6lkop8uf9wzd314pbj66&dl=1"
     out = f"{dir}/wallpapers.zip"
     urllib.request.urlretrieve(url, out)
     logging.info(f"download: {url} >> {out}")
 
-    print(":: [i] :: WALLPAPERS: Extract")
+    print(":: [i] :: WALLPAPERS :: Extract")
     with zipfile.ZipFile(out, "r") as zip_ref:
         zip_ref.extractall(dir)
         logging.info(f"extract: {zip_ref} >> {dir}")
 
     os.remove(out)
-    print(":: [+] :: WALLPAPERS: Remove zip")
+    print(":: [+] :: WALLPAPERS :: Remove zip")
     logging.info(f"remove zip: {out}")
     os.system("clear")
 
 def spotify():
-    print("[TODO] Spotify")
     # killall spotifyd
 
     # # Spotifyd.conf
