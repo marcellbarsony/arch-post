@@ -13,10 +13,9 @@ def toolchain():
     cmd = "rustup default stable"
     try:
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-        print(":: [+] RUST :: ", cmd)
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        print(":: [-] RUST :: ", err)
         logging.error(f"{cmd}\n{repr(err)}")
+        print(":: [-] RUST :: ", err)
         sys.exit(1)
     os.system("clear")

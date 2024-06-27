@@ -122,7 +122,7 @@ def set_xdg():
 
 # {{{ Customize
 def customize():
-    custom.background()
+    custom.background(home)
     custom.spotify()
 # }}}
 
@@ -212,18 +212,18 @@ if __name__ == "__main__":
     # }}}
 
     # {{{ Run
-    # set_system_time()
-    # set_pacman()
-    # set_rust()
-    # set_aur()
+    set_system_time()
+    set_pacman()
+    set_rust()
+    set_aur()
     set_bitwarden()
-    # set_ssh()
-    # set_git()
-    # set_git_repos()
-    # set_shell()
-    # set_pipewire()
-    # set_xdg()
-    # customize()
-    # set_javascript()
-    # set_python()
+    set_ssh()
+    set_git()
+    set_git_repos()
+    set_shell()
+    set_pipewire()
+    set_xdg()
+    customize()
+    set_javascript()
+    set_python()
     # }}}

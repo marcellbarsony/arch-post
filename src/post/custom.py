@@ -22,8 +22,8 @@ def background(home: str):
         logging.info(f"extract: {zip_ref} >> {dir}")
 
     os.remove(out)
-    print(":: [+] :: WALLPAPERS :: Remove zip")
     logging.info(f"remove zip: {out}")
+    print(":: [+] :: WALLPAPERS :: Remove zip")
     os.system("clear")
 
 def spotify():

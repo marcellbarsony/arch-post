@@ -8,15 +8,15 @@ import sys
 
 def mkdir(aur_dir: str):
     os.makedirs(aur_dir, exist_ok=True)
-    print(":: [+] AUR :: Mkdir")
     logging.info(aur_dir)
+    print(":: [+] AUR :: Mkdir")
 
 def clone(aur_dir: str, aur_helper: str):
     cmd = f"git clone https://aur.archlinux.org/{aur_helper}.git {aur_dir}"
     try:
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-        print(":: [+] AUR :: Clone")
         logging.info(cmd)
+        print(":: [+] AUR :: Clone")
     except subprocess.CalledProcessError as err:
         if err.returncode == 128:
             logging.info(f"Directory already exists: {aur_dir}")
@@ -30,15 +30,14 @@ def mkpkg(aur_dir: str):
     try:
         os.chdir(aur_dir)
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-        print(":: [+] AUR :: Makepkg")
         logging.info(cmd)
         os.chdir(current_dir)
+        os.system("clear")
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")
         print(":: [-] AUR :: Makepkg :: ", err)
         os.chdir(current_dir)
         sys.exit(1)
-    os.system("clear")
 
 def install(current_dir: str, aurhelper: str, sudo: str):
     packages = ""
@@ -49,18 +48,18 @@ def install(current_dir: str, aurhelper: str, sudo: str):
     cmd = f"sudo {aurhelper} -S --noconfirm {packages}"
     try:
         subprocess.run(cmd, shell=True, input=sudo, check=True, text=True)
-        print(":: [+] AUR :: Install")
         logging.info(cmd)
+        print(":: [+] AUR :: Install")
     except Exception as err:
-        print(":: [-] AUR :: Install :: ", err)
         logging.error(f"{cmd}: {repr(err)}")
+        print(":: [-] AUR :: Install :: ", err)
         sys.exit(1)
 
 def remove(aur_dir: str):
     try:
         os.rmdir(aur_dir)
-        print(":: [+] AUR :: Rmdir")
         logging.info(f"Removing {aur_dir}")
+        print(":: [+] AUR :: Rmdir")
     except Exception as err:
-        print(":: [-] AUR :: Rmdir")
         logging.error(f"Cannot remove {aur_dir}\n{err}")
+        print(":: [-] AUR :: Rmdir")

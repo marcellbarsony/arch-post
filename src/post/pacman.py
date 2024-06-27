@@ -12,11 +12,11 @@ def explicit_keyring():
     cmd = "sudo pacman -D --asexplicit archlinux-keyring"
     try:
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
-        print(":: [+] PACMAN :: Keyring")
         logging.info(cmd)
+        print(":: [+] PACMAN :: Keyring")
     except subprocess.CalledProcessError as err:
-        print(":: [-] PACMAN :: Keyring :: ", err)
         logging.error(f"{cmd}: {repr(err)}")
+        print(":: [-] PACMAN :: Keyring :: ", err)
         sys.exit(1)
 
 def update():

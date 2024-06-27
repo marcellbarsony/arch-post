@@ -4,7 +4,7 @@ import sys
 
 
 """
-Bitwarden (rbw) setup
+Bitwarden setup
 https://github.com/doy/rbw
 """
 
@@ -17,8 +17,10 @@ def config(email: str, timeout: str):
         try:
             subprocess.run(cmd, shell=True, check=True)
             logging.info(cmd)
+            print(":: [+] RBW :: Config")
         except subprocess.CalledProcessError as err:
             logging.error(f"{cmd}\n{repr(err)}")
+            print(":: [-] RBW :: ", err)
 
 def register():
     cmd = "rbw register"
@@ -39,18 +41,18 @@ def register_error():
             register_error()
         else:
             if user_input == "y":
-              register()
+                register()
             if user_input == "n":
-              sys.exit(1)
+                sys.exit(1)
 
 def sync():
     cmd = "rbw sync"
     try:
         subprocess.run(cmd, shell=True, check=True)
-        print(":: [+] RBW :: Sync :: ")
+        print(":: [+] RBW :: Sync")
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        print(":: [-] RBW :: Sync :: ", err)
+        print(":: [-] RBW :: ", err)
         logging.error(f"{cmd}\n{repr(err)}")
         sys.exit(1)
 
