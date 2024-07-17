@@ -17,7 +17,8 @@ def service():
         cmd = f"systemctl --user enable {service}"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(cmd)
         except subprocess.CalledProcessError as err:
             logging.error(f"{cmd}\n{err}")
             sys.exit(1)
+        else:
+            logging.info(cmd)

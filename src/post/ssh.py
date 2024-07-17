@@ -44,26 +44,29 @@ def service_start():
     for cmd in cmds:
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(cmd)
         except subprocess.CalledProcessError as err:
             logging.error(f"{cmd}\n{err}")
             sys.exit(1)
+        else:
+            logging.info(cmd)
 
 def key_gen(home: str, ssh_key: str, gh_mail: str):
     file = f"{home}/.ssh/id_ed25519"
     cmd = f"ssh-keygen -q -t ed25519 -N {ssh_key} -C {gh_mail} -f {file}"
     try:
         subprocess.run(cmd, shell=True, check=True)
-        logging.info(cmd)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{err}")
         sys.exit(1)
+    else:
+        logging.info(cmd)
 
 def key_add():
     cmd = "ssh-add -q ~/.ssh/id_ed25519"
     try:
         subprocess.run(cmd, shell=True, check=True)
-        logging.info(cmd)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{err}")
         sys.exit(1)
+    else:
+        logging.info(cmd)

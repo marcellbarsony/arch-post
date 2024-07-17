@@ -3,6 +3,7 @@
 Author : Marcell Barsony
 Date   : January 2023
 """
+print("test")
 
 
 # {{{ Imports
@@ -224,6 +225,6 @@ if __name__ == "__main__":
     set_pipewire()
     set_xdg()
     customize()
-    set_javascript()
+    # set_javascript()
     set_python()
     # }}}

@@ -16,23 +16,25 @@ def config(email: str, timeout: str):
     for cmd in cmds:
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(cmd)
-            print(":: [+] RBW :: Config")
         except subprocess.CalledProcessError as err:
             logging.error(f"{cmd}\n{repr(err)}")
             print(":: [-] RBW :: ", err)
+        else:
+            logging.info(cmd)
+            print(":: [+] RBW :: Config")
 
 def register():
     cmd = "rbw register"
     try:
         subprocess.run(cmd, shell=True, check=True)
-        logging.info(cmd)
     except KeyboardInterrupt:
         logging.warn(f"{cmd}\nKeyboardInterrupt")
         sys.exit(1)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")
         register_error()
+    else:
+        logging.info(cmd)
 
 def register_error():
     while True:
@@ -49,12 +51,13 @@ def sync():
     cmd = "rbw sync"
     try:
         subprocess.run(cmd, shell=True, check=True)
-        print(":: [+] RBW :: Sync")
-        logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        print(":: [-] RBW :: ", err)
         logging.error(f"{cmd}\n{repr(err)}")
+        print(":: [-] RBW :: ", err)
         sys.exit(1)
+    else:
+        logging.info(cmd)
+        print(":: [+] RBW :: Sync")
 
 def rbw_get(name: str, item: str) -> str:
     cmd = f'rbw get {name} --full | grep "{item}" | cut -d " " -f 2'

@@ -13,37 +13,41 @@ def auth_login(gh_token: str):
     cmd = "gh auth login --with-token"
     try:
         subprocess.run(cmd, shell=True, check=True, input=gh_token.encode())
-        logging.info(cmd)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{err}")
         sys.exit(1)
+    else:
+        logging.info(cmd)
 
 def auth_status():
     cmd = "gh auth status"
     try:
         subprocess.run(cmd, shell=True, check=True)
-        logging.info(cmd)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")
         sys.exit(1)
+    else:
+        logging.info(cmd)
 
 def pubkey(git_pubkey: str):
     cmd = f"gh ssh-key add /home/{getpass.getuser()}/.ssh/id_ed25519.pub -t {git_pubkey}"
     try:
         subprocess.run(cmd, shell=True, check=True)
-        logging.info(cmd)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{err}")
         sys.exit(1)
+    else:
+        logging.info(cmd)
 
 def known_hosts():
     cmd = "ssh-keyscan github.com >> ~/.ssh/known_hosts"
     try:
         subprocess.run(cmd, shell=True, check=True)
-        logging.info(cmd)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{err}")
         sys.exit(1)
+    else:
+        logging.info(cmd)
 
 def ssh_test():
     cmd = "ssh -T git@github.com"
@@ -63,7 +67,8 @@ def config(gh_user: str, gh_mail: str):
     for cmd in cmds:
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(cmd)
         except subprocess.CalledProcessError as err:
             logging.error(f"{cmd}: {err}")
             sys.exit(1)
+        else:
+            logging.info(cmd)

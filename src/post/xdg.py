@@ -38,9 +38,10 @@ def remove_dirs(home: str):
         if os.path.exists(path):
             try:
                 os.rmdir(path)
-                logging.info(path)
             except OSError as err:
                 logging.error(f"{path}\n{err}")
+            else:
+                logging.info(path)
 
 def remove_files(home: str):
     files = [
@@ -61,6 +62,3 @@ def remove_self(home: str):
     if os.path.exists(path):
         shutil.rmtree(path)
         logging.info(path)
-
-# Remove orphans and their configs (requires root)
-# "sudo pacman -Qtdq | pacman -Rns -"

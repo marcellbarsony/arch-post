@@ -6,14 +6,15 @@ import sys
 
 
 def change():
+    os.system("clear")
     cmd = "chsh -s /usr/bin/zsh"
     try:
-        os.system("clear")
         subprocess.run(cmd, shell=True, check=True)
-        logging.info(cmd)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{err}")
         sys.exit(1)
+    else:
+        logging.info(cmd)
 
 def config():
     src = f"/home/{getpass.getuser()}/.config/zsh/global/"
@@ -28,10 +29,11 @@ def config():
         for cmd in cmds:
             try:
                 subprocess.run(cmd, shell=True, check=True)
-                logging.info(cmd)
             except subprocess.CalledProcessError as err:
                 logging.error(f"{cmd}\n{err}")
                 sys.exit(1)
+            else:
+                logging.info(cmd)
 
 def tools():
     repositories = {"marlonrichert/zsh-autocomplete": "zsh-autocomplete"}
@@ -40,7 +42,8 @@ def tools():
         cmd = f"git clone --depth 1 git@github.com:{repo}.git {dst}"
         try:
             subprocess.run(cmd, shell=True, check=True)
-            logging.info(cmd)
         except subprocess.CalledProcessError as err:
             logging.error(f"{cmd}\n{err}")
             sys.exit(1)
+        else:
+            logging.info(cmd)
