@@ -13,8 +13,13 @@ def background(home: str):
     print(":: [i] :: WALLPAPERS :: Download")
     url = "https://www.dropbox.com/scl/fo/5loqjisrohzslojb5ibmw/h?rlkey=onmox6lkop8uf9wzd314pbj66&dl=1"
     out = f"{dir}/wallpapers.zip"
-    urllib.request.urlretrieve(url, out)
-    logging.info(f"download: {url} >> {out}")
+    try:
+        urllib.request.urlretrieve(url, out)
+    except Exception as err:
+        print(":: [-] :: WALLPAPERS :: Downlaod :: ", err)
+        logging.error(err)
+    else:
+        logging.info(f"download: {url} >> {out}")
 
     print(":: [i] :: WALLPAPERS :: Extract")
     with zipfile.ZipFile(out, "r") as zip_ref:

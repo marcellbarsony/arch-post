@@ -4,7 +4,7 @@ import sys
 
 
 """
-Package manager setup
+Pacman setup
 https://wiki.archlinux.org/title/Pacman/Package_signing
 """
 

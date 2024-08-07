@@ -3,7 +3,6 @@
 Author : Marcell Barsony
 Date   : January 2023
 """
-print("test")
 
 
 # {{{ Imports

@@ -64,7 +64,7 @@ def remove(aur_dir: str):
         os.rmdir(aur_dir)
     except Exception as err:
         logging.error(f"Cannot remove {aur_dir}\n{err}")
-        print(":: [-] AUR :: Rmdir")
+        print(":: [-] AUR :: Rmdir :: ", err)
     else:
         logging.info(f"Removing {aur_dir}")
         print(":: [+] AUR :: Rmdir")
