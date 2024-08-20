@@ -4,32 +4,38 @@ import urllib.request
 import zipfile
 
 
-def background(home: str):
-    dir = f"{home}/tmp/backgrounds"
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-        logging.info(f"makedirs: {dir}")
+def wallpapers(home: str):
+    dst = f"{home}/tmp/backgrounds"
+    if not os.path.exists(dst):
+        os.makedirs(dst)
+        logging.info(f"makedirs: {dst}")
 
     print(":: [i] :: WALLPAPERS :: Download")
     url = "https://www.dropbox.com/scl/fo/5loqjisrohzslojb5ibmw/h?rlkey=onmox6lkop8uf9wzd314pbj66&dl=1"
-    out = f"{dir}/wallpapers.zip"
+    out = f"{dst}/wallpapers.zip"
     try:
         urllib.request.urlretrieve(url, out)
     except Exception as err:
-        print(":: [-] :: WALLPAPERS :: Downlaod :: ", err)
         logging.error(err)
+        print(":: [-] :: WALLPAPERS :: Download :: ", err)
     else:
         logging.info(f"download: {url} >> {out}")
+        print(":: [+] :: WALLPAPERS :: Download")
 
     print(":: [i] :: WALLPAPERS :: Extract")
     with zipfile.ZipFile(out, "r") as zip_ref:
-        zip_ref.extractall(dir)
-        logging.info(f"extract: {zip_ref} >> {dir}")
+        zip_ref.extractall(dst)
+        logging.info(f"extract: {zip_ref} >> {dst}")
 
-    os.remove(out)
-    logging.info(f"remove zip: {out}")
-    print(":: [+] :: WALLPAPERS :: Remove zip")
-    os.system("clear")
+    try:
+        os.remove(out)
+    except OSError as err:
+        logging.error(err)
+        print(":: [-] :: WALLPAPERS :: Remove zip :: ", err)
+    else:
+        logging.info(f"remove zip: {out}")
+        print(":: [+] :: WALLPAPERS :: Remove zip")
+        os.system("clear")
 
 def spotify():
     # killall spotifyd

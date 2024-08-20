@@ -122,7 +122,7 @@ def set_xdg():
 
 # {{{ Customize
 def customize():
-    custom.background(home)
+    custom.wallpapers(home)
     custom.spotify()
 # }}}
 
