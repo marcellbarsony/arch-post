@@ -10,7 +10,7 @@ def npm_install():
     try:
         subprocess.run(cmd, shell=True, check=True)
     except subprocess.CalledProcessError as err:
-        logging.warn(f"{cmd}\n{repr(err)}")
+        logging.warning(f"{cmd}\n{repr(err)}")
         pass
     else:
         logging.info(cmd)

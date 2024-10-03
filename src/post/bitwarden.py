@@ -28,7 +28,7 @@ def register():
     try:
         subprocess.run(cmd, shell=True, check=True)
     except KeyboardInterrupt:
-        logging.warn(f"{cmd}\nKeyboardInterrupt")
+        logging.warning(f"{cmd}\nKeyboardInterrupt")
         sys.exit(1)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")

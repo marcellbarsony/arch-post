@@ -3,10 +3,15 @@
 ## The Chad Stack
 
 - AUR (Paru)
-- Git
-- Password manager (rbw)
+- Git (GitHub)
+- Bitwarden (rbw)
 - Pipewire
+- SSH
+- Shell (Zsh)
+- XDG directory standard
+
+### Languages
+
 - Python
 - Rust
-- SSH
-- Zsh
+- JavaScript

@@ -5,7 +5,7 @@ Date   : January 2023
 """
 
 
-# {{{ Imports
+# Imports {{{
 import argparse
 import configparser
 import getpass
@@ -29,25 +29,24 @@ from src.post import systime
 from src.post import xdg
 # }}}
 
-
-# {{{ System Time
+# System Time {{{
 def set_system_time():
     systime.ntp()
     systime.time_zone(timezone)
 # }}}
 
-# {{{ Pacman
+# Pacman {{{
 def set_pacman():
     pacman.explicit_keyring()
     pacman.update()
 # }}}
 
-# {{{ Rust
+# Rust {{{
 def set_rust():
     rust.toolchain()
 # }}}
 
-# {{{ AUR
+# AUR {{{
 def set_aur():
     aur.mkdir(aur_dir)
     aur.clone(aur_dir, aur_helper)
@@ -55,14 +54,14 @@ def set_aur():
     aur.remove(aur_dir)
 # }}}
 
-# {{{ Password Manager
+# Password Manager {{{
 def set_bitwarden():
     bitwarden.config(bw_mail, bw_lock)
     bitwarden.register()
     bitwarden.sync()
 # }}}
 
-# {{{ SSH
+# SSH {{{
 def set_ssh():
     gh_mail = bitwarden.rbw_get("github", git_mail)
     ssh.config(home, ssh_dir)
@@ -72,7 +71,7 @@ def set_ssh():
     ssh.key_add()
 # }}}
 
-# {{{ GIT
+# GIT {{{
 def set_git():
     gh_token = bitwarden.rbw_get("github", git_token)
     gh_mail = bitwarden.rbw_get("github", git_mail)
@@ -99,19 +98,19 @@ def set_git_repos():
         git_repos.repo_cfg(gh_user, repo)
 # }}}
 
-# {{{ Shell
+# Shell {{{
 def set_shell():
     shell.change()
     shell.config()
     shell.tools()
 # }}}
 
-# {{{ Audio
+# Audio {{{
 def set_pipewire():
     pipewire.service()
 # }}}
 
-# {{{ XDG
+# XDG {{{
 def set_xdg():
     xdg.mkdir_tmp(home)
     xdg.move_rust(home)
@@ -120,13 +119,13 @@ def set_xdg():
     xdg.remove_self(home)
 # }}}
 
-# {{{ Customize
+# Customize {{{
 def customize():
     custom.wallpapers(home)
     custom.spotify()
 # }}}
 
-# {{{ Programming
+# Programming {{{
 def set_javascript():
     javascript.npm_install()
 
@@ -156,13 +155,13 @@ def set_python():
 
 if __name__ == "__main__":
 
-    # {{{ Check
+    # Check {{{
     if os.getuid == 0:
         print("[-] Executed as root: UID=0")
         sys.exit(1)
     # }}}
 
-    # {{{ Argparse
+    # Argparse {{{
     parser = argparse.ArgumentParser(
         prog="python3 arch-post.py",
         description="Arch post-install setup",
@@ -171,12 +170,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # }}}
 
-    # {{{ Logging
+    # Logging {{{
     logging.basicConfig(level=logging.INFO, filename="logs.log", filemode="w",
                         format="%(levelname)-7s :: %(module)s - %(funcName)s - %(lineno)d :: %(message)s")
     # }}}
 
-    # {{{ Variables (Config)
+    # Variables (Config) {{{
     config = configparser.ConfigParser()
     config.read("config.ini")
 
@@ -202,7 +201,7 @@ if __name__ == "__main__":
     timezone = config.get("timezone", "zone")
     # }}}
 
-    # {{{ Variables (Global)
+    # Variables (Global) {{{
     cwd = os.getcwd()
     user = getpass.getuser()
 
@@ -211,7 +210,7 @@ if __name__ == "__main__":
     ssh_dir = f"{cwd}/src/ssh"
     # }}}
 
-    # {{{ Run
+    # Run {{{
     set_system_time()
     set_pacman()
     set_rust()
