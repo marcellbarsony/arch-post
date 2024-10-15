@@ -161,7 +161,7 @@ if __name__ == "__main__":
         sys.exit(1)
     # }}}
 
-    # Argparse {{{
+    # Initializing Argparse {{{
     parser = argparse.ArgumentParser(
         prog="python3 arch-post.py",
         description="Arch post-install setup",
@@ -170,12 +170,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # }}}
 
-    # Logging {{{
+    # Initializing Logging {{{
     logging.basicConfig(level=logging.INFO, filename="logs.log", filemode="w",
                         format="%(levelname)-7s :: %(module)s - %(funcName)s - %(lineno)d :: %(message)s")
     # }}}
 
-    # Variables (Config) {{{
+    # Initializing Config {{{
     config = configparser.ConfigParser()
     config.read("config.ini")
 
@@ -201,7 +201,7 @@ if __name__ == "__main__":
     timezone = config.get("timezone", "zone")
     # }}}
 
-    # Variables (Global) {{{
+    # Initializing Global Variables {{{
     cwd = os.getcwd()
     user = getpass.getuser()
 
