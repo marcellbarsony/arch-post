@@ -22,10 +22,10 @@ def config(home: str, ssh_dir: str):
         logging.info(f"chmod {dst_path}")
     except Exception as err:
         logging.error(err)
-        print(":: [-] SSH :: Config :: ", err)
+        print(":: [-] :: SSH :: Config :: ", err)
         sys.exit(1)
     else:
-        print(":: [+] SSH :: Config")
+        print(":: [+] :: SSH :: Config")
 
 def service_set(home: str, ssh_dir: str):
     src = f"{ssh_dir}/ssh-agent.service"
@@ -37,10 +37,10 @@ def service_set(home: str, ssh_dir: str):
         logging.info(f"copy {src} >> {dst}")
     except Exception as err:
         logging.error(err)
-        print(":: [-] SSH :: Service set :: ", err)
+        print(":: [-] :: SSH :: Service set :: ", err)
         sys.exit(1)
     else:
-        print(":: [+] SSH :: Service set")
+        print(":: [+] :: SSH :: Service set")
 
 def service_start():
     services = [
@@ -52,11 +52,11 @@ def service_start():
             subprocess.run(service, shell=True, check=True)
         except subprocess.CalledProcessError as err:
             logging.error(f"{service}\n{err}")
-            print(":: [-] SSH :: Service start :: ", err)
+            print(":: [-] :: SSH :: Service start :: ", err)
             sys.exit(1)
         else:
             logging.info(service)
-            print(":: [+] SSH :: Service start :: ", service)
+            print(":: [+] :: SSH :: Service start :: ", service)
 
 def key_gen(home: str, ssh_key: str, gh_mail: str):
     file = f"{home}/.ssh/id_ed25519"
@@ -65,11 +65,11 @@ def key_gen(home: str, ssh_key: str, gh_mail: str):
         subprocess.run(cmd, shell=True, check=True)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{err}")
-        print(":: [-] SSH :: Key gen :: ", err)
+        print(":: [-] :: SSH :: Key gen :: ", err)
         sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] SSH :: Key gen")
+        print(":: [+] :: SSH :: Key gen")
 
 def key_add():
     cmd = "ssh-add -q ~/.ssh/id_ed25519"
@@ -77,8 +77,8 @@ def key_add():
         subprocess.run(cmd, shell=True, check=True)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{err}")
-        print(":: [-] SSH :: Key gen :: ", err)
+        print(":: [-] :: SSH :: Key gen :: ", err)
         sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] SSH :: Keygen")
+        print(":: [+] :: SSH :: Keygen")

@@ -36,8 +36,8 @@ def config():
                 logging.info(cmd)
 
 def tools():
-    repositories = {"marlonrichert/zsh-autocomplete": "zsh-autocomplete"}
-    for repo, dir in repositories.items():
+    repos = {"marlonrichert/zsh-autocomplete": "zsh-autocomplete"}
+    for repo, dir in repos.items():
         dst = f"/home/{getpass.getuser()}/.local/src/{dir}"
         cmd = f"git clone --depth 1 git@github.com:{repo}.git {dst}"
         try:

@@ -14,11 +14,11 @@ def explicit_keyring():
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}: {repr(err)}")
-        print(":: [-] PACMAN :: Keyring :: ", err)
+        print(":: [-] :: PACMAN :: Keyring :: ", err)
         sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] PACMAN :: Keyring")
+        print(":: [+] :: PACMAN :: Keyring")
 
 def update():
     cmd = "sudo pacman -Sy --noconfirm"
@@ -26,11 +26,11 @@ def update():
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")
-        print(":: [-] PACMAN :: Update :: ", err)
+        print(":: [-] :: PACMAN :: Update :: ", err)
         sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] PACMAN :: Update")
+        print(":: [+] :: PACMAN :: Update")
 
 def remove_orphans():
     """https://wiki.archlinux.org/title/Pacman/Tips_and_tricks#Removing_unused_packages_(orphans)"""
@@ -39,7 +39,7 @@ def remove_orphans():
         subprocess.run(cmd, shell=True, check=True)
     except subprocess.CalledProcessError as err:
         logging.error(err)
-        print(":: [-] PACMAN :: Remove orphans :: ", err)
+        print(":: [-] :: PACMAN :: Remove orphans :: ", err)
     else:
         logging.info(cmd)
-        print(":: [+] PACMAN :: Remove orphans")
+        print(":: [+] :: PACMAN :: Remove orphans")

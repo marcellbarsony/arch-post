@@ -18,10 +18,10 @@ def config(email: str, timeout: str):
             subprocess.run(cmd, shell=True, check=True)
         except subprocess.CalledProcessError as err:
             logging.error(f"{cmd}\n{repr(err)}")
-            print(":: [-] RBW :: ", err)
+            print(":: [-] :: RBW :: ", err)
         else:
             logging.info(cmd)
-            print(":: [+] RBW :: Config")
+            print(":: [+] :: RBW :: Config")
 
 def register():
     cmd = "rbw register"
@@ -38,7 +38,7 @@ def register():
 
 def register_error():
     while True:
-        user_input = input(":: [?] Try again? (Y/N) ").lower()
+        user_input = input(":: [?] :: Try again? :: Y/N ").lower()
         if user_input not in ("y", "n"):
             register_error()
         else:
@@ -53,11 +53,11 @@ def sync():
         subprocess.run(cmd, shell=True, check=True)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")
-        print(":: [-] RBW :: ", err)
+        print(":: [-] :: RBW :: Sync :: ", err)
         sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] RBW :: Sync")
+        print(":: [+] :: RBW :: Sync")
 
 def rbw_get(name: str, item: str) -> str:
     cmd = f'rbw get {name} --full | grep "{item}" | cut -d " " -f 2'

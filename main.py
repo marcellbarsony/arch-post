@@ -50,7 +50,7 @@ def set_rust():
 def set_aur():
     aur.mkdir(aur_dir)
     aur.clone(aur_dir, aur_helper)
-    aur.mkpkg(aur_dir)
+    aur.mkpkg(aur_dir, cwd)
     aur.remove(aur_dir)
 # }}}
 
@@ -89,8 +89,6 @@ def set_git_repos():
         if repo == "dotfiles":
             dst = f"{home}/.config"
             git_repos.remove(dst)
-        if repo == "arch-progs":
-            dst = f"{home}/.local/bin"
         else:
             dst = f"{home}/.local/git/{repo}"
         git_repos.repo_clone(gh_user, repo, dst)
@@ -157,11 +155,11 @@ if __name__ == "__main__":
 
     # Check {{{
     if os.getuid == 0:
-        print("[-] Executed as root: UID=0")
+        print(":: [-] Executed as root :: UID=0")
         sys.exit(1)
     # }}}
 
-    # Initializing Argparse {{{
+    # Argparse {{{
     parser = argparse.ArgumentParser(
         prog="python3 arch-post.py",
         description="Arch post-install setup",
@@ -170,12 +168,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # }}}
 
-    # Initializing Logging {{{
+    # Logging {{{
     logging.basicConfig(level=logging.INFO, filename="logs.log", filemode="w",
-                        format="%(levelname)-7s :: %(module)s - %(funcName)s - %(lineno)d :: %(message)s")
+        format="%(levelname)-7s :: %(module)s - %(funcName)s - %(lineno)d :: %(message)s")
     # }}}
 
-    # Initializing Config {{{
+    # Config {{{
     config = configparser.ConfigParser()
     config.read("config.ini")
 
@@ -201,12 +199,12 @@ if __name__ == "__main__":
     timezone = config.get("timezone", "zone")
     # }}}
 
-    # Initializing Global Variables {{{
+    # Global variables {{{
     cwd = os.getcwd()
     user = getpass.getuser()
 
-    aur_dir = f"/home/{user}/.local/src/{aur_helper}/"
     home = f"/home/{user}"
+    aur_dir = f"/home/{user}/.local/src/{aur_helper}/"
     ssh_dir = f"{cwd}/src/ssh"
     # }}}
 
