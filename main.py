@@ -108,15 +108,6 @@ def set_pipewire():
     pipewire.service()
 # }}}
 
-# XDG {{{
-def set_xdg():
-    xdg.mkdir_tmp(home)
-    xdg.move_rust(home)
-    xdg.remove_dirs(home)
-    xdg.remove_files(home)
-    xdg.remove_self(home)
-# }}}
-
 # Customize {{{
 def customize():
     custom.wallpapers(home)
@@ -148,6 +139,15 @@ def set_python():
     python.venv_activate()
     python.pip_install_debugpy()
     python.venv_deactivate()
+# }}}
+
+# XDG {{{
+def set_xdg():
+    xdg.move_rust(home)
+    xdg.remove_dirs(home)
+    xdg.remove_files(home)
+    xdg.remove_self(home)
+    xdg.open()
 # }}}
 
 
@@ -218,9 +218,9 @@ if __name__ == "__main__":
     set_git()
     set_git_repos()
     set_shell()
-    set_pipewire()
-    set_xdg()
+    # set_pipewire()
     customize()
     # set_javascript()
     set_python()
+    set_xdg()
     # }}}

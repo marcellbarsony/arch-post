@@ -5,7 +5,7 @@ import zipfile
 
 
 def wallpapers(home: str):
-    dst = f"{home}/tmp/backgrounds"
+    dst = f"{home}/Downloads/backgrounds"
     if not os.path.exists(dst):
         os.makedirs(dst)
         logging.info(f"makedirs: {dst}")
