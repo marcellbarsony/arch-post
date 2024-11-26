@@ -20,6 +20,7 @@ def clone(aur_dir: str, aur_helper: str):
             logging.info(f"Directory already exists: {aur_dir}")
         else:
             logging.error(f"{cmd}\n{repr(err)}")
+            print(":: [-] :: AUR :: Clone")
             sys.exit(1)
     else:
         logging.info(cmd)

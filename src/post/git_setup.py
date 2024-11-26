@@ -29,7 +29,7 @@ def auth_status():
     else:
         logging.info(cmd)
 
-def pubkey(git_pubkey: str):
+def pubkey_add(git_pubkey: str):
     cmd = f"gh ssh-key add /home/{getpass.getuser()}/.ssh/id_ed25519.pub -t {git_pubkey}"
     try:
         subprocess.run(cmd, shell=True, check=True)

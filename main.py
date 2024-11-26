@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Author : Marcell Barsony
-Date   : January 2023
-"""
 
 
 # Imports {{{
@@ -64,6 +60,7 @@ def set_bitwarden():
 # SSH {{{
 def set_ssh():
     gh_mail = bitwarden.rbw_get("github", git_mail)
+
     ssh.config(home, ssh_dir)
     ssh.service_set(home, ssh_dir)
     ssh.service_start()
@@ -76,15 +73,17 @@ def set_git():
     gh_token = bitwarden.rbw_get("github", git_token)
     gh_mail = bitwarden.rbw_get("github", git_mail)
     gh_user = bitwarden.rbw_get("github", git_user)
+
     git_setup.auth_login(gh_token)
     git_setup.auth_status()
-    git_setup.pubkey(git_pubkey)
+    git_setup.pubkey_add(git_pubkey)
     git_setup.known_hosts()
     git_setup.ssh_test()
     git_setup.config(gh_user, gh_mail)
 
 def set_git_repos():
     gh_user = bitwarden.rbw_get("github", git_user)
+
     for repo in repositories:
         if repo == "dotfiles":
             dst = f"{home}/.config"
@@ -155,7 +154,7 @@ if __name__ == "__main__":
 
     # Check {{{
     if os.getuid == 0:
-        print(":: [-] Executed as root :: UID=0")
+        print(":: [-] :: Executed as root :: UID=0")
         sys.exit(1)
     # }}}
 
