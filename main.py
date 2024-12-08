@@ -14,7 +14,6 @@ from src.post import bitwarden
 from src.post import custom
 from src.post import git_setup
 from src.post import git_repos
-from src.post import javascript
 from src.post import pacman
 from src.post import pipewire
 from src.post import python
@@ -113,10 +112,7 @@ def customize():
     custom.spotify()
 # }}}
 
-# Programming {{{
-def set_javascript():
-    javascript.npm_install()
-
+# Python {{{
 def set_python():
     dirs = {
         ".local/bin",
@@ -176,26 +172,48 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read("config.ini")
 
-    aur_helper = config.get("aur", "helper")
-    bw_mail = config.get("bitwarden", "mail")
-    bw_lock = config.get("bitwarden", "lock")
-    git_mail = config.get("bitwarden_data", "github_mail")
-    git_user = config.get("bitwarden_data", "github_user")
-    git_token = config.get("bitwarden_data", "github_token")
+    # AUR
+    aur_helper        = config.get("aur", "helper")
+
+    # Bitwarden
+    bw_mail           = config.get("bitwarden", "mail")
+    bw_lock           = config.get("bitwarden", "lock")
+    git_mail          = config.get("bitwarden_data", "github_mail")
+    git_user          = config.get("bitwarden_data", "github_user")
+    git_token         = config.get("bitwarden_data", "github_token")
     spotify_client_id = config.get("bitwarden_data", "spotify_client_id")
-    spotify_secret = config.get("bitwarden_data", "spotify_client_secret")
+    spotify_secret    = config.get("bitwarden_data", "spotify_client_secret")
     spotify_device_id = config.get("bitwarden_data", "spotify_device_id")
-    spotify_mail = config.get("bitwarden_data", "spotify_mail")
-    spotify_user = config.get("bitwarden_data", "spotify_user")
-    git_pubkey = config.get("github",  "pubkey")
-    network_ip = config.get("network", "ip")
-    network_port = config.get("network", "port")
-    network_toggle = config.get("network", "wifi")
-    network_key = config.get("network", "wifi_key")
-    network_ssid = config.get("network", "wifi_ssid")
-    repositories = config.get("repositories", "repositories").split(", ")
-    ssh_key = config.get("ssh", "key")
-    timezone = config.get("timezone", "zone")
+    spotify_mail      = config.get("bitwarden_data", "spotify_mail")
+    spotify_user      = config.get("bitwarden_data", "spotify_user")
+
+    # GitHub
+    git_pubkey        = config.get("github",  "pubkey")
+
+    # Network
+    network_ip        = config.get("network", "ip")
+    network_port      = config.get("network", "port")
+    network_toggle    = config.get("network", "wifi")
+    network_key       = config.get("network", "wifi_key")
+    network_ssid      = config.get("network", "wifi_ssid")
+
+    # Repositories
+    repositories      = config.get("repositories", "repositories").split(", ")
+
+    # SSH
+    ssh_key           = config.get("ssh", "key")
+
+    # Timezone
+    timezone          = config.get("timezone", "zone")
+
+    for section in config.sections():
+        for key, value in config.items(section):
+            if not key.strip():
+                print(":: [-] :: ConfigParser :: Empty key")
+                raise ValueError(f"Empty key found :: [{section}]")
+            if not value.strip():
+                print(":: [-] :: ConfigParser :: Empty value")
+                raise ValueError(f"Empty value '{key}' in section [{section}]")
     # }}}
 
     # Global variables {{{
@@ -219,7 +237,6 @@ if __name__ == "__main__":
     set_shell()
     # set_pipewire()
     customize()
-    # set_javascript()
     set_python()
     set_xdg()
     # }}}
