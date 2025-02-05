@@ -131,6 +131,8 @@ if __name__ == "__main__":
     aur.clone(aur_dir, aur_helper)
     aur.mkpkg(aur_dir, cwd)
     aur.remove(aur_dir)
+    packages = aur.get_packages(cwd)
+    aur.install(aur_helper, packages)
     # }}}
 
     # Password Manager {{{
@@ -163,7 +165,6 @@ if __name__ == "__main__":
     # }}}
 
     # GIT Repositories {{{
-
     gh_user = bitwarden.rbw_get("github", git_user)
 
     for repo in repositories:

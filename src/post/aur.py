@@ -41,16 +41,18 @@ def mkpkg(aur_dir: str, cwd: str):
         logging.info(cmd)
         os.system("clear")
 
-def install(current_dir: str, aurhelper: str, sudo: str):
+def get_packages(current_dir: str) -> str:
     packages = ""
     with open(f"{current_dir}/src/pkg/aur.ini", "r") as file:
         for line in file:
             if not line.startswith("[") and not line.startswith(";") and line.strip() != "":
                 packages += f"{line.rstrip()} "
+    return packages
 
-    cmd = f"sudo {aurhelper} -S --noconfirm {packages}"
+def install(aurhelper: str, packages:str):
+    cmd = f"{aurhelper} -S --sudoloop --noconfirm {packages}"
     try:
-        subprocess.run(cmd, shell=True, input=sudo, check=True, text=True)
+        subprocess.run(cmd, shell=True, check=True, text=True)
     except Exception as err:
         logging.error(f"{cmd}: {repr(err)}")
         print(":: [-] :: AUR :: Install :: ", err)
