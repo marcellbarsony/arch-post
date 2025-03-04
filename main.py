@@ -40,9 +40,9 @@ if __name__ == "__main__":
 
     # Argparse {{{
     parser = argparse.ArgumentParser(
-        prog="python3 arch-post.py",
-        description="Arch post-install setup",
-        epilog="TODO"
+        prog = "python3 arch-post.py",
+        description = "Arch post-install setup",
+        epilog = "TODO"
     )
     args = parser.parse_args()
     # }}}
