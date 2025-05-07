@@ -64,7 +64,7 @@ def open():
         subprocess.run(cmd, shell=True, check=True)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")
-        print(":: [-] :: XDG :: ", err)
+        print(":: [-] :: XDG ::", err)
     else:
         logging.info(cmd)
         print(":: [+] :: XDG :: Open")

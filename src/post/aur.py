@@ -20,7 +20,7 @@ def clone(aur_dir: str, aur_helper: str):
             logging.info(f"Directory already exists: {aur_dir}")
         else:
             logging.error(f"{cmd}\n{repr(err)}")
-            print(":: [-] :: AUR :: Clone")
+            print(":: [-] :: AUR :: Clone ::", err)
             sys.exit(1)
     else:
         logging.info(cmd)
@@ -34,7 +34,7 @@ def mkpkg(aur_dir: str, cwd: str):
     except subprocess.CalledProcessError as err:
         os.chdir(cwd)
         logging.error(f"{cmd}\n{repr(err)}")
-        print(":: [-] :: AUR :: Makepkg :: ", err)
+        print(":: [-] :: AUR :: Makepkg ::", err)
         sys.exit(1)
     else:
         os.chdir(cwd)
@@ -55,7 +55,7 @@ def install(aurhelper: str, packages:str):
         subprocess.run(cmd, shell=True, check=True, text=True)
     except Exception as err:
         logging.error(f"{cmd}: {repr(err)}")
-        print(":: [-] :: AUR :: Install :: ", err)
+        print(":: [-] :: AUR :: Install ::", err)
         sys.exit(1)
     else:
         logging.info(cmd)
@@ -66,7 +66,7 @@ def remove(aur_dir: str):
         os.rmdir(aur_dir)
     except Exception as err:
         logging.error(f"Cannot remove {aur_dir}\n{err}")
-        print(":: [-] :: AUR :: Rmdir :: ", err)
+        print(":: [-] :: AUR :: Rmdir ::", err)
     else:
         logging.info(f"Removing {aur_dir}")
         print(":: [+] :: AUR :: Rmdir")

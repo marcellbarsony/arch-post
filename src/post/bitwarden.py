@@ -53,7 +53,7 @@ def sync():
         subprocess.run(cmd, shell=True, check=True)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")
-        print(":: [-] :: RBW :: Sync :: ", err)
+        print(":: [-] :: RBW :: Sync ::", err)
         sys.exit(1)
     else:
         logging.info(cmd)

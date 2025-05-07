@@ -14,7 +14,7 @@ def explicit_keyring():
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}: {repr(err)}")
-        print(":: [-] :: PACMAN :: Keyring :: ", err)
+        print(":: [-] :: PACMAN :: Keyring ::", err)
         sys.exit(1)
     else:
         logging.info(cmd)
@@ -26,7 +26,7 @@ def update():
         subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")
-        print(":: [-] :: PACMAN :: Update :: ", err)
+        print(":: [-] :: PACMAN :: Update ::", err)
         sys.exit(1)
     else:
         logging.info(cmd)
@@ -39,7 +39,7 @@ def remove_orphans():
         subprocess.run(cmd, shell=True, check=True)
     except subprocess.CalledProcessError as err:
         logging.error(err)
-        print(":: [-] :: PACMAN :: Remove orphans :: ", err)
+        print(":: [-] :: PACMAN :: Remove orphans ::", err)
     else:
         logging.info(cmd)
         print(":: [+] :: PACMAN :: Remove orphans")

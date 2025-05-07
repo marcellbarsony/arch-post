@@ -17,7 +17,7 @@ def wallpapers(home: str):
         urllib.request.urlretrieve(url, out)
     except Exception as err:
         logging.error(err)
-        print(":: [-] :: WALLPAPERS :: Download :: ", err)
+        print(":: [-] :: WALLPAPERS :: Download ::", err)
     else:
         logging.info(f"download: {url} >> {out}")
         print(":: [+] :: WALLPAPERS :: Download")
@@ -31,7 +31,7 @@ def wallpapers(home: str):
         os.remove(out)
     except OSError as err:
         logging.error(err)
-        print(":: [-] :: WALLPAPERS :: Remove zip :: ", err)
+        print(":: [-] :: WALLPAPERS :: Remove zip ::", err)
     else:
         logging.info(f"remove zip: {out}")
         print(":: [+] :: WALLPAPERS :: Remove zip")
