@@ -12,9 +12,9 @@ def mkdir(aur_dir: str):
     print(":: [+] :: AUR :: Mkdir")
 
 def clone(aur_dir: str, aur_helper: str):
-    cmd = f"git clone https://aur.archlinux.org/{aur_helper}.git {aur_dir}"
+    cmd = ["git", "clone", f"https://aur.archlinux.org/{aur_helper}.git", aur_dir]
     try:
-        subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+        subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError as err:
         if err.returncode == 128:
             logging.info(f"Directory already exists: {aur_dir}")
@@ -27,10 +27,10 @@ def clone(aur_dir: str, aur_helper: str):
         print(":: [+] :: AUR :: Clone")
 
 def mkpkg(aur_dir: str, cwd: str):
-    cmd = f"makepkg -rsi --noconfirm"
+    cmd = ["makepkg", "-rsi", "--noconfirm"]
     try:
         os.chdir(aur_dir)
-        subprocess.run(cmd, shell=True, check=True, stdout=subprocess.DEVNULL)
+        subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError as err:
         os.chdir(cwd)
         logging.error(f"{cmd}\n{repr(err)}")
@@ -49,17 +49,18 @@ def get_packages(current_dir: str) -> str:
                 packages += f"{line.rstrip()} "
     return packages
 
-def install(aurhelper: str, packages:str):
-    cmd = f"{aurhelper} -S --sudoloop --noconfirm {packages}"
+def install(package:str):
+    cmd = ["paru", "-S", "--sudoloop", "--noconfirm", package]
     try:
-        subprocess.run(cmd, shell=True, check=True, text=True)
+        subprocess.run(cmd, check=True, text=True)
     except Exception as err:
         logging.error(f"{cmd}: {repr(err)}")
         print(":: [-] :: AUR :: Install ::", err)
         sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] :: AUR :: Install")
+        print(":: [+] :: AUR :: Install ::", package)
+        os.system("clear")
 
 def remove(aur_dir: str):
     try:

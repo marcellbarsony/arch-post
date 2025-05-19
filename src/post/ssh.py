@@ -14,10 +14,13 @@ def config(home: str, ssh_dir: str):
     dst = f"{home}/.ssh/"
     dst_path = os.path.join(dst, os.path.basename(src))
     try:
+        # Create config directory
         os.makedirs(dst, exist_ok=True)
         logging.info(f"mkdir {dst}")
+        # Move config files
         shutil.copy(src, dst)
         logging.info(f"copy {src} >> {dst}")
+        # Chmod 600 (rw)
         os.chmod(dst_path, 0o600)
         logging.info(f"chmod {dst_path}")
     except Exception as err:
@@ -44,12 +47,12 @@ def service_set(home: str, ssh_dir: str):
 
 def service_start():
     services = [
-        "systemctl --user enable ssh-agent.service",
-        "systemctl --user start ssh-agent.service"
+        ["systemctl", "--user", "enable", "ssh-agent.service"],
+        ["systemctl", "--user", "start", "ssh-agent.service"]
     ]
     for service in services:
         try:
-            subprocess.run(service, shell=True, check=True)
+            subprocess.run(service, check=True)
         except subprocess.CalledProcessError as err:
             logging.error(f"{service}\n{err}")
             print(":: [-] :: SSH :: Service start ::", err)
@@ -60,9 +63,16 @@ def service_start():
 
 def key_gen(home: str, ssh_key: str, gh_mail: str):
     file = f"{home}/.ssh/id_ed25519"
-    cmd = f"ssh-keygen -q -t ed25519 -N {ssh_key} -C {gh_mail} -f {file}"
+    cmd = [
+        "ssh-keygen",
+        "-q", # Silence keygen
+        "-t", "ed25519", # Key type
+        "-N", ssh_key, # Passphrase
+        "-C", gh_mail, # Comment
+        "-f", file, # Key file
+    ]
     try:
-        subprocess.run(cmd, shell=True, check=True)
+        subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{err}")
         print(":: [-] :: SSH :: Key gen ::", err)
@@ -72,9 +82,9 @@ def key_gen(home: str, ssh_key: str, gh_mail: str):
         print(":: [+] :: SSH :: Key gen")
 
 def key_add():
-    cmd = "ssh-add -q ~/.ssh/id_ed25519"
+    cmd = ["ssh-add", "-q", "~/.ssh/id_ed25519"]
     try:
-        subprocess.run(cmd, shell=True, check=True)
+        subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{err}")
         print(":: [-] :: SSH :: Key add ::", err)

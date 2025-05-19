@@ -10,47 +10,44 @@ https://github.com/doy/rbw
 
 def config(email: str, timeout: str):
     cmds = [
-        f"rbw config set email {email}",
-        f"rbw config set lock_timeout {timeout}",
+        ["rbw", "config", "set", "email", email],
+        ["rbw", "config", "set", "lock_timeout", timeout]
     ]
     for cmd in cmds:
         try:
-            subprocess.run(cmd, shell=True, check=True)
+            subprocess.run(cmd, check=True)
         except subprocess.CalledProcessError as err:
             logging.error(f"{cmd}\n{repr(err)}")
-            print(":: [-] :: RBW :: ", err)
+            print(":: [-] :: RBW ::", err)
         else:
             logging.info(cmd)
             print(":: [+] :: RBW :: Config")
 
 def register():
-    cmd = "rbw register"
+    cmd = ["rbw", "register"]
     try:
-        subprocess.run(cmd, shell=True, check=True)
+        subprocess.run(cmd, check=True)
     except KeyboardInterrupt:
         logging.warning(f"{cmd}\nKeyboardInterrupt")
         sys.exit(1)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")
-        register_error()
+        while True:
+            print(":: [?] :: Try again? :: Y/N: ", end="")
+            user_input = input().strip().lower()
+            if user_input == "y":
+                return register()
+            elif user_input == "n":
+                sys.exit(1)
+            else:
+                continue
     else:
         logging.info(cmd)
 
-def register_error():
-    while True:
-        user_input = input(":: [?] :: Try again? :: Y/N ").lower()
-        if user_input not in ("y", "n"):
-            register_error()
-        else:
-            if user_input == "y":
-                register()
-            if user_input == "n":
-                sys.exit(1)
-
 def sync():
-    cmd = "rbw sync"
+    cmd = ["rbw", "sync"]
     try:
-        subprocess.run(cmd, shell=True, check=True)
+        subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as err:
         logging.error(f"{cmd}\n{repr(err)}")
         print(":: [-] :: RBW :: Sync ::", err)

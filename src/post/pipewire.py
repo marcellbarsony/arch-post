@@ -4,7 +4,7 @@ import subprocess
 
 
 """
-Docstring for Pipewire
+Pipewire
 https://wiki.archlinux.org/title/Pipewire
 """
 
@@ -14,9 +14,9 @@ def service():
         "wireplumber"
     ]
     for service in services:
-        cmd = f"systemctl --user enable {service}"
+        cmd = ["systemctl", "--user", "enable", service]
         try:
-            subprocess.run(cmd, shell=True, check=True)
+            subprocess.run(cmd, check=True)
         except subprocess.CalledProcessError as err:
             logging.error(f"{cmd}\n{err}")
             print(f":: [-] :: SERVICE :: Enable {service} ::", err)

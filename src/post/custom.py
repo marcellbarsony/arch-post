@@ -4,15 +4,17 @@ import urllib.request
 import zipfile
 
 
-def wallpapers(home: str):
-    dst = f"{home}/Downloads/backgrounds"
+def wallpapers_download(home: str) -> tuple[str, str]:
+    url = "https://www.dropbox.com/scl/fo/zehsrcun1wbcb7tczyyum/AGqKkD1ILpPq3hPVDBKhCF4?rlkey=szjmedenux6fb799jn96hbgk8&st=5fbc9u7o&dl=1"
+    dst = f"{home}/tmp/backgrounds"
+    out = f"{dst}/wallpapers.zip"
+
     if not os.path.exists(dst):
         os.makedirs(dst)
         logging.info(f"makedirs: {dst}")
 
-    print(":: [i] :: WALLPAPERS :: Download")
-    url = "https://www.dropbox.com/scl/fo/5loqjisrohzslojb5ibmw/h?rlkey=onmox6lkop8uf9wzd314pbj66&dl=1"
-    out = f"{dst}/wallpapers.zip"
+    print(":: [i] :: WALLPAPERS :: Downloading")
+
     try:
         urllib.request.urlretrieve(url, out)
     except Exception as err:
@@ -22,11 +24,22 @@ def wallpapers(home: str):
         logging.info(f"download: {url} >> {out}")
         print(":: [+] :: WALLPAPERS :: Download")
 
-    print(":: [i] :: WALLPAPERS :: Extract")
-    with zipfile.ZipFile(out, "r") as zip_ref:
-        zip_ref.extractall(dst)
-        logging.info(f"extract: {zip_ref} >> {dst}")
+    return out, dst
 
+def wallpapers_extract(out: str, dst: str):
+    print(":: [i] :: WALLPAPERS :: Extracting")
+    try:
+        with zipfile.ZipFile(out, "r") as zip_ref:
+            zip_ref.extractall(dst)
+            logging.info(f"extract: {zip_ref} >> {dst}")
+    except Exception as err:
+        logging.error(err)
+        print(":: [-] :: WALLPAPERS :: Extraction ::", err)
+    else:
+        logging.info(f"Extracting wallpapers")
+        print(":: [+] :: WALLPAPERS :: Extraction")
+
+def wallpapers_remove(out: str):
     try:
         os.remove(out)
     except OSError as err:

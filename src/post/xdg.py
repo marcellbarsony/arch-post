@@ -1,10 +1,11 @@
 import logging
 import os
 import shutil
-import subprocess
 
 
-"""Docstring for Cross Desktop Group (XDG)"""
+"""
+XDG (Cross Desktop Group)
+"""
 
 def move_rust(home: str):
     cargo_conf = f"{home}/.cargo"
@@ -23,7 +24,9 @@ def remove_dirs(home: str):
     dirs = [
         "Desktop",
         "Documents",
+        "Downloads",
         "Music",
+        "Pictures",
         "Public",
         "Templates",
         "Videos"
@@ -57,14 +60,3 @@ def remove_self(home: str):
     if os.path.exists(path):
         shutil.rmtree(path)
         logging.info(path)
-
-def open():
-    cmd = "xdg-settings set default-web-browser firefox.desktop"
-    try:
-        subprocess.run(cmd, shell=True, check=True)
-    except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}\n{repr(err)}")
-        print(":: [-] :: XDG ::", err)
-    else:
-        logging.info(cmd)
-        print(":: [+] :: XDG :: Open")

@@ -14,7 +14,6 @@ from src.post import bitwarden
 from src.post import custom
 from src.post import git_setup
 from src.post import git_repos
-from src.post import pacman
 from src.post import pipewire
 from src.post import python
 from src.post import rust
@@ -52,7 +51,7 @@ if __name__ == "__main__":
     config.read("config.ini")
 
     # AUR {{{
-    aur_helper        = config.get("aur", "helper")
+    aur_helper = config.get("aur", "helper")
     # }}}
 
     # Bitwarden {{{
@@ -69,27 +68,27 @@ if __name__ == "__main__":
     # }}}
 
     # GitHub {{{
-    git_pubkey        = config.get("github",  "pubkey")
+    git_pubkey = config.get("github", "pubkey")
     # }}}
 
     # Network {{{
-    network_ip        = config.get("network", "ip")
-    network_port      = config.get("network", "port")
-    network_toggle    = config.get("network", "wifi")
-    network_key       = config.get("network", "wifi_key")
-    network_ssid      = config.get("network", "wifi_ssid")
+    network_ip = config.get("network", "ip")
+    network_port = config.get("network", "port")
+    network_toggle = config.get("network", "wifi")
+    network_key = config.get("network", "wifi_key")
+    network_ssid = config.get("network", "wifi_ssid")
     # }}}
 
     # Repositories {{{
-    repositories      = config.get("repositories", "repositories").split(", ")
+    repositories = config.get("repositories", "repositories").split(", ")
     # }}}
 
     # SSH {{{
-    ssh_key           = config.get("ssh", "key")
+    ssh_key = config.get("ssh", "key")
     # }}}
 
     # Timezone {{{
-    timezone          = config.get("timezone", "zone")
+    timezone = config.get("timezone", "zone")
     # }}}
 
     for section in config.sections():
@@ -111,15 +110,9 @@ if __name__ == "__main__":
     ssh_dir = f"{cwd}/src/ssh"
     # }}}
 
-    # Run {{{
     # System Time {{{
     systime.ntp()
     systime.time_zone(timezone)
-    # }}}
-
-    # Pacman {{{
-    pacman.explicit_keyring()
-    pacman.update()
     # }}}
 
     # Rust {{{
@@ -132,7 +125,8 @@ if __name__ == "__main__":
     aur.mkpkg(aur_dir, cwd)
     aur.remove(aur_dir)
     packages = aur.get_packages(cwd)
-    aur.install(aur_helper, packages)
+    for package in packages:
+        aur.install(package)
     # }}}
 
     # Password Manager {{{
@@ -158,7 +152,7 @@ if __name__ == "__main__":
 
     git_setup.auth_login(gh_token)
     git_setup.auth_status()
-    git_setup.pubkey_add(git_pubkey)
+    git_setup.pubkey_add(user, git_pubkey)
     git_setup.known_hosts()
     git_setup.ssh_test()
     git_setup.config(gh_user, gh_mail)
@@ -167,21 +161,21 @@ if __name__ == "__main__":
     # GIT Repositories {{{
     gh_user = bitwarden.rbw_get("github", git_user)
 
+    dst = f"{home}/.config"
+    git_repos.remove(dst)
+    git_repos.dotfiles_clone(gh_user, dst)
+
     for repo in repositories:
-        if repo == "dotfiles":
-            dst = f"{home}/.config"
-            git_repos.remove(dst)
-        else:
-            dst = f"{home}/.local/git/{repo}"
+        dst = f"{home}/.local/git/{repo}"
         git_repos.repo_clone(gh_user, repo, dst)
-        git_repos.repo_chdir(dst)
+        os.chdir(dst)
         git_repos.repo_cfg(gh_user, repo)
     # }}}
 
     # Shell {{{
     shell.change()
-    shell.config()
-    shell.tools()
+    shell.config(user)
+    shell.tools(user)
     # }}}
 
     # Audio {{{
@@ -189,7 +183,9 @@ if __name__ == "__main__":
     # }}}
 
     # Customize {{{
-    custom.wallpapers(home)
+    out, dst = custom.wallpapers_download(home)
+    custom.wallpapers_extract(out, dst)
+    custom.wallpapers_remove(out)
     custom.spotify()
     # }}}
 
@@ -204,8 +200,6 @@ if __name__ == "__main__":
         python.chdir(home, dir)
         python.venv_init()
         python.venv_activate()
-        # python.pip_upgrade()
-        # python.pip_install()
         python.venv_deactivate()
 
     dir = ".local/share/python"
@@ -221,6 +215,4 @@ if __name__ == "__main__":
     xdg.remove_dirs(home)
     xdg.remove_files(home)
     xdg.remove_self(home)
-    xdg.open()
-    # }}}
     # }}}
