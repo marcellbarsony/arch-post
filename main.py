@@ -11,15 +11,16 @@ import logging
 
 from src.post import aur
 from src.post import bitwarden
-from src.post import custom
 from src.post import git_setup
 from src.post import git_repos
 from src.post import pipewire
 from src.post import python
 from src.post import rust
 from src.post import shell
+from src.post import spotify
 from src.post import ssh
 from src.post import systime
+from src.post import wallpapers
 from src.post import xdg
 # }}}
 
@@ -33,8 +34,20 @@ if __name__ == "__main__":
     # }}}
 
     # Logging {{{
-    logging.basicConfig(level=logging.INFO, filename="logs.log", filemode="w",
-        format="%(levelname)-7s :: %(module)s - %(funcName)s - %(lineno)d :: %(message)s")
+    logging.basicConfig(
+        level = logging.INFO,
+        filename = "logs.log",
+        filemode = "w",
+        format = ":: %(levelname)s :: %(module)s :: %(funcName)s :: %(lineno)d\n%(message)-1s"
+    )
+
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(logging.Formatter(
+        ":: %(levelname)s :: %(module)s :: %(funcName)s :: %(message)-1s"
+    ))
+
+    logging.getLogger().addHandler(console_handler)
     # }}}
 
     # Argparse {{{
@@ -94,10 +107,8 @@ if __name__ == "__main__":
     for section in config.sections():
         for key, value in config.items(section):
             if not key.strip():
-                print(":: [-] :: ConfigParser :: Empty key")
                 raise ValueError(f"Empty key found :: [{section}]")
             if not value.strip():
-                print(":: [-] :: ConfigParser :: Empty value")
                 raise ValueError(f"Empty value '{key}' in section [{section}]")
     # }}}
 
@@ -124,6 +135,7 @@ if __name__ == "__main__":
     aur.clone(aur_dir, aur_helper)
     aur.mkpkg(aur_dir, cwd)
     aur.remove(aur_dir)
+
     packages = aur.get_packages(cwd)
     for package in packages:
         aur.install(package)
@@ -183,10 +195,11 @@ if __name__ == "__main__":
     # }}}
 
     # Customize {{{
-    out, dst = custom.wallpapers_download(home)
-    custom.wallpapers_extract(out, dst)
-    custom.wallpapers_remove(out)
-    custom.spotify()
+    out, dst = wallpapers.downloads(home)
+    wallpapers.extract(out, dst)
+    wallpapers.cleanup(out)
+
+    spotify.install()
     # }}}
 
     # Python {{{

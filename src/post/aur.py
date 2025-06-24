@@ -9,7 +9,6 @@ import sys
 def mkdir(aur_dir: str):
     os.makedirs(aur_dir, exist_ok=True)
     logging.info(aur_dir)
-    print(":: [+] :: AUR :: Mkdir")
 
 def clone(aur_dir: str, aur_helper: str):
     cmd = ["git", "clone", f"https://aur.archlinux.org/{aur_helper}.git", aur_dir]
@@ -18,13 +17,12 @@ def clone(aur_dir: str, aur_helper: str):
     except subprocess.CalledProcessError as err:
         if err.returncode == 128:
             logging.info(f"Directory already exists: {aur_dir}")
+            pass
         else:
-            logging.error(f"{cmd}\n{repr(err)}")
-            print(":: [-] :: AUR :: Clone ::", err)
+            logging.error("%s\n%s", cmd, err)
             sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] :: AUR :: Clone")
 
 def mkpkg(aur_dir: str, cwd: str):
     cmd = ["makepkg", "-rsi", "--noconfirm"]
@@ -33,8 +31,7 @@ def mkpkg(aur_dir: str, cwd: str):
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError as err:
         os.chdir(cwd)
-        logging.error(f"{cmd}\n{repr(err)}")
-        print(":: [-] :: AUR :: Makepkg ::", err)
+        logging.error("%s\n%s", cmd, err)
         sys.exit(1)
     else:
         os.chdir(cwd)
@@ -54,20 +51,17 @@ def install(package:str):
     try:
         subprocess.run(cmd, check=True, text=True)
     except Exception as err:
-        logging.error(f"{cmd}: {repr(err)}")
-        print(":: [-] :: AUR :: Install ::", err)
-        sys.exit(1)
+        logging.warning("%s\n%s", cmd, err)
+        return
     else:
         logging.info(cmd)
-        print(":: [+] :: AUR :: Install ::", package)
         os.system("clear")
 
 def remove(aur_dir: str):
     try:
         os.rmdir(aur_dir)
     except Exception as err:
-        logging.error(f"Cannot remove {aur_dir}\n{err}")
-        print(":: [-] :: AUR :: Rmdir ::", err)
+        logging.error("%s\n%s", aur_dir, err)
+        pass
     else:
-        logging.info(f"Removing {aur_dir}")
-        print(":: [+] :: AUR :: Rmdir")
+        logging.info(aur_dir)

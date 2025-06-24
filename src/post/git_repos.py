@@ -9,10 +9,10 @@ def repo_clone(gh_user: str, repo: str, dst: str):
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
         if err.returncode == 128:
-            logging.warning(f"already exists: {repo}")
+            logging.warning("already exists", repo)
             pass
         else:
-            logging.error(f"{cmd}\n{repr(err)}")
+            logging.error("%s\n%s", cmd, repr(err))
             sys.exit(1)
 
 def repo_cfg(gh_user: str, repo: str):
@@ -21,7 +21,7 @@ def repo_cfg(gh_user: str, repo: str):
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}\n{err}")
+        logging.error("%s\n%s", cmd, err)
         sys.exit(1)
 
 def remove(dst: str):
@@ -30,7 +30,7 @@ def remove(dst: str):
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}\n{err}")
+        logging.error("%s\n%s", cmd, err)
         sys.exit(1)
 
 def dotfiles_clone(gh_user: str, dst: str):
@@ -39,5 +39,5 @@ def dotfiles_clone(gh_user: str, dst: str):
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
         logging.info(cmd)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}\n{repr(err)}")
+        logging.error("%s\n%s", cmd, repr(err))
         sys.exit(1)

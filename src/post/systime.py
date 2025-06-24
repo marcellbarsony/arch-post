@@ -14,21 +14,17 @@ def ntp():
     try:
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}: {repr(err)}")
-        print(":: [-] :: SYSTIME ::", repr(err))
+        logging.error("%s\n%s", cmd, repr(err))
         sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] :: SYSTIME ::", cmd)
 
 def time_zone(zone: str):
     cmd = ["timedatectl", "set-timezone", zone]
     try:
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}\n{err}")
-        print(":: [-] :: SYSTIME ::", err)
+        logging.error("%s\n%s", cmd, repr(err))
         sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] :: SYSTIME ::", cmd)

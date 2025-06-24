@@ -18,8 +18,7 @@ def service():
         try:
             subprocess.run(cmd, check=True)
         except subprocess.CalledProcessError as err:
-            logging.error(f"{cmd}\n{err}")
-            print(f":: [-] :: SERVICE :: Enable {service} ::", err)
+            logging.error("%s\n%s", service, err)
             sys.exit(1)
         else:
             logging.info(cmd)

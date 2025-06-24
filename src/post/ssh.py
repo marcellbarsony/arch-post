@@ -16,34 +16,32 @@ def config(home: str, ssh_dir: str):
     try:
         # Create config directory
         os.makedirs(dst, exist_ok=True)
-        logging.info(f"mkdir {dst}")
+        logging.info("mkdir :: %s", dst)
         # Move config files
         shutil.copy(src, dst)
-        logging.info(f"copy {src} >> {dst}")
+        logging.info("copy %s >> %s", src, dst)
         # Chmod 600 (rw)
         os.chmod(dst_path, 0o600)
-        logging.info(f"chmod {dst_path}")
+        logging.info("chmod :: %s", dst_path)
     except Exception as err:
         logging.error(err)
-        print(":: [-] :: SSH :: Config ::", err)
         sys.exit(1)
     else:
-        print(":: [+] :: SSH :: Config")
+        logging.info("ssh config")
 
 def service_set(home: str, ssh_dir: str):
     src = f"{ssh_dir}/ssh-agent.service"
     dst = f"{home}/.config/systemd/user/"
     try:
         os.makedirs(dst, exist_ok=True)
-        logging.info(f"mkdir {dst}")
+        logging.info("mkdir :: %s", dst)
         shutil.copy(src, dst)
-        logging.info(f"copy {src} >> {dst}")
+        logging.info("copy %s >> %s", src, dst)
     except Exception as err:
         logging.error(err)
-        print(":: [-] :: SSH :: Service set ::", err)
         sys.exit(1)
     else:
-        print(":: [+] :: SSH :: Service set")
+        logging.info("ssh service")
 
 def service_start():
     services = [
@@ -54,12 +52,10 @@ def service_start():
         try:
             subprocess.run(service, check=True)
         except subprocess.CalledProcessError as err:
-            logging.error(f"{service}\n{err}")
-            print(":: [-] :: SSH :: Service start ::", err)
+            logging.error("%s\n%s", service, err)
             sys.exit(1)
         else:
             logging.info(service)
-            print(":: [+] :: SSH :: Service start ::", service)
 
 def key_gen(home: str, ssh_key: str, gh_mail: str):
     file = f"{home}/.ssh/id_ed25519"
@@ -74,21 +70,17 @@ def key_gen(home: str, ssh_key: str, gh_mail: str):
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}\n{err}")
-        print(":: [-] :: SSH :: Key gen ::", err)
+        logging.error("%s\n%s", cmd, err)
         sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] :: SSH :: Key gen")
 
 def key_add():
     cmd = ["ssh-add", "-q", "~/.ssh/id_ed25519"]
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}\n{err}")
-        print(":: [-] :: SSH :: Key add ::", err)
+        logging.error("%s\n%s", cmd, err)
         sys.exit(1)
     else:
         logging.info(cmd)
-        print(":: [+] :: SSH :: Key add")

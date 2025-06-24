@@ -21,52 +21,42 @@ def venv_init():
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as err:
-        logging.error(err)
-        print(":: [-] :: PYTHON :: Venv init ::", err)
+        logging.error("%s\n%s", cmd, err)
     else:
         logging.info(cmd)
-        print(":: [+] :: PYTHON :: Venv init")
 
 def venv_init_debugpy():
     cmd = ["python", "-m", "venv", "debugpy"]
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as err:
-        logging.error(err)
-        print(":: [-] :: PYTHON :: Venv init :: Debugpy ::", err)
+        logging.error("%s\n%s", cmd, err)
     else:
         logging.info(cmd)
-        print(":: [+] :: PYTHON :: Venv init :: Debugpy")
 
 def venv_activate():
     cmd = ["source", ".venv/bin/activate"]
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as err:
-        logging.error(err)
-        print(":: [-] :: PYTHON :: Venv activate ::", err)
+        logging.error("%s\n%s", cmd, err)
     else:
         logging.info(cmd)
-        print(":: [+] :: PYTHON :: Venv activate")
 
 def pip_install_debugpy():
     cmd = ["python", "-m", "pip", "install", "debugpy"]
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as err:
-        logging.error(err)
-        print(":: [-] :: PTYHON :: Pip install :: Debugpy ::", err)
+        logging.error("%s\n%s", cmd, err)
     else:
         logging.info(cmd)
-        print(":: [+] :: PYTHON :: Pip install :: Debugpy")
 
 def venv_deactivate():
     cmd = ["deactivate"]
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as err:
-        logging.error(err)
-        print(":: [-] :: PYTHON :: Venv deactivate ::", err)
+        logging.error("%s\n%s", cmd, err)
     else:
         logging.info(cmd)
-        print(":: [+] :: PYTHON :: Venv deactivate")

@@ -1,5 +1,4 @@
 import logging
-import os
 import subprocess
 import sys
 
@@ -15,9 +14,7 @@ def toolchain():
     try:
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError as err:
-        logging.error(f"{cmd}\n{repr(err)}")
-        print(":: [-] :: RUST ::", err)
+        logging.error("%s\n%s", cmd, repr(err))
         sys.exit(1)
     else:
         logging.info(cmd)
-        os.system("clear")
