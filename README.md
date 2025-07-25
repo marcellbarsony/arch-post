@@ -1,4 +1,4 @@
-**The Chad Stack post-installation script**
+**Arch Linux post-installation script**
 
 - AUR (Paru)
 - Git (GitHub)
@@ -12,4 +12,3 @@
 
 - Python
 - Rust
-- JavaScript

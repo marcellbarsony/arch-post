@@ -178,7 +178,7 @@ if __name__ == "__main__":
     git_repos.dotfiles_clone(gh_user, dst)
 
     for repo in repositories:
-        dst = f"{home}/.local/git/{repo}"
+        dst = f"{home}/tmp/git/{repo}"
         git_repos.repo_clone(gh_user, repo, dst)
         os.chdir(dst)
         git_repos.repo_cfg(gh_user, repo)
@@ -205,10 +205,11 @@ if __name__ == "__main__":
     # Python {{{
     dirs = {
         ".local/bin",
-        ".local/git/arch",
-        ".local/git/arch-post",
-        ".local/git/arch-tools",
+        "tmp/git/arch",
+        "tmp/git/arch-post",
+        "tmp/git/arch-tools",
     }
+
     for dir in dirs:
         python.chdir(home, dir)
         python.venv_init()
