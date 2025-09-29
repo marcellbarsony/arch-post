@@ -9,11 +9,11 @@ import os
 import sys
 import logging
 
+from src.post import audio
 from src.post import aur
 from src.post import bitwarden
 from src.post import git_setup
 from src.post import git_repos
-from src.post import pipewire
 from src.post import python
 from src.post import rust
 from src.post import shell
@@ -191,7 +191,7 @@ if __name__ == "__main__":
     # }}}
 
     # Audio {{{
-    pipewire.service()
+    audio.service()
     # }}}
 
     # Customize {{{

@@ -4,13 +4,16 @@ import subprocess
 
 
 """
-Pipewire
+Audio (PipeWire & MPRIS)
 https://wiki.archlinux.org/title/Pipewire
+https://wiki.archlinux.org/title/MPRIS
 """
 
 def service():
     services = [
+        "mpris-proxy.service",
         "pipewire",
+        "pipewire-pulse.service",
         "wireplumber"
     ]
     for service in services:
