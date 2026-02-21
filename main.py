@@ -145,11 +145,13 @@ if __name__ == "__main__":
     bitwarden.config(bw_mail, bw_lock)
     bitwarden.register()
     bitwarden.sync()
+
+    gh_mail = bitwarden.rbw_get("github", git_mail)
+    gh_token = bitwarden.rbw_get("github", git_token)
+    gh_user = bitwarden.rbw_get("github", git_user)
     # }}}
 
     # SSH {{{
-    gh_mail = bitwarden.rbw_get("github", git_mail)
-
     ssh.config(home, ssh_dir)
     ssh.service_set(home, ssh_dir)
     ssh.service_start()
@@ -158,21 +160,14 @@ if __name__ == "__main__":
     # }}}
 
     # GIT {{{
-    gh_token = bitwarden.rbw_get("github", git_token)
-    gh_mail = bitwarden.rbw_get("github", git_mail)
-    gh_user = bitwarden.rbw_get("github", git_user)
-
     git_setup.auth_login(gh_token)
     git_setup.auth_status()
     git_setup.pubkey_add(user, git_pubkey)
     git_setup.known_hosts()
     git_setup.ssh_test()
     git_setup.config(gh_user, gh_mail)
-    # }}}
 
-    # GIT Repositories {{{
-    gh_user = bitwarden.rbw_get("github", git_user)
-
+    # Repositories
     dst = f"{home}/.config"
     git_repos.remove(dst)
     git_repos.dotfiles_clone(gh_user, dst)
